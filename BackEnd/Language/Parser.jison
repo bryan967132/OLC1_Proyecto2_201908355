@@ -94,15 +94,28 @@ INSTRUCTIONS:
 
 INSTRUCTION:
     TYPE LIST_ID TOK_semicolon      {} |
-    ID TOK_semicolon                {};
+    ID TOK_semicolon                {} |
+    TYPE ARRAY TOK_semicolon        {};
 
 LIST_ID:
     LIST_ID TOK_comma ID            {} |
     ID                              {};
 
 ID:
-    TOK_id TOK_equal EXP            {} |
-    TOK_id                          {};
+    TOK_id TOK_equal EXP                                {} |
+    TOK_id TOK_lbrckt EXP TOK_rbrckt TOK_equal EXP      {} |
+    TOK_id                                              {};
+
+ARRAY:
+    TOK_lbrckt TOK_rbrckt TOK_id TOK_equal ARRAY_VALUE  {};
+
+ARRAY_VALUE:
+    RW_new TYPE TOK_lbrckt EXP TOK_rbrckt   {} |
+    TOK_lbrc VALUE_LIST TOK_rbrc;
+
+VALUE_LIST:
+    VALUE_LIST TOK_comma EXP            {} |
+    EXP                                 {};
 
 EXP:
     EXP TOK_plus  EXP                   {} |
@@ -122,6 +135,9 @@ EXP:
     TOK_not EXP                         {} |
     TOK_lpar TYPE TOK_rpar EXP          {} |
     EXP TOK_question EXP TOK_colon EXP  {} |
+    TOK_id TOK_lbrckt EXP TOK_rbrckt    {} |
+    EXP TOK_incr                        {} |
+    EXP TOK_decr                        {} |
     TOK_id                              {} |
     TOK_double                          {} |
     TOK_integer                         {} |

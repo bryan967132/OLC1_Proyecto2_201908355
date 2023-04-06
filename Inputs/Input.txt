@@ -3,9 +3,14 @@ double f = 1.5 + (a * 1.05),g;
 char h;
 h = (char) a;
 boolean comp_1 = !(a > 0 || b <= 5) && d == 100;
-//String[] nombre = {"201908355","Danny","Tejaxún"};
-String edad = "Edad: " + 22;
+String[] nombres = new String[5];
+String[] datos = {"201908355","Danny","Tejaxún"};
+String edad = "Nombre: " + datos[1] + " Edad: " + 22;
 char inicial = '\\';
 boolean izquierda;
 izquierda = a > 70 ? false : true;
 boolean derecha = false;
+int anio = 2020;
+anio = 1 + anio++; //obtiene el valor de 2022
+anio = anio--; //obtiene el valor de 2021
+nombres[1] = "Danny";
