@@ -1,15 +1,16 @@
 # Proyecto 2 OLC1 1S 2023
 ## Sintaxis del Lenguaje
 ```java
-int a = 5,b = 3,c,d = -(a + b) * 3;
+int a = 70,b = 3,c,d = -(a + b) * 3;
 double f = 1.5 + (a * 1.05),g;
-inT h;
-h = 5;
-boolean comp_1 = !(a > 0 || b <= 5);
+char h;
+h = (char) a;
+boolean comp_1 = !(a > 0 || b <= 5) && d == 100;
 String[] nombre = {"201908355","Danny","Tejaxún"};
+String edad = "Edad: " + 22;
 char inicial = '\\';
 boolean izquierda;
-izquierda = true;
+izquierda = a > 70 ? false : true;
 boolean derecha = false;
 if(comp_1 && h > d) {
     while(h > 0) {
