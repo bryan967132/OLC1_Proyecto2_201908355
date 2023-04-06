@@ -23,9 +23,9 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 'string'                                {return 'RW_string'}
 'true'                                  {return 'RW_true'}
 'false'                                 {return 'RW_false'}
-'print'                                 {return 'RW_print'}
-'if'                                    {return 'RW_if'}
 'new'                                   {return 'RW_new'}
+'if'                                    {return 'RW_if'}
+'print'                                 {return 'RW_print'}
 //expresiones regulares
 \"{char1}*\"                            {yytext = yytext.substr(1,yyleng - 2);return 'TOK_string'; }
 \'{char1}\'                             {yytext = yytext.substr(1,yyleng - 2);return 'TOK_char'; }
@@ -43,6 +43,10 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 '^'                                     {return 'TOK_pow'}
 '('                                     {return 'TOK_lpar'}
 ')'                                     {return 'TOK_rpar'}
+'['                                     {return 'TOK_lbrckt'}
+']'                                     {return 'TOK_rbrckt'}
+'{'                                     {return 'TOK_lbrc'}
+'}'                                     {return 'TOK_rbrc'}
 '=='                                    {return 'TOK_equalequal'}
 '='                                     {return 'TOK_equal'}
 ','                                     {return 'TOK_comma'}
@@ -56,8 +60,7 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 '>='                                    {return 'TOK_greatequal'}
 '>'                                     {return 'TOK_less'}
 '<'                                     {return 'TOK_great'}
-'{'                                     {return 'TOK_lbracket'}
-'}'                                     {return 'TOK_rbracket'}
+'?'                                     {return 'TOK_question'}
 .                                       {console.log('Error: ' + yytext)}
 <<EOF>>                                 {return 'EOF'}
 /lex
@@ -79,39 +82,22 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 %right uminus
 
 //análisis sintáctico
-%start INI
+%start INIT
 
 %%
 
-INI: BODY EOF {};
+INIT: INSTRUCTIONS EOF {};
 
-BODY:
-    BODY SENTENCES      {} |
-    SENTENCES           {};
+INSTRUCTIONS:
+    INSTRUCTIONS INSTRUCTION        {} |
+    INSTRUCTION                     {};
 
-SENTENCES:
-    INIT_STATEMENTS_VARIABLE    {} |
-    STATEMENTS_VARIABLE         {};
-
-INIT_STATEMENTS_VARIABLE:
-    TIPO     LIST_ID_INT      TOK_semicolon{};
-
-TIPO:
-    RW_int          {} |
-    RW_double       {} |
-    RW_boolean      {} |
-    RW_char         {} |
-    RW_string       {};
-
-STATEMENTS_VARIABLE:
+INSTRUCTION:
+    TYPE LIST_ID TOK_semicolon      {} |
     ID TOK_semicolon                {};
 
-LIST_ID_INT:
-    LIST_ID_INT TOK_comma ID        {} |
-    ID                              {};
-
-LIST_ID_DOUBLE:
-    LIST_ID_DOUBLE TOK_comma ID     {} |
+LIST_ID:
+    LIST_ID TOK_comma ID            {} |
     ID                              {};
 
 ID:
@@ -119,25 +105,34 @@ ID:
     TOK_id                          {};
 
 EXP:
-    EXP TOK_plus  EXP               {} |
-    EXP TOK_minus EXP               {} |
-    EXP TOK_mult  EXP               {} |
-    EXP TOK_div   EXP               {} |
-    TOK_minus EXP %prec uminus      {} |
-    TOK_lpar EXP TOK_rpar           {} |
-    EXP TOK_equalequal EXP          {} |
-    EXP TOK_notequal   EXP          {} |
-    EXP TOK_less       EXP          {} |
-    EXP TOK_great      EXP          {} |
-    EXP TOK_lessequal  EXP          {} |
-    EXP TOK_greatequal EXP          {} |
-    EXP TOK_or  EXP                 {} |
-    EXP TOK_and EXP                 {} |
-    TOK_not EXP                     {} |
-    TOK_id                          {} |
-    TOK_double                      {} |
-    TOK_integer                     {} |
-    TOK_string                      {} |
-    TOK_char                        {} |
-    RW_true                         {} |
-    RW_false                        {};
+    EXP TOK_plus  EXP                   {} |
+    EXP TOK_minus EXP                   {} |
+    EXP TOK_mult  EXP                   {} |
+    EXP TOK_div   EXP                   {} |
+    TOK_minus EXP %prec uminus          {} |
+    TOK_lpar EXP TOK_rpar               {} |
+    EXP TOK_equalequal EXP              {} |
+    EXP TOK_notequal   EXP              {} |
+    EXP TOK_less       EXP              {} |
+    EXP TOK_great      EXP              {} |
+    EXP TOK_lessequal  EXP              {} |
+    EXP TOK_greatequal EXP              {} |
+    EXP TOK_or  EXP                     {} |
+    EXP TOK_and EXP                     {} |
+    TOK_not EXP                         {} |
+    TOK_lpar TYPE TOK_rpar EXP          {} |
+    EXP TOK_question EXP TOK_colon EXP  {} |
+    TOK_id                              {} |
+    TOK_double                          {} |
+    TOK_integer                         {} |
+    TOK_string                          {} |
+    TOK_char                            {} |
+    RW_true                             {} |
+    RW_false                            {};
+
+TYPE:
+    RW_int          {} |
+    RW_double       {} |
+    RW_boolean      {} |
+    RW_char         {} |
+    RW_string       {};
