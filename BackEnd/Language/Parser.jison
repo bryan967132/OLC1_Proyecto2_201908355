@@ -24,7 +24,9 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 'true'                                  {return 'RW_true'}
 'false'                                 {return 'RW_false'}
 'new'                                   {return 'RW_new'}
+'list'                                  {return 'RW_list'}
 'if'                                    {return 'RW_if'}
+'else'                                  {return 'RW_else'}
 'print'                                 {return 'RW_print'}
 //expresiones regulares
 \"{char1}*\"                            {yytext = yytext.substr(1,yyleng - 2);return 'TOK_string'; }
@@ -95,7 +97,9 @@ INSTRUCTIONS:
 INSTRUCTION:
     TYPE LIST_ID TOK_semicolon      {} |
     ID TOK_semicolon                {} |
-    TYPE ARRAY TOK_semicolon        {};
+    NEW_ARRAY TOK_semicolon        {} |
+    ARRAY_ASIGN TOK_semicolon       {} |
+    IF_STRCT                        {};
 
 LIST_ID:
     LIST_ID TOK_comma ID            {} |
@@ -103,19 +107,29 @@ LIST_ID:
 
 ID:
     TOK_id TOK_equal EXP                                {} |
-    TOK_id TOK_lbrckt EXP TOK_rbrckt TOK_equal EXP      {} |
     TOK_id                                              {};
 
-ARRAY:
-    TOK_lbrckt TOK_rbrckt TOK_id TOK_equal ARRAY_VALUE  {};
+NEW_ARRAY:
+    TYPE TOK_lbrckt TOK_rbrckt TOK_id TOK_equal ARRAY_VALUE  {};
 
 ARRAY_VALUE:
     RW_new TYPE TOK_lbrckt EXP TOK_rbrckt   {} |
-    TOK_lbrc VALUE_LIST TOK_rbrc;
+    TOK_lbrc VALUE_LIST TOK_rbrc            {};
+
+ARRAY_ASIGN:
+    TOK_id TOK_lbrckt EXP TOK_rbrckt TOK_equal EXP      {};
 
 VALUE_LIST:
     VALUE_LIST TOK_comma EXP            {} |
     EXP                                 {};
+
+IF_STRCT:
+    RW_if TOK_lpar EXP TOK_rpar BLOCK                   {} |
+    RW_if TOK_lpar EXP TOK_rpar BLOCK RW_else BLOCK     {} |
+    RW_if TOK_lpar EXP TOK_rpar BLOCK RW_else IF_STRCT  {};
+
+BLOCK:
+    TOK_lbrc INSTRUCTIONS TOK_rbrc      {};
 
 EXP:
     EXP TOK_plus  EXP                   {} |

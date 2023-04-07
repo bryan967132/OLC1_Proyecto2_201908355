@@ -10,8 +10,15 @@ String[] nombre = {"201908355","Danny","Tejaxún"};
 String edad = "Edad: " + 22;
 char inicial = '\\';
 boolean izquierda;
+List<char> lista1 = new List<char>;
 izquierda = a > 70 ? false : true;
 boolean derecha = false;
+dato[2] = dato[2] + " Pichiyá";
+lista1.add('a');
+lista1.add((char) 70);
+lista1[[2]] = lista1[[1]];
+lista1[[1]] = lista1[[0]];
+lista1[[0]] = 'Z';
 if(comp_1 && h > d) {
     while(h > 0) {
         print("Se cumple");
