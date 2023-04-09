@@ -147,10 +147,14 @@ BLOCK:
     TOK_lbrc TOK_rbrc                   {};
 
 SWITCH_STRCT:
-    RW_switch TOK_lpar EXP TOK_rpar TOK_lbrc CASE_LIST TOK_rbrc   {};
+    RW_switch TOK_lpar EXP TOK_rpar TOK_lbrc CASE_BLOCK TOK_rbrc     {};
+
+CASE_BLOCK:
+    CASE_LIST DEFAULT   {} |
+    CASE_LIST           {} |
+    DEFAULT             {};
 
 CASE_LIST:
-    CASE_LIST CASE DEFAULT      {} |
     CASE_LIST CASE              {} |
     CASE                        {};
 
