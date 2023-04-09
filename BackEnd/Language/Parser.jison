@@ -25,6 +25,7 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 'false'                                 {return 'RW_false'}
 'new'                                   {return 'RW_new'}
 'list'                                  {return 'RW_list'}
+'add'                                   {return 'RW_add'}
 'if'                                    {return 'RW_if'}
 'else'                                  {return 'RW_else'}
 'print'                                 {return 'RW_print'}
@@ -51,6 +52,7 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 '}'                                     {return 'TOK_rbrc'}
 '=='                                    {return 'TOK_equalequal'}
 '='                                     {return 'TOK_equal'}
+'.'                                     {return 'TOK_dot'}
 ','                                     {return 'TOK_comma'}
 ':'                                     {return 'TOK_colon'}
 ';'                                     {return 'TOK_semicolon'}
@@ -60,8 +62,8 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 '!'                                     {return 'TOK_not'}
 '<='                                    {return 'TOK_lessequal'}
 '>='                                    {return 'TOK_greatequal'}
-'>'                                     {return 'TOK_less'}
-'<'                                     {return 'TOK_great'}
+'<'                                     {return 'TOK_less'}
+'>'                                     {return 'TOK_great'}
 '?'                                     {return 'TOK_question'}
 .                                       {console.log('Error: ' + yytext)}
 <<EOF>>                                 {return 'EOF'}
@@ -97,7 +99,7 @@ INSTRUCTIONS:
 INSTRUCTION:
     TYPE LIST_ID TOK_semicolon      {} |
     ID TOK_semicolon                {} |
-    NEW_ARRAY TOK_semicolon        {} |
+    NEW_ARRAY TOK_semicolon         {} |
     ARRAY_ASIGN TOK_semicolon       {} |
     IF_STRCT                        {};
 
@@ -110,14 +112,20 @@ ID:
     TOK_id                                              {};
 
 NEW_ARRAY:
-    TYPE TOK_lbrckt TOK_rbrckt TOK_id TOK_equal ARRAY_VALUE  {};
+    TYPE TOK_lbrckt TOK_rbrckt TOK_id TOK_equal ARRAY_VALUE         {} |
+    RW_list TOK_less TYPE TOK_great TOK_id TOK_equal LIST_VALUE     {};
 
 ARRAY_VALUE:
     RW_new TYPE TOK_lbrckt EXP TOK_rbrckt   {} |
     TOK_lbrc VALUE_LIST TOK_rbrc            {};
 
+LIST_VALUE:
+    RW_new RW_list TOK_less TYPE TOK_great  {};
+
 ARRAY_ASIGN:
-    TOK_id TOK_lbrckt EXP TOK_rbrckt TOK_equal EXP      {};
+    TOK_id TOK_lbrckt EXP TOK_rbrckt TOK_equal EXP      {} |
+    TOK_id TOK_dot RW_add TOK_lpar EXP TOK_rpar         {} |
+    TOK_id TOK_lbrckt TOK_lbrckt EXP TOK_rbrckt TOK_rbrckt TOK_equal EXP      {};
 
 VALUE_LIST:
     VALUE_LIST TOK_comma EXP            {} |
@@ -132,33 +140,34 @@ BLOCK:
     TOK_lbrc INSTRUCTIONS TOK_rbrc      {};
 
 EXP:
-    EXP TOK_plus  EXP                   {} |
-    EXP TOK_minus EXP                   {} |
-    EXP TOK_mult  EXP                   {} |
-    EXP TOK_div   EXP                   {} |
-    TOK_minus EXP %prec uminus          {} |
-    TOK_lpar EXP TOK_rpar               {} |
-    EXP TOK_equalequal EXP              {} |
-    EXP TOK_notequal   EXP              {} |
-    EXP TOK_less       EXP              {} |
-    EXP TOK_great      EXP              {} |
-    EXP TOK_lessequal  EXP              {} |
-    EXP TOK_greatequal EXP              {} |
-    EXP TOK_or  EXP                     {} |
-    EXP TOK_and EXP                     {} |
-    TOK_not EXP                         {} |
-    TOK_lpar TYPE TOK_rpar EXP          {} |
-    EXP TOK_question EXP TOK_colon EXP  {} |
-    TOK_id TOK_lbrckt EXP TOK_rbrckt    {} |
-    EXP TOK_incr                        {} |
-    EXP TOK_decr                        {} |
-    TOK_id                              {} |
-    TOK_double                          {} |
-    TOK_integer                         {} |
-    TOK_string                          {} |
-    TOK_char                            {} |
-    RW_true                             {} |
-    RW_false                            {};
+    EXP TOK_plus  EXP                                       {} |
+    EXP TOK_minus EXP                                       {} |
+    EXP TOK_mult  EXP                                       {} |
+    EXP TOK_div   EXP                                       {} |
+    TOK_minus EXP %prec uminus                              {} |
+    TOK_lpar EXP TOK_rpar                                   {} |
+    EXP TOK_equalequal EXP                                  {} |
+    EXP TOK_notequal   EXP                                  {} |
+    EXP TOK_less       EXP                                  {} |
+    EXP TOK_great      EXP                                  {} |
+    EXP TOK_lessequal  EXP                                  {} |
+    EXP TOK_greatequal EXP                                  {} |
+    EXP TOK_or  EXP                                         {} |
+    EXP TOK_and EXP                                         {} |
+    TOK_not EXP                                             {} |
+    TOK_lpar TYPE TOK_rpar EXP                              {} |
+    EXP TOK_question EXP TOK_colon EXP                      {} |
+    TOK_id TOK_lbrckt EXP TOK_rbrckt                        {} |
+    TOK_id TOK_lbrckt TOK_lbrckt EXP TOK_rbrckt TOK_rbrckt  {} |
+    EXP TOK_incr                                            {} |
+    EXP TOK_decr                                            {} |
+    TOK_id                                                  {} |
+    TOK_double                                              {} |
+    TOK_integer                                             {} |
+    TOK_string                                              {} |
+    TOK_char                                                {} |
+    RW_true                                                 {} |
+    RW_false                                                {};
 
 TYPE:
     RW_int          {} |
