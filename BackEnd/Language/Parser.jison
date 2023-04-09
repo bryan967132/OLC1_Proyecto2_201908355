@@ -13,8 +13,8 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 %%
 \s+                                     {}
 [ \n\r]                                 {}
-\/\/.*                                  {/*comentario simple*/}
-[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]     {/*comentario multilínea*/}
+\/\/.*                                  {}//comentario simple
+[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]     {}//comentario multilínea
 //palabras reservadas
 'int'                                   {return 'RW_int'}
 'double'                                {return 'RW_double'}
@@ -28,6 +28,10 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 'add'                                   {return 'RW_add'}
 'if'                                    {return 'RW_if'}
 'else'                                  {return 'RW_else'}
+'switch'                                {return 'RW_switch'}
+'case'                                  {return 'RW_case'}
+'break'                                 {return 'RW_break'}
+'default'                               {return 'RW_default'}
 'print'                                 {return 'RW_print'}
 //expresiones regulares
 \"{char1}*\"                            {yytext = yytext.substr(1,yyleng - 2);return 'TOK_string'; }
@@ -101,7 +105,9 @@ INSTRUCTION:
     ID TOK_semicolon                {} |
     NEW_ARRAY TOK_semicolon         {} |
     ARRAY_ASIGN TOK_semicolon       {} |
-    IF_STRCT                        {};
+    IF_STRCT                        {} |
+    SWITCH_STRCT                    {} |
+    RW_break TOK_semicolon          {};
 
 LIST_ID:
     LIST_ID TOK_comma ID            {} |
@@ -137,7 +143,22 @@ IF_STRCT:
     RW_if TOK_lpar EXP TOK_rpar BLOCK RW_else IF_STRCT  {};
 
 BLOCK:
-    TOK_lbrc INSTRUCTIONS TOK_rbrc      {};
+    TOK_lbrc INSTRUCTIONS TOK_rbrc      {} |
+    TOK_lbrc TOK_rbrc                   {};
+
+SWITCH_STRCT:
+    RW_switch TOK_lpar EXP TOK_rpar TOK_lbrc CASE_LIST TOK_rbrc   {};
+
+CASE_LIST:
+    CASE_LIST CASE DEFAULT      {} |
+    CASE_LIST CASE              {} |
+    CASE                        {};
+
+CASE:
+    RW_case EXP TOK_colon INSTRUCTIONS      {};
+
+DEFAULT:
+    RW_default TOK_colon INSTRUCTIONS       {};
 
 EXP:
     EXP TOK_plus  EXP                                       {} |

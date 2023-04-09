@@ -16,16 +16,16 @@ lista1.add((char) 70);
 lista1[[2]] = lista1[[1]];
 lista1[[1]] = lista1[[0]];
 lista1[[0]] = 'Z';
-/*if(comp_1 && h > d) {
+if(comp_1 && h > d) {
     while(h > 0) {
         print("Se cumple");
         h --;
     }
 }
 else if(!izquierda) {
-    for(int i = 0; i < (int) inicial; i ++) {
+    /*for(int i = 0; i < (int) inicial; i ++) {
         print("izquierda");
-    }
+    }*/
 }
 else {
     int[] numeros = new int[4];
@@ -43,4 +43,4 @@ else {
             numeros[3] = 3;
             break;
     }
-}*/
+}
