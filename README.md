@@ -65,7 +65,7 @@ do {
     if(a>=1 && a <3){
         break;
     }
-    Else if(a > 3){
+    else if(a > 3){
         continue;
     }
     r = r - 1;
