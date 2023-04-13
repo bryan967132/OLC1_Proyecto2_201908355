@@ -30,8 +30,13 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 'else'                                  {return 'RW_else'}
 'switch'                                {return 'RW_switch'}
 'case'                                  {return 'RW_case'}
+'while'                                 {return 'RW_while'}
+'for'                                   {return 'RW_for'}
+'do'                                    {return 'RW_do'}
 'break'                                 {return 'RW_break'}
+'continue'                              {return 'RW_continue'}
 'default'                               {return 'RW_default'}
+'return'                                {return 'RW_return'}
 'print'                                 {return 'RW_print'}
 //expresiones regulares
 \"{char1}*\"                            {yytext = yytext.substr(1,yyleng - 2);return 'TOK_string'; }
@@ -101,19 +106,26 @@ INSTRUCTIONS:
     INSTRUCTION                     {};
 
 INSTRUCTION:
-    TYPE LIST_ID TOK_semicolon      {} |
-    ID TOK_semicolon                {} |
+    INIT_ID TOK_semicolon           {} |
+    ID_ASIGN TOK_semicolon          {} |
+    INCR_DECR TOK_semicolon         {} |
     NEW_ARRAY TOK_semicolon         {} |
     ARRAY_ASIGN TOK_semicolon       {} |
     IF_STRCT                        {} |
     SWITCH_STRCT                    {} |
-    RW_break TOK_semicolon          {};
+    RW_break TOK_semicolon          {} |
+    RW_continue TOK_semicolon       {} |
+    LOOP                            {} |
+    INCR_DECR TOK_semicolon         {};
+
+INIT_ID:
+    TYPE LIST_ID                    {};
 
 LIST_ID:
-    LIST_ID TOK_comma ID            {} |
-    ID                              {};
+    LIST_ID TOK_comma ID_ASIGN            {} |
+    ID_ASIGN                              {};
 
-ID:
+ID_ASIGN:
     TOK_id TOK_equal EXP                                {} |
     TOK_id                                              {};
 
@@ -142,10 +154,6 @@ IF_STRCT:
     RW_if TOK_lpar EXP TOK_rpar BLOCK RW_else BLOCK     {} |
     RW_if TOK_lpar EXP TOK_rpar BLOCK RW_else IF_STRCT  {};
 
-BLOCK:
-    TOK_lbrc INSTRUCTIONS TOK_rbrc      {} |
-    TOK_lbrc TOK_rbrc                   {};
-
 SWITCH_STRCT:
     RW_switch TOK_lpar EXP TOK_rpar TOK_lbrc CASE_BLOCK TOK_rbrc     {};
 
@@ -164,11 +172,35 @@ CASE:
 DEFAULT:
     RW_default TOK_colon INSTRUCTIONS       {};
 
+LOOP:
+    RW_while TOK_lpar EXP TOK_rpar BLOCK                        {} |
+    RW_for TOK_lpar FOR_PARAMS TOK_rpar BLOCK                   {} |
+    RW_do BLOCK RW_while TOK_lpar EXP TOK_rpar TOK_semicolon    {};
+
+FOR_PARAMS:
+    INIT_ID TOK_semicolon EXP TOK_semicolon UPDATE_FOR {};
+
+UPDATE_FOR:
+    UPDATE_FOR TOK_comma UPDATE   {} |
+    UPDATE              {};
+
+UPDATE:
+    INCR_DECR       {} |
+    ID_ASIGN_FOR    {};
+
+ID_ASIGN_FOR:
+    TOK_id TOK_equal EXP    {};
+
+BLOCK:
+    TOK_lbrc INSTRUCTIONS TOK_rbrc      {} |
+    TOK_lbrc TOK_rbrc                   {};
+
 EXP:
     EXP TOK_plus  EXP                                       {} |
     EXP TOK_minus EXP                                       {} |
     EXP TOK_mult  EXP                                       {} |
     EXP TOK_div   EXP                                       {} |
+    EXP TOK_mod   EXP                                       {} |
     TOK_minus EXP %prec uminus                              {} |
     TOK_lpar EXP TOK_rpar                                   {} |
     EXP TOK_equalequal EXP                                  {} |
@@ -184,8 +216,7 @@ EXP:
     EXP TOK_question EXP TOK_colon EXP                      {} |
     TOK_id TOK_lbrckt EXP TOK_rbrckt                        {} |
     TOK_id TOK_lbrckt TOK_lbrckt EXP TOK_rbrckt TOK_rbrckt  {} |
-    EXP TOK_incr                                            {} |
-    EXP TOK_decr                                            {} |
+    INCR_DECR                                               {} |
     TOK_id                                                  {} |
     TOK_double                                              {} |
     TOK_integer                                             {} |
@@ -193,6 +224,10 @@ EXP:
     TOK_char                                                {} |
     RW_true                                                 {} |
     RW_false                                                {};
+
+INCR_DECR:
+    TOK_id TOK_incr        {} |
+    TOK_id TOK_decr        {};
 
 TYPE:
     RW_int          {} |

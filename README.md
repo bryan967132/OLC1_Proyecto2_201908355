@@ -18,16 +18,29 @@ lista1.add('a');
 lista1.add((char) 70);
 lista1[[2]] = lista1[[1]];
 lista1[[1]] = lista1[[0]];
+int edad = 18;
+edad++; //tiene el valor de 19
+edad--; //tiene el valor 18
+int anio=2020;
+anio = 1 + anio++; //obtiene el valor de 2022
+anio = anio--; //obtiene el valor de 2021
 lista1[[0]] = 'Z';
 if(comp_1 && h > d) {
     while(h > 0) {
-        print("Se cumple");
+        //print("Se cumple");
+        if(h % 2 == 0) {continue;}
+        else {}
         h --;
     }
 }
 else if(!izquierda) {
-    for(int i = 0; i < (int) inicial; i ++) {
-        print("izquierda");
+    double r = 5.1;
+    for(int i = 0,j = 4; i < ((int) r) && j >= 0; i ++,j = j - 1) {
+        String HOLA = "HOLA";
+        //print("i = " + i + ", j = " + j);
+        if(i == 3) {
+            break;
+        }
     }
 }
 else {
@@ -47,4 +60,14 @@ else {
             break;
     }
 }
+int r = 8;
+do {
+    if(a>=1 && a <3){
+        break;
+    }
+    Else if(a > 3){
+        continue;
+    }
+    r = r - 1;
+} while(r > 0);
 ```
