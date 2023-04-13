@@ -37,6 +37,7 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 'continue'                              {return 'RW_continue'}
 'default'                               {return 'RW_default'}
 'return'                                {return 'RW_return'}
+'void'                                  {return 'RW_void'}
 'print'                                 {return 'RW_print'}
 //expresiones regulares
 \"{char1}*\"                            {yytext = yytext.substr(1,yyleng - 2);return 'TOK_string'; }
@@ -116,7 +117,12 @@ INSTRUCTION:
     RW_break TOK_semicolon          {} |
     RW_continue TOK_semicolon       {} |
     LOOP                            {} |
-    INCR_DECR TOK_semicolon         {};
+    FUNCTION                        {} |
+    CALLED_FUNCTION TOK_semicolon   {} |
+    PRINT TOK_semicolon             {} |
+    INCR_DECR TOK_semicolon         {} |
+    RW_return TOK_semicolon         {} |
+    RW_return EXP TOK_semicolon     {};
 
 INIT_ID:
     TYPE LIST_ID                    {};
@@ -181,8 +187,8 @@ FOR_PARAMS:
     INIT_ID TOK_semicolon EXP TOK_semicolon UPDATE_FOR {};
 
 UPDATE_FOR:
-    UPDATE_FOR TOK_comma UPDATE   {} |
-    UPDATE              {};
+    UPDATE_FOR TOK_comma UPDATE     {} |
+    UPDATE                          {};
 
 UPDATE:
     INCR_DECR       {} |
@@ -191,9 +197,31 @@ UPDATE:
 ID_ASIGN_FOR:
     TOK_id TOK_equal EXP    {};
 
+FUNCTION:
+    TYPE TOK_id TOK_lpar PARAMETERS TOK_rpar BLOCK          {} |
+    RW_void TOK_id TOK_lpar PARAMETERS TOK_rpar BLOCK       {} |
+    TYPE TOK_id TOK_lpar TOK_rpar BLOCK                     {} |
+    RW_void TOK_id TOK_lpar TOK_rpar BLOCK                  {};
+
+PARAMETERS:
+    PARAMETERS TOK_comma TYPE TOK_id    {} |
+    TYPE TOK_id                         {};
+
 BLOCK:
     TOK_lbrc INSTRUCTIONS TOK_rbrc      {} |
     TOK_lbrc TOK_rbrc                   {};
+
+CALLED_FUNCTION:
+    TOK_id TOK_lpar LIST_EXPS TOK_rpar    {} |
+    TOK_id TOK_lpar TOK_rpar              {};
+
+LIST_EXPS:
+    LIST_EXPS TOK_comma EXP     {} |
+    EXP                         {};
+
+PRINT:
+    RW_print TOK_lpar EXP TOK_rpar     {} |
+    RW_print TOK_lpar TOK_rpar         {};
 
 EXP:
     EXP TOK_plus  EXP                                       {} |
@@ -216,6 +244,7 @@ EXP:
     EXP TOK_question EXP TOK_colon EXP                      {} |
     TOK_id TOK_lbrckt EXP TOK_rbrckt                        {} |
     TOK_id TOK_lbrckt TOK_lbrckt EXP TOK_rbrckt TOK_rbrckt  {} |
+    CALLED_FUNCTION                                         {} |
     INCR_DECR                                               {} |
     TOK_id                                                  {} |
     TOK_double                                              {} |

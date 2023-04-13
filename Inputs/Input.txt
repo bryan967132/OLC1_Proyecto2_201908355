@@ -11,6 +11,26 @@ List<char> lista1 = new List<char>;
 izquierda = a > 70 ? false : true;
 boolean derecha = false;
 dato[2] = dato[2] + " Pichiyá";
+double conversion = conversion(80.5,"metro");
+print(conversion(12,"metro"));
+double conversion(double pies, string tipo){
+    if (tipo == "metro"){
+        return pies/3.281;
+    }
+    else{
+        return -1;
+    }
+}
+void saludar(){
+    String saludo;
+    saludo = "Hola";
+    print(saludo);
+}
+void saludar1(String saludo){
+    print(saludo);
+}
+saludar();
+saludar1("Adiós");
 lista1.add('a');
 lista1.add((char) 70);
 lista1[[2]] = lista1[[1]];
@@ -24,9 +44,9 @@ anio = anio--; //obtiene el valor de 2021
 lista1[[0]] = 'Z';
 if(comp_1 && h > d) {
     while(h > 0) {
-        //print("Se cumple");
+        print("Se cumple");
         if(h % 2 == 0) {continue;}
-        else {}
+        else {return;}
         h --;
     }
 }
@@ -34,7 +54,7 @@ else if(!izquierda) {
     double r = 5.1;
     for(int i = 0,j = 4; i < ((int) r) && j >= 0; i ++,j = j - 1) {
         String HOLA = "HOLA";
-        //print("i = " + i + ", j = " + j);
+        print("i = " + i + ", j = " + j);
         if(i == 3) {
             break;
         }
@@ -57,6 +77,7 @@ else {
             break;
     }
 }
+return;
 int r = 8;
 do {
     if(a>=1 && a <3){
