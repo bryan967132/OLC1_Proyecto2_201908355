@@ -1,0 +1,17 @@
+void iniciar() {
+    List<int> lista = toCharArray("¡Hola Mundo!");
+    int b = length(lista) % 2 == 0 ? length(lista) : length(lista) + 1;
+    int suma = suma(5,b);
+    print("5 + " + b + " = " + suma);
+    print(factorial(suma));
+}
+int suma(int a,int b) {
+    return a + b;
+}
+int factorial(int n) {
+    if(n == 0) {
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+main iniciar();

@@ -25,7 +25,6 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 'false'                                 {return 'RW_false'}
 'new'                                   {return 'RW_new'}
 'list'                                  {return 'RW_list'}
-'add'                                   {return 'RW_add'}
 'if'                                    {return 'RW_if'}
 'else'                                  {return 'RW_else'}
 'switch'                                {return 'RW_switch'}
@@ -38,7 +37,18 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 'default'                               {return 'RW_default'}
 'return'                                {return 'RW_return'}
 'void'                                  {return 'RW_void'}
-'print'                                 {return 'RW_print'}
+'main'                                  {return 'RW_main'}
+//funciones nativas
+'add'                                   {return 'FN_add'}
+'toLower'                               {return 'FN_toLower'}
+'toUpper'                               {return 'FN_toUpper'}
+'length'                                {return 'FN_length'}
+'truncate'                              {return 'FN_truncate'}
+'round'                                 {return 'FN_round'}
+'typeOf'                                {return 'FN_typeOf'}
+'toString'                              {return 'FN_toString'}
+'toCharArray'                           {return 'FN_toCharArray'}
+'print'                                 {return 'FN_print'}
 //expresiones regulares
 \"{char1}*\"                            {yytext = yytext.substr(1,yyleng - 2);return 'TOK_string'; }
 \'{char1}\'                             {yytext = yytext.substr(1,yyleng - 2);return 'TOK_char'; }
@@ -107,6 +117,7 @@ INSTRUCTIONS:
     INSTRUCTION                     {};
 
 INSTRUCTION:
+    MAIN_METHOD                     {} |
     INIT_ID TOK_semicolon           {} |
     ID_ASIGN TOK_semicolon          {} |
     INCR_DECR TOK_semicolon         {} |
@@ -119,10 +130,13 @@ INSTRUCTION:
     LOOP                            {} |
     FUNCTION                        {} |
     CALLED_FUNCTION TOK_semicolon   {} |
-    PRINT TOK_semicolon             {} |
+    NATIVES_FUNCTION TOK_semicolon  {} |
     INCR_DECR TOK_semicolon         {} |
     RW_return TOK_semicolon         {} |
     RW_return EXP TOK_semicolon     {};
+
+MAIN_METHOD:
+    RW_main CALLED_FUNCTION TOK_semicolon   {};
 
 INIT_ID:
     TYPE LIST_ID                    {};
@@ -144,11 +158,12 @@ ARRAY_VALUE:
     TOK_lbrc VALUE_LIST TOK_rbrc            {};
 
 LIST_VALUE:
-    RW_new RW_list TOK_less TYPE TOK_great  {};
+    RW_new RW_list TOK_less TYPE TOK_great  {} |
+    FN_toCharArray TOK_lpar EXP TOK_rpar    {};
 
 ARRAY_ASIGN:
     TOK_id TOK_lbrckt EXP TOK_rbrckt TOK_equal EXP      {} |
-    TOK_id TOK_dot RW_add TOK_lpar EXP TOK_rpar         {} |
+    TOK_id TOK_dot FN_add TOK_lpar EXP TOK_rpar         {} |
     TOK_id TOK_lbrckt TOK_lbrckt EXP TOK_rbrckt TOK_rbrckt TOK_equal EXP      {};
 
 VALUE_LIST:
@@ -219,9 +234,19 @@ LIST_EXPS:
     LIST_EXPS TOK_comma EXP     {} |
     EXP                         {};
 
-PRINT:
-    RW_print TOK_lpar EXP TOK_rpar     {} |
-    RW_print TOK_lpar TOK_rpar         {};
+NATIVES_FUNCTION:
+    FN_print TOK_lpar EXP TOK_rpar      {} |
+    FN_print TOK_lpar TOK_rpar          {};
+
+NATIVES_FUNCTION_EXP:
+    FN_toLower TOK_lpar EXP TOK_rpar        {} |
+    FN_toUpper TOK_lpar EXP TOK_rpar        {} |
+    FN_length TOK_lpar EXP TOK_rpar         {} |
+    FN_truncate TOK_lpar EXP TOK_rpar       {} |
+    FN_round TOK_lpar EXP TOK_rpar          {} |
+    FN_typeOf TOK_lpar EXP TOK_rpar         {} |
+    FN_toString TOK_lpar EXP TOK_rpar       {} |
+    FN_toCharArray TOK_lpar EXP TOK_rpar    {};
 
 EXP:
     EXP TOK_plus  EXP                                       {} |
@@ -245,6 +270,7 @@ EXP:
     TOK_id TOK_lbrckt EXP TOK_rbrckt                        {} |
     TOK_id TOK_lbrckt TOK_lbrckt EXP TOK_rbrckt TOK_rbrckt  {} |
     CALLED_FUNCTION                                         {} |
+    NATIVES_FUNCTION_EXP                                    {} |
     INCR_DECR                                               {} |
     TOK_id                                                  {} |
     TOK_double                                              {} |

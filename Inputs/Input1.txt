@@ -88,3 +88,34 @@ do {
     }
     r = r - 1;
 } while(r > 0);
+print("Sale compi \n" + valor);
+print(suma(2,2));
+string cad_1 = toLower("hOla MunDo"); // cad_1 = "hola mundo"
+string cad_2 = toLower("RESULTADO = " + 100); // cad_2 = "resultado = 100"
+string cad_1 = toUpper("hOla MunDo"); // cad_1 = "HOLA MUNDO"
+string cad_2 = toUpper("resultado = " + 100); // cad_2 = "RESULTADO = 100"
+list<int> lista2 =new list<int>;
+string[] vector2 = {"hola", "Mundo"};
+int tam_lista = length(lista2); // tam_lista = 0
+int tam_vector = length(vector2); // tam_vector = 2
+int tam_hola = length(vector2[0]); // tam_hola = 4
+int nuevoValor = truncate(3.53); // nuevoValor = 3
+int otroValor = truncate(10); // otroValor = 10
+double decimal = 15.4654849;
+int entero = truncate(decimal); // entero = 15
+Double valor = round(5.8); //valor = 6
+Double valor2 = round(5.4); //valor2 = 5
+list<int> lista2 =new list<int>;
+String tipo = typeof(15); // tipo = "int"
+String tipo2 = typeof(15.25); // tipo = "double"
+String tipo3 = typeof(lista2); // tipo3 = "lista"
+String valor = toString(14); // valor = "14"
+String valor2 = toString(true); // valor = "true"
+list<char> caracteres = toCharArray("Hola");
+/*
+caracteres [[0]] = 'H'
+caracteres [[1]] = 'o'
+caracteres [[2]] = 'l'
+caracteres [[3]] = 'a'
+*/
+main saludar();
