@@ -1,8 +1,9 @@
 import { Expression } from '../Abstracts/Expression';
-import { Return, Type } from '../Abstracts/Type';
+import { TypeExp } from '../Spec/Expressions';
+import { Return, Type } from '../Spec/Type';
 export class Logic extends Expression {
     constructor(line: number,column: number,public exp1: Expression,public sign: string,public exp2: Expression) {
-        super(line,column,Type.NULL)
+        super(line,column,Type.NULL,TypeExp.LOGIC_OP)
     }
     public execute(): Return {
         switch(this.sign) {

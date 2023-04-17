@@ -90,13 +90,14 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 /lex
 //Código JavaScript necesario
 %{
-    const {Type} = require('../Classes/Abstracts/Type');
+    const {Type} = require('../Classes/Spec/Type');
     //Instrucciones
     const {Print} = require('../Classes/Instructions/Print');
     //Expresiones
     const {Primitive} = require('../Classes/Expressions/Primitive');
     const {Arithmetic} = require('../Classes/Expressions/Arithmetic');
     const {Logic} = require('../Classes/Expressions/Logic');
+    const {Relational} = require('../Classes/Expressions/Relational');
 %}
 //precedencia de operadores
 //--Operaciones logicas
@@ -119,7 +120,7 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 INIT: INSTRUCTIONS EOF {return $1};
 
 INSTRUCTIONS:
-    INSTRUCTIONS INSTRUCTION        {$$.push($2);/*$$ = $1;*/} |
+    INSTRUCTIONS INSTRUCTION        {$$.push($2);} |
     INSTRUCTION                     {$$ = [$1]};
 
 INSTRUCTION:
@@ -139,7 +140,8 @@ INSTRUCTION:
     NATIVES_FUNCTION TOK_semicolon  {$$ = $1} |
     INCR_DECR TOK_semicolon         {} |
     RW_return TOK_semicolon         {} |
-    RW_return EXP TOK_semicolon     {};
+    RW_return EXP TOK_semicolon     {} |
+    error                           {console.log({ line: this._$.first_line, column: this._$.first_column, type: 'Sintáctico', message: `Error sintáctico, token no esperado '${yytext}' .`})};
 
 MAIN_METHOD:
     RW_main CALLED_FUNCTION TOK_semicolon   {};
@@ -259,12 +261,12 @@ EXP:
     EXP TOK_mod   EXP                                       {$$ = new Arithmetic(@2.first_line,@2.first_column,$1,$2,$3)} |
     TOK_minus EXP %prec uminus                              {$$ = new Arithmetic(@1.first_line,@1.first_column,undefined,$1,$2)} |
     TOK_lpar EXP TOK_rpar                                   {$$ = $2} |
-    EXP TOK_equalequal EXP                                  {} |
-    EXP TOK_notequal   EXP                                  {} |
-    EXP TOK_less       EXP                                  {} |
-    EXP TOK_great      EXP                                  {} |
-    EXP TOK_lessequal  EXP                                  {} |
-    EXP TOK_greatequal EXP                                  {} |
+    EXP TOK_equalequal EXP                                  {$$ = new Relational(@2.first_line,@2.first_column,$1,$2,$3)} |
+    EXP TOK_notequal   EXP                                  {$$ = new Relational(@2.first_line,@2.first_column,$1,$2,$3)} |
+    EXP TOK_less       EXP                                  {$$ = new Relational(@2.first_line,@2.first_column,$1,$2,$3)} |
+    EXP TOK_great      EXP                                  {$$ = new Relational(@2.first_line,@2.first_column,$1,$2,$3)} |
+    EXP TOK_lessequal  EXP                                  {$$ = new Relational(@2.first_line,@2.first_column,$1,$2,$3)} |
+    EXP TOK_greatequal EXP                                  {$$ = new Relational(@2.first_line,@2.first_column,$1,$2,$3)} |
     EXP TOK_or  EXP                                         {$$ = new Logic(@2.first_line,@2.first_column,$1,$2,$3)} |
     EXP TOK_and EXP                                         {$$ = new Logic(@2.first_line,@2.first_column,$1,$2,$3)} |
     TOK_not EXP                                             {$$ = new Logic(@1.first_line,@1.first_column,undefined,$1,$2)} |

@@ -1,9 +1,10 @@
 import { Expression } from '../Abstracts/Expression';
-import { Return, Type } from '../Abstracts/Type';
+import { Return, Type } from '../Spec/Type';
 import { plus, minus, mult, div, pow, mod } from '../Spec/Operations';
+import { TypeExp } from '../Spec/Expressions';
 export class Arithmetic extends Expression {
     constructor(line: number,column: number,public exp1: Expression,public sign: string,public exp2: Expression) {
-        super(line,column,Type.NULL)
+        super(line,column,Type.NULL,TypeExp.ARITHMETIC_OP)
     }
     public execute(): Return {
         switch(this.sign) {

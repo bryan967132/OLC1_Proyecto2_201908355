@@ -1,8 +1,9 @@
 import { Expression } from "../Abstracts/Expression";
-import { Return, Type } from "../Abstracts/Type";
+import { TypeExp } from "../Spec/Expressions";
+import { Return, Type } from "../Spec/Type";
 export class Primitive extends Expression {
     constructor(line: number,column: number,public value: any,type: Type) {
-        super(line,column,type)
+        super(line,column,type,TypeExp.PRIMITIVE)
     }
     public execute(): Return {
         switch(this.type) {

@@ -1,4 +1,4 @@
-import { Type } from '../Abstracts/Type';
+import { Type } from './Type';
 export const plus: Type[][] = [
     [Type.INT,      Type.DOUBLE,    Type.INT,       Type.INT,       Type.STRING],
     [Type.DOUBLE,   Type.DOUBLE,    Type.DOUBLE,    Type.DOUBLE,    Type.STRING],
