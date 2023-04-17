@@ -4,14 +4,16 @@ import { plus, minus, mult, div, pow, mod } from '../Spec/Operations';
 export class Arithmetic extends Expression {
     constructor(line: number,column: number,public exp1: Expression,public sign: string,public exp2: Expression) {
         super(line,column,Type.NULL)
-        this.type = Type.NULL
     }
     public execute(): Return {
         switch(this.sign) {
             case '+':
                 return this.plus()
             case '-':
-                return this.minus()
+                if(this.exp1 != undefined){
+                    return this.minus()
+                }
+                return this.negative()
             case '*':
                 return this.mult()
             case '/':
@@ -24,7 +26,7 @@ export class Arithmetic extends Expression {
                 return {value: -1,type: Type.NULL}
         }
     }
-    public plus(): Return {
+    plus(): Return {
         let value1: Return = this.exp1.execute()
         let value2: Return = this.exp2.execute()
         this.type = plus[value1.type][value2.type]
@@ -44,7 +46,7 @@ export class Arithmetic extends Expression {
         }
         return {value: result,type: this.type}
     }
-    public minus(): Return {
+    minus(): Return {
         let value1: Return = this.exp1.execute()
         let value2: Return = this.exp2.execute()
         this.type = minus[value1.type][value2.type]
@@ -61,7 +63,15 @@ export class Arithmetic extends Expression {
         }
         return {value: result,type: this.type}
     }
-    public mult(): Return {
+    negative(): Return {
+        let value: Return = this.exp2.execute()
+        this.type = value.type
+        if(this.type === Type.INT || this.type === Type.DOUBLE) {
+            return {value: -value.value,type: this.type}
+        }
+        return {value: 'NULL',type: Type.NULL}
+    }
+    mult(): Return {
         let value1: Return = this.exp1.execute()
         let value2: Return = this.exp2.execute()
         this.type = mult[value1.type][value2.type]
@@ -78,7 +88,7 @@ export class Arithmetic extends Expression {
         }
         return {value: result,type: this.type}
     }
-    public div(): Return {
+    div(): Return {
         let value1: Return = this.exp1.execute()
         let value2: Return = this.exp2.execute()
         this.type = div[value1.type][value2.type]
@@ -90,7 +100,7 @@ export class Arithmetic extends Expression {
         }
         return {value: result,type: this.type}
     }
-    public pow(): Return {
+    pow(): Return {
         let value1: Return = this.exp1.execute()
         let value2: Return = this.exp2.execute()
         this.type = pow[value1.type][value2.type]
@@ -103,7 +113,7 @@ export class Arithmetic extends Expression {
         }
         return {value: result,type: this.type}
     }
-    public mod(): Return {
+    mod(): Return {
         let value1: Return = this.exp1.execute()
         let value2: Return = this.exp2.execute()
         this.type = mod[value1.type][value2.type]
@@ -113,7 +123,7 @@ export class Arithmetic extends Expression {
         }
         return {value: result,type: this.type}
     }
-    public getValue(value: Return): Return {
+    getValue(value: Return): Return {
         if(value.type === Type.BOOLEAN) {
             if(value.value) {
                 return {value: 1,type: Type.INT}

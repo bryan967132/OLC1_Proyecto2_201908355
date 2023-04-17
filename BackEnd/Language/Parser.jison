@@ -96,7 +96,7 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
     //Expresiones
     const {Primitive} = require('../Classes/Expressions/Primitive');
     const {Arithmetic} = require('../Classes/Expressions/Arithmetic');
-    const {Negative} = require('../Classes/Expressions/Negative');
+    const {Logic} = require('../Classes/Expressions/Logic');
 %}
 //precedencia de operadores
 //--Operaciones logicas
@@ -257,7 +257,7 @@ EXP:
     EXP TOK_div   EXP                                       {$$ = new Arithmetic(@2.first_line,@2.first_column,$1,$2,$3)} |
     EXP TOK_pow   EXP                                       {$$ = new Arithmetic(@2.first_line,@2.first_column,$1,$2,$3)} |
     EXP TOK_mod   EXP                                       {$$ = new Arithmetic(@2.first_line,@2.first_column,$1,$2,$3)} |
-    TOK_minus EXP %prec uminus                              {$$ = new Negative(@1.first_line,@1.first_column,$2)} |
+    TOK_minus EXP %prec uminus                              {$$ = new Arithmetic(@1.first_line,@1.first_column,undefined,$1,$2)} |
     TOK_lpar EXP TOK_rpar                                   {$$ = $2} |
     EXP TOK_equalequal EXP                                  {} |
     EXP TOK_notequal   EXP                                  {} |
@@ -265,9 +265,9 @@ EXP:
     EXP TOK_great      EXP                                  {} |
     EXP TOK_lessequal  EXP                                  {} |
     EXP TOK_greatequal EXP                                  {} |
-    EXP TOK_or  EXP                                         {} |
-    EXP TOK_and EXP                                         {} |
-    TOK_not EXP                                             {} |
+    EXP TOK_or  EXP                                         {$$ = new Logic(@2.first_line,@2.first_column,$1,$2,$3)} |
+    EXP TOK_and EXP                                         {$$ = new Logic(@2.first_line,@2.first_column,$1,$2,$3)} |
+    TOK_not EXP                                             {$$ = new Logic(@1.first_line,@1.first_column,undefined,$1,$2)} |
     TOK_lpar TYPE TOK_rpar EXP                              {} |
     EXP TOK_question EXP TOK_colon EXP                      {} |
     TOK_id TOK_lbrckt EXP TOK_rbrckt                        {} |
