@@ -62,8 +62,8 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 '-'                                     {return 'TOK_minus'}
 '*'                                     {return 'TOK_mult'}
 '/'                                     {return 'TOK_div'}
-'%'                                     {return 'TOK_mod'}
 '^'                                     {return 'TOK_pow'}
+'%'                                     {return 'TOK_mod'}
 '('                                     {return 'TOK_lpar'}
 ')'                                     {return 'TOK_rpar'}
 '['                                     {return 'TOK_lbrckt'}
@@ -90,7 +90,13 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 /lex
 //Código JavaScript necesario
 %{
-    
+    const {Type} = require('../Classes/Abstracts/Type');
+    //Instrucciones
+    const {Print} = require('../Classes/Instructions/Print');
+    //Expresiones
+    const {Primitive} = require('../Classes/Expressions/Primitive');
+    const {Arithmetic} = require('../Classes/Expressions/Arithmetic');
+    const {Negative} = require('../Classes/Expressions/Negative');
 %}
 //precedencia de operadores
 //--Operaciones logicas
@@ -110,11 +116,11 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 
 %%
 
-INIT: INSTRUCTIONS EOF {};
+INIT: INSTRUCTIONS EOF {return $1};
 
 INSTRUCTIONS:
-    INSTRUCTIONS INSTRUCTION        {} |
-    INSTRUCTION                     {};
+    INSTRUCTIONS INSTRUCTION        {$$.push($2);/*$$ = $1;*/} |
+    INSTRUCTION                     {$$ = [$1]};
 
 INSTRUCTION:
     MAIN_METHOD                     {} |
@@ -130,7 +136,7 @@ INSTRUCTION:
     LOOP                            {} |
     FUNCTION                        {} |
     CALLED_FUNCTION TOK_semicolon   {} |
-    NATIVES_FUNCTION TOK_semicolon  {} |
+    NATIVES_FUNCTION TOK_semicolon  {$$ = $1} |
     INCR_DECR TOK_semicolon         {} |
     RW_return TOK_semicolon         {} |
     RW_return EXP TOK_semicolon     {};
@@ -139,11 +145,7 @@ MAIN_METHOD:
     RW_main CALLED_FUNCTION TOK_semicolon   {};
 
 INIT_ID:
-    TYPE LIST_ID                    {};
-
-LIST_ID:
-    LIST_ID TOK_comma ID_ASIGN            {} |
-    ID_ASIGN                              {};
+    TYPE ID_ASIGN                    {};
 
 ID_ASIGN:
     TOK_id TOK_equal EXP                                {} |
@@ -235,8 +237,8 @@ LIST_EXPS:
     EXP                         {};
 
 NATIVES_FUNCTION:
-    FN_print TOK_lpar EXP TOK_rpar      {} |
-    FN_print TOK_lpar TOK_rpar          {};
+    FN_print TOK_lpar EXP TOK_rpar      {$$ = new Print(@1.first_line,@1.first_column,$3);} |
+    FN_print TOK_lpar TOK_rpar          {$$ = new Print(@1.first_line,@1.first_column,'');};
 
 NATIVES_FUNCTION_EXP:
     FN_toLower TOK_lpar EXP TOK_rpar        {} |
@@ -249,13 +251,14 @@ NATIVES_FUNCTION_EXP:
     FN_toCharArray TOK_lpar EXP TOK_rpar    {};
 
 EXP:
-    EXP TOK_plus  EXP                                       {} |
-    EXP TOK_minus EXP                                       {} |
-    EXP TOK_mult  EXP                                       {} |
-    EXP TOK_div   EXP                                       {} |
-    EXP TOK_mod   EXP                                       {} |
-    TOK_minus EXP %prec uminus                              {} |
-    TOK_lpar EXP TOK_rpar                                   {} |
+    EXP TOK_plus  EXP                                       {$$ = new Arithmetic(@2.first_line,@2.first_column,$1,$2,$3)} |
+    EXP TOK_minus EXP                                       {$$ = new Arithmetic(@2.first_line,@2.first_column,$1,$2,$3)} |
+    EXP TOK_mult  EXP                                       {$$ = new Arithmetic(@2.first_line,@2.first_column,$1,$2,$3)} |
+    EXP TOK_div   EXP                                       {$$ = new Arithmetic(@2.first_line,@2.first_column,$1,$2,$3)} |
+    EXP TOK_pow   EXP                                       {$$ = new Arithmetic(@2.first_line,@2.first_column,$1,$2,$3)} |
+    EXP TOK_mod   EXP                                       {$$ = new Arithmetic(@2.first_line,@2.first_column,$1,$2,$3)} |
+    TOK_minus EXP %prec uminus                              {$$ = new Negative(@1.first_line,@1.first_column,$2)} |
+    TOK_lpar EXP TOK_rpar                                   {$$ = $2} |
     EXP TOK_equalequal EXP                                  {} |
     EXP TOK_notequal   EXP                                  {} |
     EXP TOK_less       EXP                                  {} |
@@ -273,12 +276,12 @@ EXP:
     NATIVES_FUNCTION_EXP                                    {} |
     INCR_DECR                                               {} |
     TOK_id                                                  {} |
-    TOK_double                                              {} |
-    TOK_integer                                             {} |
-    TOK_string                                              {} |
-    TOK_char                                                {} |
-    RW_true                                                 {} |
-    RW_false                                                {};
+    TOK_integer                                             {$$ = new Primitive(@1.first_line,@1.first_column,$1,Type.INT)} |
+    TOK_double                                              {$$ = new Primitive(@1.first_line,@1.first_column,$1,Type.DOUBLE)} |
+    TOK_string                                              {$$ = new Primitive(@1.first_line,@1.first_column,$1,Type.STRING)} |
+    TOK_char                                                {$$ = new Primitive(@1.first_line,@1.first_column,$1,Type.CHAR)} |
+    RW_true                                                 {$$ = new Primitive(@1.first_line,@1.first_column,$1,Type.BOOLEAN)} |
+    RW_false                                                {$$ = new Primitive(@1.first_line,@1.first_column,$1,Type.BOOLEAN)};
 
 INCR_DECR:
     TOK_id TOK_incr        {} |

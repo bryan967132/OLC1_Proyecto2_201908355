@@ -1,0 +1,10 @@
+print("Concatenación: \"Carnet: " + 201908355 + "\"");
+print("Concatenación: 2/5 = " + (-2 / 5));
+print("Suma y Resta: " + (2023 + true - 'd'));
+print("Suma y Resta: " + (3.1416 * 'a' + true));
+print("Potencia: " + (1 + 1) ^ (2 + 1));
+print("Potencia: " + 4 ^ 0.5);
+print("Módulo: " + (7 % 2 + 3 * 5));
+print("Booleano: " + true);
+print("Booleano: " + false);
+print("Caracter: " + 'D');

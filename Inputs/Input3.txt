@@ -1,0 +1,98 @@
+int funcion_suma(int a, int b){
+	int resultado = a+b;
+	return resultado;
+}
+
+
+void funcion_main(){
+	int a = 2;
+	string s = "este es un string";
+	boolean [] vector1 = new boolean [3-1];
+	list <string> compras = new list <string>;
+	a = 2*a+2;
+	print("a="+a); //6
+	print("resultado de (true||false && !true): " + true||false && !true); //true
+	if(a != 5){
+	
+	for(int i=0; i<length(s);i++){
+		print("iteracion No."+(i+1)); //de 1 a 17
+	}
+	}else{
+	 print("a = "+a); //no se ejecuta
+	}
+	
+	string t = (string) 2310.56423;
+	compras.add("manzana");
+	compras.add("pan");
+compras.add("queso");
+compras.add("mantequilla");
+compras.add("jamon");
+compras.add("jugo");
+print(" ");
+print("--------------------------");
+print("     Lista de compras     ");
+print("--------------------------");
+	for(int n = 0; n<length(compras); n++){
+	print((n+1)+".- "+compras[[n]]);
+}
+print("--------------------------");
+print(" ");
+	int edad = 18;
+	
+	switch( edad ) {
+		Case 10:
+			Print("Tengo 10 anios.");
+			// mas sentencias
+			Break;
+		Case 18:
+			Print("Tengo 18 anios.");
+int x = 49;
+	while (x<100){ if (x > 50)
+		{
+		print("Mayor que 50");
+		break;
+		}
+		else
+		{
+		print("Menor que 100");
+		//Más sentencias
+		}
+		X++;
+		//Más sentencias
+	}
+Break;
+			// mas sentencias
+		Case 25:
+			Print("Tengo 25 anios.");
+			//mas sentencias
+			Break;
+		Default:
+			Print("No se que edad tengo. :(");
+			// mas sentencias
+			Break;
+	}
+
+	/*int x = 49;
+	while (x<100){ if (x > 50)
+		{
+		print("Mayor que 50");
+		break;
+		}
+		else
+		{
+		print("Menor que 100");
+		//Más sentencias
+		}
+		X++;
+		//Más sentencias
+	} comentario que no se ejecuta*/
+
+	S = toUpPer(s);
+	print("toLower(s): "+s); // ESTE ES UN STRING
+	S = toloweR(s);
+	print("toUpper(s): "+s); // este es un string
+	print("funcion_suma(5,3): "+funcion_suma(5, 3)); // 8
+}
+
+
+main funcion_main();

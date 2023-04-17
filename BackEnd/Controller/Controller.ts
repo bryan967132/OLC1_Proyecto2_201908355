@@ -17,10 +17,13 @@ export class Controller {
         fs.readFile(path,(err,data) => {
             try {
                 let code = data.toString()
-                /*let ast:Node = */parser.parse(code)
-                //console.log(ast.getDot())
+                let ast = parser.parse(code)
                 console.log('════════════════════════════════════════════════════════')
                 console.log(code)
+                console.log('RESULT:')
+                for(const instruction of ast) {
+                    instruction.execute()
+                }
                 res.json({
                     code: code,
                     console: 'Finish Parser!!!'
