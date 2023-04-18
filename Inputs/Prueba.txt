@@ -22,3 +22,5 @@ print("Mayor: " + (-1.5 > 0));
 print("Mayor: " + ("agua" > "elote"));
 print("Menor: " + (-1.03 < 0));
 print("Menor: " + ("agua" < "elote"));
+print("Prueba Mixta:\n\t(!(5 + 6 <= 10) && (7 % 2 == 2 - 1 || 8 * 2 != 0)) = " + (!(5 + 6 <= 10) && (7 % 2 == 1 || 8 * 2 != 0)));
+print("Ternario: " + ('a' == 97 ? "El ASCII de \"a\" es 97" : "El ASCII de \"a\" no es 97"));

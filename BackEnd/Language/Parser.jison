@@ -98,19 +98,21 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
     const {Arithmetic} = require('../Classes/Expressions/Arithmetic');
     const {Logic} = require('../Classes/Expressions/Logic');
     const {Relational} = require('../Classes/Expressions/Relational');
+    const {Ternary} = require('../Classes/Expressions/Ternary');
 %}
 //precedencia de operadores
-//--Operaciones logicas
-%left 'TOK_incr' 'TOK_decr'//
-%left 'TOK_or'//7
-%left 'TOK_and'//6
-%right 'TOK_not'//5
-%left 'TOK_equalequal' 'TOK_notequal' 'TOK_less' 'TOK_lessequal' 'TOK_great' 'TOK_greatequal'//4
-//--Operaciones numericas
-%left 'TOK_plus' 'TOK_minus'//3
-%left 'TOK_mult' 'TOK_div' 'TOK_mod'//2
+%left 'TOK_question' 'TOK_colon'
+%left 'TOK_or'
+%left 'TOK_and'
+%right 'TOK_not'
+%left 'TOK_equalequal' 'TOK_notequal'
+%left 'TOK_less' 'TOK_lessequal' 'TOK_great' 'TOK_greatequal'
+%left 'TOK_plus' 'TOK_minus'
+%left 'TOK_mult' 'TOK_div' 'TOK_mod'
 %nonassoc 'TOK_pow'
 %right uminus
+%left 'TOK_incr' 'TOK_decr'
+%left 'TOK_dot' 'TOK_lbrckt' 'TOK_rbrckt'
 
 //análisis sintáctico
 %start INIT
@@ -271,7 +273,7 @@ EXP:
     EXP TOK_and EXP                                         {$$ = new Logic(@2.first_line,@2.first_column,$1,$2,$3)} |
     TOK_not EXP                                             {$$ = new Logic(@1.first_line,@1.first_column,undefined,$1,$2)} |
     TOK_lpar TYPE TOK_rpar EXP                              {} |
-    EXP TOK_question EXP TOK_colon EXP                      {} |
+    EXP TOK_question EXP TOK_colon EXP                      {$$ = new Ternary(@1.first_line,@1.first_column,$1,$3,$5)} |
     TOK_id TOK_lbrckt EXP TOK_rbrckt                        {} |
     TOK_id TOK_lbrckt TOK_lbrckt EXP TOK_rbrckt TOK_rbrckt  {} |
     CALLED_FUNCTION                                         {} |
