@@ -102,6 +102,7 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
     const {Relational} = require('../Classes/Expressions/Relational');
     const {Ternary} = require('../Classes/Expressions/Ternary');
     const {AccessID} = require('../Classes/Expressions/AccessID');
+    const {IncrDecr} = require('../Classes/Expressions/IncrDecr');
 %}
 //precedencia de operadores
 %left 'TOK_question' 'TOK_colon'
@@ -132,7 +133,6 @@ INSTRUCTION:
     MAIN_METHOD                     {} |
     INIT_ID TOK_semicolon           {$$ = $1} |
     ID_ASIGN TOK_semicolon          {$$ = $1} |
-    INCR_DECR TOK_semicolon         {} |
     NEW_ARRAY TOK_semicolon         {} |
     ARRAY_ASIGN TOK_semicolon       {} |
     IF_STRCT                        {} |
@@ -143,7 +143,7 @@ INSTRUCTION:
     FUNCTION                        {} |
     CALLED_FUNCTION TOK_semicolon   {} |
     NATIVES_FUNCTION TOK_semicolon  {$$ = $1} |
-    INCR_DECR TOK_semicolon         {} |
+    INCR_DECR TOK_semicolon         {$$ = $1} |
     RW_return TOK_semicolon         {} |
     RW_return EXP TOK_semicolon     {} |
     error                           {console.log({ line: this._$.first_line, column: this._$.first_column, type: 'Sintáctico', message: `Error sintáctico, token no esperado '${yytext}' .`})};
@@ -282,7 +282,7 @@ EXP:
     TOK_id TOK_lbrckt TOK_lbrckt EXP TOK_rbrckt TOK_rbrckt  {} |
     CALLED_FUNCTION                                         {} |
     NATIVES_FUNCTION_EXP                                    {} |
-    INCR_DECR                                               {} |
+    INCR_DECR                                               {$$ = $1} |
     TOK_id                                                  {$$ = new AccessID(@1.first_line,@1.first_column,$1)} |
     TOK_integer                                             {$$ = new Primitive(@1.first_line,@1.first_column,$1,Type.INT)} |
     TOK_double                                              {$$ = new Primitive(@1.first_line,@1.first_column,$1,Type.DOUBLE)} |
@@ -292,8 +292,8 @@ EXP:
     RW_false                                                {$$ = new Primitive(@1.first_line,@1.first_column,$1,Type.BOOLEAN)};
 
 INCR_DECR:
-    TOK_id TOK_incr        {} |
-    TOK_id TOK_decr        {};
+    TOK_id TOK_incr        {$$ = new IncrDecr(@2.first_line,@2.first_column,$1,$2)} |
+    TOK_id TOK_decr        {$$ = new IncrDecr(@2.first_line,@2.first_column,$1,$2)};
 
 TYPE:
     RW_int          {$$ = Type.INT} |

@@ -4,5 +4,7 @@ export enum TypeExp {
     LOGIC_OP,
     RELATIONAL_OP,
     TERNARY_OP,
-    ACCESS_ID
+    ACCESS_ID,
+    INCR,
+    DECR
 }

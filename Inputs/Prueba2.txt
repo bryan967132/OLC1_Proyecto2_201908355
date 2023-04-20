@@ -5,5 +5,8 @@ String resultado = a > b ? "a > b" : "b > a";
 print(s + " = " + a);
 print('a' == A);
 print(resultado);
-a = a - 1;
-print(s + " = " + a);
+int anio = 2020;
+anio = 1 + anio++; //obtiene el valor de 2022
+print(anio);
+anio = anio--; //obtiene el valor de 2021
+print(anio);
