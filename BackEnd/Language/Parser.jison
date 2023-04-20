@@ -122,7 +122,7 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 INIT: INSTRUCTIONS EOF {return $1};
 
 INSTRUCTIONS:
-    INSTRUCTIONS INSTRUCTION        {$$.push($2);} |
+    INSTRUCTIONS INSTRUCTION        {$$.push($2)} |
     INSTRUCTION                     {$$ = [$1]};
 
 INSTRUCTION:
@@ -241,8 +241,9 @@ LIST_EXPS:
     EXP                         {};
 
 NATIVES_FUNCTION:
-    FN_print TOK_lpar EXP TOK_rpar      {$$ = new Print(@1.first_line,@1.first_column,$3);} |
-    FN_print TOK_lpar TOK_rpar          {$$ = new Print(@1.first_line,@1.first_column,'');};
+    FN_print TOK_lpar EXP TOK_rpar      {$$ = new Print(@1.first_line,@1.first_column,$3)} |
+    FN_print TOK_lpar TOK_rpar          {$$ = new Print(@1.first_line,@1.first_column,'')} |
+    NATIVES_FUNCTION_EXP                {$$ = $1};
 
 NATIVES_FUNCTION_EXP:
     FN_toLower TOK_lpar EXP TOK_rpar        {} |
@@ -292,8 +293,8 @@ INCR_DECR:
     TOK_id TOK_decr        {};
 
 TYPE:
-    RW_int          {} |
-    RW_double       {} |
-    RW_boolean      {} |
-    RW_char         {} |
-    RW_string       {};
+    RW_int          {$$ = Type.INT} |
+    RW_double       {$$ = Type.DOUBLE} |
+    RW_boolean      {$$ = Type.BOOLEAN} |
+    RW_char         {$$ = Type.CHAR} |
+    RW_string       {$$ = Type.STRING};

@@ -12,9 +12,9 @@ export class Primitive extends Expression {
             case Type.DOUBLE:
                 return {value: parseFloat(this.value),type: this.type}
             case Type.BOOLEAN:
-                return {value: this.value === 'true',type: this.type}
+                return {value: this.value.toString().toLowerCase() === 'true',type: this.type}
             case Type.CHAR:
-                return {value: this.value[0],type: this.type}
+                return {value: this.value,type: this.type}
             default:
                 this.value = this.value.replace(/\\n/g,'\n')
                 this.value = this.value.replace(/\\t/g,'\t')
