@@ -1,31 +1,32 @@
 import { Expression } from '../Abstracts/Expression';
-import { TypeExp } from '../Spec/Expressions';
-import { Return, Type } from '../Spec/Type';
+import { Environment } from '../Env/Environment';
+import { TypeExp } from '../Utils/Expressions';
+import { Return, Type } from '../Utils/Type';
 export class Relational extends Expression {
     constructor(line: number,column: number,public exp1: Expression,public sign: string,public exp2: Expression) {
         super(line,column,Type.NULL,TypeExp.RELATIONAL_OP)
     }
-    public execute(): Return {
+    public execute(env: Environment): Return {
         switch(this.sign) {
             case '==':
-                return this.equal()
+                return this.equal(env)
             case '!=':
-                return this.notEqual()
+                return this.notEqual(env)
             case '>=':
-                return this.greatEqual()
+                return this.greatEqual(env)
             case '<=':
-                return this.lessEqual()
+                return this.lessEqual(env)
             case '>':
-                return this.great()
+                return this.great(env)
             case '<':
-                return this.less()
+                return this.less(env)
             default:
                 return {value: -1,type: Type.NULL}
             }
         }
-    equal(): Return {
-        let value1: Return = this.exp1.execute()
-        let value2: Return = this.exp2.execute()
+    equal(env: Environment): Return {
+        let value1: Return = this.exp1.execute(env)
+        let value2: Return = this.exp2.execute(env)
         if(value1.type === Type.INT || value1.type === Type.DOUBLE || value1.type === Type.CHAR) {
             if(value2.type === Type.INT || value2.type === Type.DOUBLE || value2.type === Type.CHAR) {
                 value1 = this.getValue(value1)
@@ -39,9 +40,9 @@ export class Relational extends Expression {
         }
         return {value: 'NULL',type: Type.NULL}
     }
-    notEqual(): Return {
-        let value1: Return = this.exp1.execute()
-        let value2: Return = this.exp2.execute()
+    notEqual(env: Environment): Return {
+        let value1: Return = this.exp1.execute(env)
+        let value2: Return = this.exp2.execute(env)
         if(value1.type === Type.INT || value1.type === Type.DOUBLE || value1.type === Type.CHAR) {
             if(value2.type === Type.INT || value2.type === Type.DOUBLE || value2.type === Type.CHAR) {
                 value1 = this.getValue(value1)
@@ -55,9 +56,9 @@ export class Relational extends Expression {
         }
         return {value: 'NULL',type: Type.NULL}
     }
-    greatEqual(): Return {
-        let value1: Return = this.exp1.execute()
-        let value2: Return = this.exp2.execute()
+    greatEqual(env: Environment): Return {
+        let value1: Return = this.exp1.execute(env)
+        let value2: Return = this.exp2.execute(env)
         if(value1.type === Type.INT || value1.type === Type.DOUBLE || value1.type === Type.CHAR) {
             if(value2.type === Type.INT || value2.type === Type.DOUBLE || value2.type === Type.CHAR) {
                 value1 = this.getValue(value1)
@@ -71,9 +72,9 @@ export class Relational extends Expression {
         }
         return {value: 'NULL',type: Type.NULL}
     }
-    lessEqual(): Return {
-        let value1: Return = this.exp1.execute()
-        let value2: Return = this.exp2.execute()
+    lessEqual(env: Environment): Return {
+        let value1: Return = this.exp1.execute(env)
+        let value2: Return = this.exp2.execute(env)
         if(value1.type === Type.INT || value1.type === Type.DOUBLE || value1.type === Type.CHAR) {
             if(value2.type === Type.INT || value2.type === Type.DOUBLE || value2.type === Type.CHAR) {
                 value1 = this.getValue(value1)
@@ -87,9 +88,9 @@ export class Relational extends Expression {
         }
         return {value: 'NULL',type: Type.NULL}
     }
-    great(): Return {
-        let value1: Return = this.exp1.execute()
-        let value2: Return = this.exp2.execute()
+    great(env: Environment): Return {
+        let value1: Return = this.exp1.execute(env)
+        let value2: Return = this.exp2.execute(env)
         if(value1.type === Type.INT || value1.type === Type.DOUBLE || value1.type === Type.CHAR) {
             if(value2.type === Type.INT || value2.type === Type.DOUBLE || value2.type === Type.CHAR) {
                 value1 = this.getValue(value1)
@@ -103,9 +104,9 @@ export class Relational extends Expression {
         }
         return {value: 'NULL',type: Type.NULL}
     }
-    less(): Return {
-        let value1: Return = this.exp1.execute()
-        let value2: Return = this.exp2.execute()
+    less(env: Environment): Return {
+        let value1: Return = this.exp1.execute(env)
+        let value2: Return = this.exp2.execute(env)
         if(value1.type === Type.INT || value1.type === Type.DOUBLE || value1.type === Type.CHAR) {
             if(value2.type === Type.INT || value2.type === Type.DOUBLE || value2.type === Type.CHAR) {
                 value1 = this.getValue(value1)

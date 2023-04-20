@@ -90,15 +90,17 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 /lex
 //Código JavaScript necesario
 %{
-    const {Type} = require('../Classes/Spec/Type');
+    const {Type} = require('../Classes/Utils/Type');
     //Instrucciones
     const {Print} = require('../Classes/Instructions/Print');
+    const {InitID} = require('../Classes/Instructions/InitID');
     //Expresiones
     const {Primitive} = require('../Classes/Expressions/Primitive');
     const {Arithmetic} = require('../Classes/Expressions/Arithmetic');
     const {Logic} = require('../Classes/Expressions/Logic');
     const {Relational} = require('../Classes/Expressions/Relational');
     const {Ternary} = require('../Classes/Expressions/Ternary');
+    const {AccessID} = require('../Classes/Expressions/AccessID');
 %}
 //precedencia de operadores
 %left 'TOK_question' 'TOK_colon'
@@ -127,7 +129,7 @@ INSTRUCTIONS:
 
 INSTRUCTION:
     MAIN_METHOD                     {} |
-    INIT_ID TOK_semicolon           {} |
+    INIT_ID TOK_semicolon           {$$ = $1} |
     ID_ASIGN TOK_semicolon          {} |
     INCR_DECR TOK_semicolon         {} |
     NEW_ARRAY TOK_semicolon         {} |
@@ -149,7 +151,8 @@ MAIN_METHOD:
     RW_main CALLED_FUNCTION TOK_semicolon   {};
 
 INIT_ID:
-    TYPE ID_ASIGN                    {};
+    TYPE TOK_id TOK_equal EXP               {$$ = new InitID(@1.first_line,@1.first_column,$2,$1,$4)} |
+    TYPE TOK_id                             {$$ = new InitID(@1.first_line,@1.first_column,$2,$1,undefined)};
 
 ID_ASIGN:
     TOK_id TOK_equal EXP                                {} |
@@ -280,7 +283,7 @@ EXP:
     CALLED_FUNCTION                                         {} |
     NATIVES_FUNCTION_EXP                                    {} |
     INCR_DECR                                               {} |
-    TOK_id                                                  {} |
+    TOK_id                                                  {$$ = new AccessID(@1.first_line,@1.first_column,$1)} |
     TOK_integer                                             {$$ = new Primitive(@1.first_line,@1.first_column,$1,Type.INT)} |
     TOK_double                                              {$$ = new Primitive(@1.first_line,@1.first_column,$1,Type.DOUBLE)} |
     TOK_string                                              {$$ = new Primitive(@1.first_line,@1.first_column,$1,Type.STRING)} |

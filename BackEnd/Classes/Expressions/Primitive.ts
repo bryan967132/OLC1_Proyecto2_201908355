@@ -1,6 +1,6 @@
 import { Expression } from "../Abstracts/Expression";
-import { TypeExp } from "../Spec/Expressions";
-import { Return, Type } from "../Spec/Type";
+import { TypeExp } from "../Utils/Expressions";
+import { Return, Type } from "../Utils/Type";
 export class Primitive extends Expression {
     constructor(line: number,column: number,public value: any,type: Type) {
         super(line,column,type,TypeExp.PRIMITIVE)

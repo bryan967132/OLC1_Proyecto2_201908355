@@ -1,0 +1,7 @@
+int a = 97;
+double b = 100.0;
+String s = "a";
+String resultado = a > b ? "a > b" : "b > a";
+print(s + " = " + a);
+print('a' == A);
+print(resultado);

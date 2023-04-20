@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Node } from "../AST/Node";
 import * as fs from 'fs'
+import { Environment } from "../Classes/Env/Environment";
 export class Controller {
     public runing(req: Request,res: Response) {
         res.send('Interpreter is running!!!')
@@ -21,8 +22,9 @@ export class Controller {
                 console.log('════════════════════════════════════════════════════════')
                 console.log(code)
                 console.log('RESULT:')
+                const global: Environment = new Environment(null)
                 for(const instruction of ast) {
-                    instruction.execute()
+                    instruction.execute(global)
                 }
                 res.json({
                     code: code,
