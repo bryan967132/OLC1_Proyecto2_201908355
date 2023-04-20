@@ -10,3 +10,14 @@ anio = 1 + anio++; //obtiene el valor de 2022
 print(anio);
 anio = anio--; //obtiene el valor de 2021
 print(anio);
+strinG cadena = "ADiOS";
+print(cadena);
+print("Lower: " + toLoweR(cadena + " HOLA " + '!'));
+print("Upper: " + toupper(cadena + " hola " + '5'));
+print("Length: " + Length(cadena + " hola " + '5'));
+int entero = truncate(45.832104);
+print("Truncate: " + entero);
+print("Round: " + round(5.8));
+print("TypeOf: " + typeOf(entero));
+print("ToString: " + toString(18.52));
+print("ToCharArray: " + toCharArray("Hola"));

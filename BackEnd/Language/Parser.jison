@@ -103,6 +103,7 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
     const {Ternary} = require('../Classes/Expressions/Ternary');
     const {AccessID} = require('../Classes/Expressions/AccessID');
     const {IncrDecr} = require('../Classes/Expressions/IncrDecr');
+    const {NativeFunc} = require('../Classes/Expressions/NativeFunc');
 %}
 //precedencia de operadores
 %left 'TOK_question' 'TOK_colon'
@@ -168,7 +169,7 @@ ARRAY_VALUE:
 
 LIST_VALUE:
     RW_new RW_list TOK_less TYPE TOK_great  {} |
-    FN_toCharArray TOK_lpar EXP TOK_rpar    {};
+    FN_toCharArray TOK_lpar EXP TOK_rpar    {$$ = new NativeFunc(@1.first_line,@1.first_column,$1,$3)};
 
 ARRAY_ASIGN:
     TOK_id TOK_lbrckt EXP TOK_rbrckt TOK_equal EXP      {} |
@@ -249,14 +250,14 @@ NATIVES_FUNCTION:
     NATIVES_FUNCTION_EXP                {$$ = $1};
 
 NATIVES_FUNCTION_EXP:
-    FN_toLower TOK_lpar EXP TOK_rpar        {} |
-    FN_toUpper TOK_lpar EXP TOK_rpar        {} |
-    FN_length TOK_lpar EXP TOK_rpar         {} |
-    FN_truncate TOK_lpar EXP TOK_rpar       {} |
-    FN_round TOK_lpar EXP TOK_rpar          {} |
-    FN_typeOf TOK_lpar EXP TOK_rpar         {} |
-    FN_toString TOK_lpar EXP TOK_rpar       {} |
-    FN_toCharArray TOK_lpar EXP TOK_rpar    {};
+    FN_toLower TOK_lpar EXP TOK_rpar        {$$ = new NativeFunc(@1.first_line,@1.first_column,$1,$3)} |
+    FN_toUpper TOK_lpar EXP TOK_rpar        {$$ = new NativeFunc(@1.first_line,@1.first_column,$1,$3)} |
+    FN_length TOK_lpar EXP TOK_rpar         {$$ = new NativeFunc(@1.first_line,@1.first_column,$1,$3)} |
+    FN_truncate TOK_lpar EXP TOK_rpar       {$$ = new NativeFunc(@1.first_line,@1.first_column,$1,$3)} |
+    FN_round TOK_lpar EXP TOK_rpar          {$$ = new NativeFunc(@1.first_line,@1.first_column,$1,$3)} |
+    FN_typeOf TOK_lpar EXP TOK_rpar         {$$ = new NativeFunc(@1.first_line,@1.first_column,$1,$3)} |
+    FN_toString TOK_lpar EXP TOK_rpar       {$$ = new NativeFunc(@1.first_line,@1.first_column,$1,$3)} |
+    FN_toCharArray TOK_lpar EXP TOK_rpar    {$$ = new NativeFunc(@1.first_line,@1.first_column,$1,$3)};
 
 EXP:
     EXP TOK_plus  EXP                                       {$$ = new Arithmetic(@2.first_line,@2.first_column,$1,$2,$3)} |
@@ -281,7 +282,7 @@ EXP:
     TOK_id TOK_lbrckt EXP TOK_rbrckt                        {} |
     TOK_id TOK_lbrckt TOK_lbrckt EXP TOK_rbrckt TOK_rbrckt  {} |
     CALLED_FUNCTION                                         {} |
-    NATIVES_FUNCTION_EXP                                    {} |
+    NATIVES_FUNCTION_EXP                                    {$$ = $1} |
     INCR_DECR                                               {$$ = $1} |
     TOK_id                                                  {$$ = new AccessID(@1.first_line,@1.first_column,$1)} |
     TOK_integer                                             {$$ = new Primitive(@1.first_line,@1.first_column,$1,Type.INT)} |

@@ -6,5 +6,6 @@ export enum TypeExp {
     TERNARY_OP    = "TERNARY_OP",
     ACCESS_ID     = "ACCESS_ID",
     INCR          = "INCR",
-    DECR          = "DECR"
+    DECR          = "DECR",
+    NATIVE_FUNC   = "NATIVE_FUNC"
 }
