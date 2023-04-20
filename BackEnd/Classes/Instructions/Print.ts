@@ -7,7 +7,7 @@ export class Print extends Instruction {
         super(line,column,TypeInst.PRINT)
     }
     public execute(env: Environment) {
-        const value = this.expression.execute(env)
-        console.log('->',value.value)
+        const value = this.expression ? this.expression.execute(env) : null
+        console.log('->',value ? value.value : '')
     }
 }

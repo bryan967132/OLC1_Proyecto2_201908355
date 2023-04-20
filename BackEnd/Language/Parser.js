@@ -111,7 +111,7 @@ case 68:
 this.$ = new Print(_$[$0-3].first_line,_$[$0-3].first_column,$$[$0-1])
 break;
 case 69:
-this.$ = new Print(_$[$0-2].first_line,_$[$0-2].first_column,'')
+this.$ = new Print(_$[$0-2].first_line,_$[$0-2].first_column,undefined)
 break;
 case 70: case 102:
 this.$ = $$[$0]

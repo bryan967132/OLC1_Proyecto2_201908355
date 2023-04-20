@@ -245,7 +245,7 @@ LIST_EXPS:
 
 NATIVES_FUNCTION:
     FN_print TOK_lpar EXP TOK_rpar      {$$ = new Print(@1.first_line,@1.first_column,$3)} |
-    FN_print TOK_lpar TOK_rpar          {$$ = new Print(@1.first_line,@1.first_column,'')} |
+    FN_print TOK_lpar TOK_rpar          {$$ = new Print(@1.first_line,@1.first_column,undefined)} |
     NATIVES_FUNCTION_EXP                {$$ = $1};
 
 NATIVES_FUNCTION_EXP:
