@@ -1,0 +1,18 @@
+
+
+main correr();
+
+
+void correr(){
+    print("Hola soy correr");
+    print("y mi nombre es: " + dame_Name());
+    print(typeof(dame_Name()) == "STRING" );
+}
+
+
+string dame_Name(){
+    print("soy dame name");
+    return "Nombre";
+    print("no le hice caso al return xd ");
+}
+

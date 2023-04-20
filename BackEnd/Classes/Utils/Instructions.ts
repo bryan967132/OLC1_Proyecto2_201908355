@@ -1,5 +1,5 @@
 export enum TypeInst {
-    PRINT,
-    INIT_ID,
-    ASIGN_ID
+    PRINT       = "PRINT",
+    INIT_ID     = "INIT_ID",
+    ASIGN_ID    = "ASIGN_ID"
 }

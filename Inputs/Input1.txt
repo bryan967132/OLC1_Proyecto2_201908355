@@ -1,121 +1,17 @@
-int a = 70,b = 3,c,d = -(a + b) * 3;
-double f = 1.5 + (a * 1.05),g;
-char h;
-h = (char) a;
-boolean comp_1 = !(a > 0 || b <= 5) && d == 100;
-String[] nombre = {"201908355","Danny","Tejaxún"};
-String edad = "Edad: " + 22;
-char inicial = '\\';
-boolean izquierda;
-List<char> lista1 = new List<char>;
-izquierda = a > 70 ? false : true;
-boolean derecha = false;
-dato[2] = dato[2] + " Pichiyá";
-double conversion = conversion(80.5,"metro");
-print(conversion(12,"metro"));
-double conversion(double pies, string tipo){
-    if (tipo == "metro"){
-        return pies/3.281;
-    }
-    else{
-        return -1;
-    }
+void iniciar() {
+    List<int> lista = toCharArray("¡Hola Mundo!");
+    int b = length(lista) % 2 == 0 ? length(lista) : length(lista) + 1;
+    int suma = suma(5,b);
+    print("5 + " + b + " = " + suma);
+    print(factorial(suma));
 }
-void saludar(){
-    String saludo;
-    saludo = "Hola";
-    print(saludo);
+int suma(int a,int b) {
+    return a + b;
 }
-void saludar1(String saludo){
-    print(saludo);
+int factorial(int n) {
+    if(n == 0) {
+        return 1;
+    }
+    return n * factorial(n - 1);
 }
-saludar();
-saludar1("Adiós");
-lista1.add('a');
-lista1.add((char) 70);
-lista1[[2]] = lista1[[1]];
-lista1[[1]] = lista1[[0]];
-int edad = 18;
-edad++; //tiene el valor de 19
-edad--; //tiene el valor 18
-int anio=2020;
-anio = 1 + anio++; //obtiene el valor de 2022
-anio = anio--; //obtiene el valor de 2021
-lista1[[0]] = 'Z';
-if(comp_1 && h > d) {
-    while(h > 0) {
-        print("Se cumple");
-        if(h % 2 == 0) {continue;}
-        else {return;}
-        h --;
-    }
-}
-else if(!izquierda) {
-    double r = 5.1;
-    for(int i = 0,j = 4; i < ((int) r) && j >= 0; i ++,j = j - 1) {
-        String HOLA = "HOLA";
-        print("i = " + i + ", j = " + j);
-        if(i == 3) {
-            break;
-        }
-    }
-}
-else {
-    int[] numeros = new int[4];
-    switch(nombre[1]) {
-        case "201908355":
-            numeros[0] = 0;
-            break;
-        case "Danny":
-            numeros[1] = 1;
-            break;
-        case "Tejaxún":
-            numeros[2] = 2;
-            break;
-        default:
-            numeros[3] = 3;
-            break;
-    }
-}
-return;
-int r = 8;
-do {
-    if(a>=1 && a <3){
-        break;
-    }
-    else if(a > 3){
-        continue;
-    }
-    r = r - 1;
-} while(r > 0);
-print("Sale compi \n" + valor);
-print(suma(2,2));
-string cad_1 = toLower("hOla MunDo"); // cad_1 = "hola mundo"
-string cad_2 = toLower("RESULTADO = " + 100); // cad_2 = "resultado = 100"
-string cad_1 = toUpper("hOla MunDo"); // cad_1 = "HOLA MUNDO"
-string cad_2 = toUpper("resultado = " + 100); // cad_2 = "RESULTADO = 100"
-list<int> lista2 =new list<int>;
-string[] vector2 = {"hola", "Mundo"};
-int tam_lista = length(lista2); // tam_lista = 0
-int tam_vector = length(vector2); // tam_vector = 2
-int tam_hola = length(vector2[0]); // tam_hola = 4
-int nuevoValor = truncate(3.53); // nuevoValor = 3
-int otroValor = truncate(10); // otroValor = 10
-double decimal = 15.4654849;
-int entero = truncate(decimal); // entero = 15
-Double valor = round(5.8); //valor = 6
-Double valor2 = round(5.4); //valor2 = 5
-list<int> lista2 =new list<int>;
-String tipo = typeof(15); // tipo = "int"
-String tipo2 = typeof(15.25); // tipo = "double"
-String tipo3 = typeof(lista2); // tipo3 = "lista"
-String valor = toString(14); // valor = "14"
-String valor2 = toString(true); // valor = "true"
-list<char> caracteres = toCharArray("Hola");
-/*
-caracteres [[0]] = 'H'
-caracteres [[1]] = 'o'
-caracteres [[2]] = 'l'
-caracteres [[3]] = 'a'
-*/
-main saludar();
+main iniciar();
