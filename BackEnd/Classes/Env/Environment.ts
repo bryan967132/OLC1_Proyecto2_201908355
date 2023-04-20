@@ -1,5 +1,5 @@
 import { printList } from "../Utils/Reports";
-import { Type } from "../Utils/Type";
+import { Return, Type } from "../Utils/Type";
 import { Symbol } from "./Symbol"
 export class Environment {
     private ids: Map<string,Symbol> = new Map<string,Symbol>()
@@ -22,5 +22,18 @@ export class Environment {
             env = env.previous
         }
         return null
+    }
+    public reasignID(id: string,value: Return): boolean {
+        let env: Environment = this
+        while(env) {
+            if(env.ids.has(id.toLowerCase())) {
+                let symbol: Symbol = env.ids.get(id.toLowerCase())!
+                symbol.value = value.value
+                env.ids.set(id.toLowerCase(),symbol)
+                return true
+            }
+        }
+        printList.push('Error, La variable "' + id + '" no ha sido declarada.')
+        return false
     }
 }

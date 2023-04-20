@@ -5,3 +5,5 @@ String resultado = a > b ? "a > b" : "b > a";
 print(s + " = " + a);
 print('a' == A);
 print(resultado);
+a = a - 1;
+print(s + " = " + a);

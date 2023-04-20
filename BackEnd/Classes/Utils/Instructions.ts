@@ -1,4 +1,5 @@
 export enum TypeInst {
     PRINT,
-    INITID
+    INIT_ID,
+    ASIGN_ID
 }

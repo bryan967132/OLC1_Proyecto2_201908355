@@ -94,6 +94,7 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
     //Instrucciones
     const {Print} = require('../Classes/Instructions/Print');
     const {InitID} = require('../Classes/Instructions/InitID');
+    const {AsignID} = require('../Classes/Instructions/AsignID');
     //Expresiones
     const {Primitive} = require('../Classes/Expressions/Primitive');
     const {Arithmetic} = require('../Classes/Expressions/Arithmetic');
@@ -130,7 +131,7 @@ INSTRUCTIONS:
 INSTRUCTION:
     MAIN_METHOD                     {} |
     INIT_ID TOK_semicolon           {$$ = $1} |
-    ID_ASIGN TOK_semicolon          {} |
+    ID_ASIGN TOK_semicolon          {$$ = $1} |
     INCR_DECR TOK_semicolon         {} |
     NEW_ARRAY TOK_semicolon         {} |
     ARRAY_ASIGN TOK_semicolon       {} |
@@ -151,12 +152,11 @@ MAIN_METHOD:
     RW_main CALLED_FUNCTION TOK_semicolon   {};
 
 INIT_ID:
-    TYPE TOK_id TOK_equal EXP               {$$ = new InitID(@1.first_line,@1.first_column,$2,$1,$4)} |
-    TYPE TOK_id                             {$$ = new InitID(@1.first_line,@1.first_column,$2,$1,undefined)};
+    TYPE TOK_id TOK_equal EXP       {$$ = new InitID(@1.first_line,@1.first_column,$2,$1,$4)} |
+    TYPE TOK_id                     {$$ = new InitID(@1.first_line,@1.first_column,$2,$1,undefined)};
 
 ID_ASIGN:
-    TOK_id TOK_equal EXP                                {} |
-    TOK_id                                              {};
+    TOK_id TOK_equal EXP            {$$ = new AsignID(@1.first_line,@1.first_column,$1,$3)};
 
 NEW_ARRAY:
     TYPE TOK_lbrckt TOK_rbrckt TOK_id TOK_equal ARRAY_VALUE         {} |
