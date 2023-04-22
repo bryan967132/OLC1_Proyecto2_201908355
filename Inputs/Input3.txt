@@ -1,0 +1,12 @@
+void hanoi(int n, string origen, string destino, string medio){
+    if (n == 1){
+        print("Mover disco 1, desde: "+ origen+ " hasta "+ destino);
+        return ;
+    }
+    else{
+        hanoi(n - 1, origen, medio, destino);
+        print("Mover disco: "+ n + " desde: "+ origen+ " hasta: "+ destino);
+        hanoi(n - 1, medio, destino, origen );
+    }
+}
+main hanoi(2,"A", "C", "B");

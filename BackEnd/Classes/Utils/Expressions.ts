@@ -7,5 +7,7 @@ export enum TypeExp {
     ACCESS_ID     = "ACCESS_ID",
     INCR          = "INCR",
     DECR          = "DECR",
-    NATIVE_FUNC   = "NATIVE_FUNC"
+    NATIVE_FUNC   = "NATIVE_FUNC",
+    ACCESS_ARRAY  = "ACCESS_ARRAY",
+    ACCESS_LIST   = "ACCESS_LIST"
 }

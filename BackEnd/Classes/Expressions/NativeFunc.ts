@@ -2,6 +2,7 @@ import { Expression } from "../Abstracts/Expression";
 import { Environment } from "../Env/Environment";
 import { TypeExp } from "../Utils/Expressions";
 import { Return, Type } from "../Utils/Type";
+import { Primitive } from './Primitive';
 export class NativeFunc extends Expression {
     constructor(line: number,column: number,private func: string,private value: Expression) {
         super(line,column,Type.NULL,TypeExp.NATIVE_FUNC)
@@ -24,7 +25,7 @@ export class NativeFunc extends Expression {
             case 'tostring':
                 return {value: value.value.toString(),type: Type.STRING}
             case 'tochararray':
-                return {value: value.value.split(''),type: Type.LIST}
+                return {value: this.getCharArray(value.value),type: Type.LIST}
         }
         return {value: 'NULL',type: Type.NULL}
     }
@@ -51,5 +52,12 @@ export class NativeFunc extends Expression {
             return 'List'
         }
         return 'NULL'
+    }
+    getCharArray(string: string) {
+        let charArray: Primitive[] = []
+        for(let character of string) {
+            charArray.push(new Primitive(this.line,this.column,character,Type.CHAR))
+        }
+        return charArray
     }
 }

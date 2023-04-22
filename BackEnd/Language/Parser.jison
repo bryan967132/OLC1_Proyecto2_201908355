@@ -95,6 +95,11 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
     const {Print} = require('../Classes/Instructions/Print');
     const {InitID} = require('../Classes/Instructions/InitID');
     const {AsignID} = require('../Classes/Instructions/AsignID');
+    const {InitArray} = require('../Classes/Instructions/InitArray');
+    const {InitList} = require('../Classes/Instructions/InitList');
+    const {AsignArray} = require('../Classes/Instructions/AsignArray');
+    const {AsignList} = require('../Classes/Instructions/AsignList');
+    const {Add} = require('../Classes/Instructions/Add');
     //Expresiones
     const {Primitive} = require('../Classes/Expressions/Primitive');
     const {Arithmetic} = require('../Classes/Expressions/Arithmetic');
@@ -104,6 +109,8 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
     const {AccessID} = require('../Classes/Expressions/AccessID');
     const {IncrDecr} = require('../Classes/Expressions/IncrDecr');
     const {NativeFunc} = require('../Classes/Expressions/NativeFunc');
+    const {AccessArray} = require('../Classes/Expressions/AccessArray');
+    const {AccessList} = require('../Classes/Expressions/AccessList');
 %}
 //precedencia de operadores
 %left 'TOK_question' 'TOK_colon'
@@ -160,25 +167,25 @@ ID_ASIGN:
     TOK_id TOK_equal EXP            {$$ = new AsignID(@1.first_line,@1.first_column,$1,$3)};
 
 NEW_ARRAY:
-    TYPE TOK_lbrckt TOK_rbrckt TOK_id TOK_equal ARRAY_VALUE         {} |
-    RW_list TOK_less TYPE TOK_great TOK_id TOK_equal LIST_VALUE     {};
+    TYPE TOK_lbrckt TOK_rbrckt TOK_id TOK_equal ARRAY_VALUE         {$$ = new InitArray(@1.first_line,@1.first_column,$4,$1,$6[0],$6[1])} |
+    RW_list TOK_less TYPE TOK_great TOK_id TOK_equal LIST_VALUE     {$$ = new InitList(@1.first_line,@1.first_column,$5,$3,$7)};
 
 ARRAY_VALUE:
-    RW_new TYPE TOK_lbrckt EXP TOK_rbrckt   {} |
-    TOK_lbrc VALUE_LIST TOK_rbrc            {};
+    RW_new TYPE TOK_lbrckt EXP TOK_rbrckt   {$$ = [$4,undefined]} |
+    TOK_lbrc VALUE_LIST TOK_rbrc            {$$ = [undefined,$2]};
 
 LIST_VALUE:
-    RW_new RW_list TOK_less TYPE TOK_great  {} |
+    RW_new RW_list TOK_less TYPE TOK_great  {$$ = undefined} |
     FN_toCharArray TOK_lpar EXP TOK_rpar    {$$ = new NativeFunc(@1.first_line,@1.first_column,$1,$3)};
 
 ARRAY_ASIGN:
-    TOK_id TOK_lbrckt EXP TOK_rbrckt TOK_equal EXP      {} |
-    TOK_id TOK_dot FN_add TOK_lpar EXP TOK_rpar         {} |
-    TOK_id TOK_lbrckt TOK_lbrckt EXP TOK_rbrckt TOK_rbrckt TOK_equal EXP      {};
+    TOK_id TOK_lbrckt EXP TOK_rbrckt TOK_equal EXP                          {$$ = new AsignArray(@1.first_line,@1.first_column,$1,$3,$6)} |
+    TOK_id TOK_dot FN_add TOK_lpar EXP TOK_rpar                             {$$ = new Add(@1.first_line,@1.first_column,$1,$5)} |
+    TOK_id TOK_lbrckt TOK_lbrckt EXP TOK_rbrckt TOK_rbrckt TOK_equal EXP    {$$ = new AsignList(@1.first_line,@1.first_column,$1,$4,$8)};
 
 VALUE_LIST:
-    VALUE_LIST TOK_comma EXP            {} |
-    EXP                                 {};
+    VALUE_LIST TOK_comma EXP            {$$.push($3)} |
+    EXP                                 {$$ = [$1]};
 
 IF_STRCT:
     RW_if TOK_lpar EXP TOK_rpar BLOCK                   {} |
@@ -279,8 +286,8 @@ EXP:
     TOK_not EXP                                             {$$ = new Logic(@1.first_line,@1.first_column,undefined,$1,$2)} |
     TOK_lpar TYPE TOK_rpar EXP                              {} |
     EXP TOK_question EXP TOK_colon EXP                      {$$ = new Ternary(@1.first_line,@1.first_column,$1,$3,$5)} |
-    TOK_id TOK_lbrckt EXP TOK_rbrckt                        {} |
-    TOK_id TOK_lbrckt TOK_lbrckt EXP TOK_rbrckt TOK_rbrckt  {} |
+    TOK_id TOK_lbrckt EXP TOK_rbrckt                        {$$ = new AccessArray(@1.first_line,@1.first_column,$1,$3)} |
+    TOK_id TOK_lbrckt TOK_lbrckt EXP TOK_rbrckt TOK_rbrckt  {$$ = new AccessList(@1.first_line,@1.first_column,$1,$4)} |
     CALLED_FUNCTION                                         {} |
     NATIVES_FUNCTION_EXP                                    {$$ = $1} |
     INCR_DECR                                               {$$ = $1} |
