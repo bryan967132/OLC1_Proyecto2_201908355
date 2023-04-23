@@ -1,7 +1,7 @@
 import { Primitive } from "../Expressions/Primitive";
 import { Function } from "../Instructions/Function";
 import { printList } from "../Utils/Reports";
-import { Return, Type } from "../Utils/Type";
+import { ReturnType, Type } from "../Utils/Type";
 import { Symbol } from "./Symbol"
 export class Environment {
     private ids: Map<string,Symbol> = new Map<string,Symbol>()
@@ -55,7 +55,7 @@ export class Environment {
         }
         return null
     }
-    public reasignID(id: string,value: Return): boolean {
+    public reasignID(id: string,value: ReturnType): boolean {
         let env: Environment | null = this
         while(env) {
             if(env.ids.has(id.toLowerCase())) {

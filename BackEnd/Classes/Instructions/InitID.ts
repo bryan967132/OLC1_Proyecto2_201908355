@@ -2,14 +2,14 @@ import { Expression } from '../Abstracts/Expression';
 import { Instruction } from '../Abstracts/Instruction';
 import { Environment } from '../Env/Environment';
 import { TypeInst } from '../Utils/Instructions';
-import { Return, Type } from '../Utils/Type';
+import { ReturnType, Type } from '../Utils/Type';
 export class InitID extends Instruction {
     constructor(line: number,column: number,private id: string,private type: Type,private value: Expression) {
         super(line,column,TypeInst.INIT_ID)
     }
     public execute(env: Environment): any {
         if(this.value) {
-            const value: Return = this.value.execute(env)
+            const value: ReturnType = this.value.execute(env)
             env.saveID(this.id,value.value,this.type,this.line,this.column)
         }
         else {

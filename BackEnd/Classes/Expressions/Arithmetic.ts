@@ -1,5 +1,5 @@
 import { Expression } from '../Abstracts/Expression';
-import { Return, Type } from '../Utils/Type';
+import { ReturnType, Type } from '../Utils/Type';
 import { plus, minus, mult, div, pow, mod } from '../Utils/Operations';
 import { TypeExp } from '../Utils/Expressions';
 import { Environment } from '../Env/Environment';
@@ -7,7 +7,7 @@ export class Arithmetic extends Expression {
     constructor(line: number,column: number,public exp1: Expression,public sign: string,public exp2: Expression) {
         super(line,column,Type.NULL,TypeExp.ARITHMETIC_OP)
     }
-    public execute(env: Environment): Return {
+    public execute(env: Environment): ReturnType {
         switch(this.sign) {
             case '+':
                 return this.plus(env)
@@ -28,9 +28,9 @@ export class Arithmetic extends Expression {
                 return {value: -1,type: Type.NULL}
         }
     }
-    plus(env: Environment): Return {
-        let value1: Return = this.exp1.execute(env)
-        let value2: Return = this.exp2.execute(env)
+    plus(env: Environment): ReturnType {
+        let value1: ReturnType = this.exp1.execute(env)
+        let value2: ReturnType = this.exp2.execute(env)
         this.type = plus[value1.type][value2.type]
         let result: any = 'NULL'
         if(this.type === Type.INT) {
@@ -48,9 +48,9 @@ export class Arithmetic extends Expression {
         }
         return {value: result,type: this.type}
     }
-    minus(env: Environment): Return {
-        let value1: Return = this.exp1.execute(env)
-        let value2: Return = this.exp2.execute(env)
+    minus(env: Environment): ReturnType {
+        let value1: ReturnType = this.exp1.execute(env)
+        let value2: ReturnType = this.exp2.execute(env)
         this.type = minus[value1.type][value2.type]
         let result: any = 'NULL'
         if(this.type === Type.INT) {
@@ -65,17 +65,17 @@ export class Arithmetic extends Expression {
         }
         return {value: result,type: this.type}
     }
-    negative(env: Environment): Return {
-        let value: Return = this.exp2.execute(env)
+    negative(env: Environment): ReturnType {
+        let value: ReturnType = this.exp2.execute(env)
         this.type = value.type
         if(this.type === Type.INT || this.type === Type.DOUBLE) {
             return {value: -value.value,type: this.type}
         }
         return {value: 'NULL',type: Type.NULL}
     }
-    mult(env: Environment): Return {
-        let value1: Return = this.exp1.execute(env)
-        let value2: Return = this.exp2.execute(env)
+    mult(env: Environment): ReturnType {
+        let value1: ReturnType = this.exp1.execute(env)
+        let value2: ReturnType = this.exp2.execute(env)
         this.type = mult[value1.type][value2.type]
         let result: any = 'NULL'
         if(this.type === Type.INT) {
@@ -90,9 +90,9 @@ export class Arithmetic extends Expression {
         }
         return {value: result,type: this.type}
     }
-    div(env: Environment): Return {
-        let value1: Return = this.exp1.execute(env)
-        let value2: Return = this.exp2.execute(env)
+    div(env: Environment): ReturnType {
+        let value1: ReturnType = this.exp1.execute(env)
+        let value2: ReturnType = this.exp2.execute(env)
         this.type = div[value1.type][value2.type]
         let result: any = 'NULL'
         if(this.type === Type.DOUBLE) {
@@ -102,9 +102,9 @@ export class Arithmetic extends Expression {
         }
         return {value: result,type: this.type}
     }
-    pow(env: Environment): Return {
-        let value1: Return = this.exp1.execute(env)
-        let value2: Return = this.exp2.execute(env)
+    pow(env: Environment): ReturnType {
+        let value1: ReturnType = this.exp1.execute(env)
+        let value2: ReturnType = this.exp2.execute(env)
         this.type = pow[value1.type][value2.type]
         let result: any = 'NULL'
         if(this.type === Type.INT) {
@@ -115,9 +115,9 @@ export class Arithmetic extends Expression {
         }
         return {value: result,type: this.type}
     }
-    mod(env: Environment): Return {
-        let value1: Return = this.exp1.execute(env)
-        let value2: Return = this.exp2.execute(env)
+    mod(env: Environment): ReturnType {
+        let value1: ReturnType = this.exp1.execute(env)
+        let value2: ReturnType = this.exp2.execute(env)
         this.type = mod[value1.type][value2.type]
         let result: any = 'NULL'
         if(this.type === Type.DOUBLE) {
@@ -125,7 +125,7 @@ export class Arithmetic extends Expression {
         }
         return {value: result,type: this.type}
     }
-    getValue(value: Return): Return {
+    getValue(value: ReturnType): ReturnType {
         if(value.type === Type.BOOLEAN) {
             if(value.value) {
                 return {value: 1,type: Type.INT}

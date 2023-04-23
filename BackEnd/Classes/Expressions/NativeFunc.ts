@@ -1,14 +1,14 @@
 import { Expression } from "../Abstracts/Expression";
 import { Environment } from "../Env/Environment";
 import { TypeExp } from "../Utils/Expressions";
-import { Return, Type } from "../Utils/Type";
+import { ReturnType, Type } from "../Utils/Type";
 import { Primitive } from './Primitive';
 export class NativeFunc extends Expression {
     constructor(line: number,column: number,private func: string,private value: Expression) {
         super(line,column,Type.NULL,TypeExp.NATIVE_FUNC)
     }
-    public execute(env: Environment): Return {
-        let value: Return = this.value.execute(env)
+    public execute(env: Environment): ReturnType {
+        let value: ReturnType = this.value.execute(env)
         switch(this.func.toLowerCase()) {
             case 'tolower':
                 return {value: value.value.toString().toLowerCase(),type: Type.STRING}
@@ -29,7 +29,7 @@ export class NativeFunc extends Expression {
         }
         return {value: 'NULL',type: Type.NULL}
     }
-    getTypeOf(value: Return): string {
+    getTypeOf(value: ReturnType): string {
         if(value.type === Type.INT) {
             return 'int'
         }

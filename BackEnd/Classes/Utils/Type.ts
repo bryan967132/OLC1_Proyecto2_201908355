@@ -8,4 +8,4 @@ export enum Type {
     LIST,
     NULL
 }
-export type Return = {value: any,type: Type}
+export type ReturnType = {value: any,type: Type}

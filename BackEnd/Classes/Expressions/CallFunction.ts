@@ -3,19 +3,19 @@ import { Environment } from "../Env/Environment";
 import { Function } from "../Instructions/Function";
 import { TypeExp } from "../Utils/Expressions";
 import { printList } from "../Utils/Reports";
-import { Return, Type } from "../Utils/Type";
+import { ReturnType, Type } from "../Utils/Type";
 export class CallFunction extends Expression {
     constructor(line: number,column: number,private id: string,private args: Array<Expression>) {
         super(line,column,Type.NULL,TypeExp.CALL_FUNC)
     }
-    public execute(env: Environment): Return {
+    public execute(env: Environment): ReturnType {
         const func: Function | null = env.getFunction(this.id)
         if(func) {
             const envFunc: Environment = new Environment(env.getGlobal())
             if(func.parameters.length == this.args.length) {
                 for(let i = 0; i < func.parameters.length; i ++) {
-                    const value: Return = this.args[i].execute(env)
-                    const param: Return = func.parameters[i].execute(env)
+                    const value: ReturnType = this.args[i].execute(env)
+                    const param: ReturnType = func.parameters[i].execute(env)
                     if(value.type === param.type) {
                         envFunc.saveID(param.value,value.value,value.type,this.line,this.column)
                     }

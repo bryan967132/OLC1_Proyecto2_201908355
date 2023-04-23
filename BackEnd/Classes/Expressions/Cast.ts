@@ -1,13 +1,13 @@
 import { Expression } from "../Abstracts/Expression";
 import { Environment } from "../Env/Environment";
 import { TypeExp } from "../Utils/Expressions";
-import { Return, Type } from "../Utils/Type";
+import { ReturnType, Type } from "../Utils/Type";
 export class Cast extends Expression {
     constructor(line: number,column: number,private destiny: Type,private value: Expression) {
         super(line,column,destiny,TypeExp.CAST)
     }
-    public execute(env: Environment): Return {
-        let value: Return = this.value.execute(env)
+    public execute(env: Environment): ReturnType {
+        let value: ReturnType = this.value.execute(env)
         if(this.destiny === Type.INT) {
             if(value.type === Type.DOUBLE) {
                 return {value: parseInt(value.value),type: this.destiny}
@@ -40,6 +40,6 @@ export class Cast extends Expression {
                 return {value: String.fromCharCode(value.value),type: this.destiny}
             }
         }
-        return {value: 'NULL',type: this.destiny}
+        return {value: 'NULL',type: Type.NULL}
     }
 }

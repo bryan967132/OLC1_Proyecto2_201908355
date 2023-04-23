@@ -1,11 +1,11 @@
 import { Expression } from "../Abstracts/Expression";
 import { TypeExp } from "../Utils/Expressions";
-import { Return, Type } from "../Utils/Type";
+import { ReturnType, Type } from "../Utils/Type";
 export class Primitive extends Expression {
     constructor(line: number,column: number,public value: any,type: Type) {
         super(line,column,type,TypeExp.PRIMITIVE)
     }
-    public execute(): Return {
+    public execute(): ReturnType {
         switch(this.type) {
             case Type.INT:
                 return {value: parseInt(this.value),type: this.type}
