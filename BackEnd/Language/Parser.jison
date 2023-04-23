@@ -111,6 +111,7 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
     const {NativeFunc} = require('../Classes/Expressions/NativeFunc');
     const {AccessArray} = require('../Classes/Expressions/AccessArray');
     const {AccessList} = require('../Classes/Expressions/AccessList');
+    const {Cast} = require('../Classes/Expressions/Cast');
 %}
 //precedencia de operadores
 %left 'TOK_question' 'TOK_colon'
@@ -284,7 +285,7 @@ EXP:
     EXP TOK_or  EXP                                         {$$ = new Logic(@2.first_line,@2.first_column,$1,$2,$3)} |
     EXP TOK_and EXP                                         {$$ = new Logic(@2.first_line,@2.first_column,$1,$2,$3)} |
     TOK_not EXP                                             {$$ = new Logic(@1.first_line,@1.first_column,undefined,$1,$2)} |
-    TOK_lpar TYPE TOK_rpar EXP                              {} |
+    TOK_lpar TYPE TOK_rpar EXP                              {$$ = new Cast(@2.first_line,@2.first_column,$2,$4)} |
     EXP TOK_question EXP TOK_colon EXP                      {$$ = new Ternary(@1.first_line,@1.first_column,$1,$3,$5)} |
     TOK_id TOK_lbrckt EXP TOK_rbrckt                        {$$ = new AccessArray(@1.first_line,@1.first_column,$1,$3)} |
     TOK_id TOK_lbrckt TOK_lbrckt EXP TOK_rbrckt TOK_rbrckt  {$$ = new AccessList(@1.first_line,@1.first_column,$1,$4)} |

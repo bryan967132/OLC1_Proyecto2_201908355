@@ -20,7 +20,6 @@ print("Truncate: " + entero);
 print("Round: " + round(5.8));
 print("TypeOf: " + typeOf(entero));
 print("ToString: " + toString(18.52));
-
 int[] arreglo = {5,6,3};
 print("TypeOf: " + typeOf(arreglo));
 print("Length = " + length(arreglo));

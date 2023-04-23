@@ -1,11 +1,14 @@
-/*String[] misDatos = new String[5];
-misDatos[0] = "Danny";
-misDatos[1] = "Hugo";
-misDatos[2] = "Bryan";
-misDatos[3] = "Tejaxún";
-misDatos[4] = "Pichiyá";
-print(misDatos[0]);*/
-
-String[] misDatos = {"Danny","Hugo","Bryan"};
-misDatos[0] = "Luna";
-print(misDatos[0]);
+double n = (double) 7;
+print(n);
+int r = (int) 3.1416;
+print(R);
+string m = (String) 12;
+print(m);
+char s = (char) 64;
+print(s);
+string a = (string) 3.1416;
+print(a);
+int w = (int) '@';
+print(w);
+double f = (double) 'x';
+print(f);
