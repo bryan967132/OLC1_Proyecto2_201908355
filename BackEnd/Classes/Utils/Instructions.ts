@@ -8,5 +8,6 @@ export enum TypeInst {
     ASIGN_LIST    = "ASIGN_LIST",
     ADD_LIST      = "ADD_LIST",
     BLOCK_INST    = "BLOCK_INST",
-    INIT_FUNCTION = "INIT_FUNCTION"
+    INIT_FUNCTION = "INIT_FUNCTION",
+    MAIN          = "MAIN"
 }

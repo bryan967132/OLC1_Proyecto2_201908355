@@ -1,9 +1,13 @@
+int a = 64;
+char l = (char) a;
 void init() {
-    print("Inicio");
-
+    double r = a + 3.1416;
+    print("a = " + a);
+    print("r = " + r);
+    otro();
 }
 PRINT("HOLA");
 void otro() {
-    print("OTRO");
+    print("l = " + l);
 }
-init();
+main init();

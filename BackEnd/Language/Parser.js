@@ -92,14 +92,17 @@ break;
 case 3: case 35: case 61: case 68:
 this.$ = [$$[$0]]
 break;
+case 4: case 14: case 71: case 102: case 103:
+this.$ = $$[$0]
+break;
 case 5: case 6: case 15: case 16: case 17: case 87:
 this.$ = $$[$0-1]
 break;
-case 14: case 71: case 102: case 103:
-this.$ = $$[$0]
-break;
 case 20:
 console.log({ line: this._$.first_line, column: this._$.first_column, type: 'Sintáctico', message: `Error sintáctico, token no esperado '${yytext}' .`})
+break;
+case 21:
+this.$ = new MainMethod(_$[$0-2].first_line,_$[$0-2].first_column,$$[$0-1])
 break;
 case 22:
 this.$ = new InitID(_$[$0-3].first_line,_$[$0-3].first_column,$$[$0-2],$$[$0-3],$$[$0])
@@ -499,6 +502,7 @@ _handle_error:
     const {Add} = require('../Classes/Instructions/Add');
     const {Block} = require('../Classes/Instructions/Block');
     const {Function} = require('../Classes/Instructions/Function');
+    const {MainMethod} = require('../Classes/Instructions/MainMethod');
     //Expresiones
     const {Primitive} = require('../Classes/Expressions/Primitive');
     const {Arithmetic} = require('../Classes/Expressions/Arithmetic');

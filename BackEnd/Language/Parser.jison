@@ -102,6 +102,7 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
     const {Add} = require('../Classes/Instructions/Add');
     const {Block} = require('../Classes/Instructions/Block');
     const {Function} = require('../Classes/Instructions/Function');
+    const {MainMethod} = require('../Classes/Instructions/MainMethod');
     //Expresiones
     const {Primitive} = require('../Classes/Expressions/Primitive');
     const {Arithmetic} = require('../Classes/Expressions/Arithmetic');
@@ -143,7 +144,7 @@ INSTRUCTIONS:
     INSTRUCTION                     {$$ = [$1]};
 
 INSTRUCTION:
-    MAIN_METHOD                     {} |
+    MAIN_METHOD                     {$$ = $1} |
     INIT_ID TOK_semicolon           {$$ = $1} |
     ID_ASIGN TOK_semicolon          {$$ = $1} |
     NEW_ARRAY TOK_semicolon         {} |
@@ -159,10 +160,10 @@ INSTRUCTION:
     INCR_DECR TOK_semicolon         {$$ = $1} |
     RW_return TOK_semicolon         {} |
     RW_return EXP TOK_semicolon     {} |
-    error                           {console.log({ line: this._$.first_line, column: this._$.first_column, type: 'Sintáctico', message: `Error sintáctico, token no esperado '${yytext}' .`})};
+    error                           {console.log({line: this._$.first_line, column: this._$.first_column, type: 'Sintáctico', message: `Error sintáctico, token no esperado '${yytext}' .`})};
 
 MAIN_METHOD:
-    RW_main CALLED_FUNCTION TOK_semicolon   {};
+    RW_main CALLED_FUNCTION TOK_semicolon   {$$ = new MainMethod(@1.first_line,@1.first_column,$2)};
 
 INIT_ID:
     TYPE TOK_id TOK_equal EXP       {$$ = new InitID(@1.first_line,@1.first_column,$2,$1,$4)} |
