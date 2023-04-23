@@ -1,0 +1,18 @@
+char a = '@';
+main validarPar();
+void validarPar() {
+    int num = (int) a;
+    print(num + (par(num) ? " es par." : " es impar."));
+}
+boolean par(int n) {
+    if(n == 0) {
+        return true;
+    }
+    return impar(n - 1);
+}
+boolean impar(int n) {
+    if(n == 0) {
+        return false;
+    }
+    return par(n - 1);
+}

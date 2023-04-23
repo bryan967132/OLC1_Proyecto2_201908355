@@ -8,7 +8,7 @@ export class CallFunction extends Expression {
     constructor(line: number,column: number,private id: string,private args: Array<Expression>) {
         super(line,column,Type.NULL,TypeExp.CALL_FUNC)
     }
-    public execute(env: Environment): ReturnType {
+    public execute(env: Environment): ReturnType | any {
         const func: Function | null = env.getFunction(this.id)
         if(func) {
             const envFunc: Environment = new Environment(env.getGlobal())
@@ -35,7 +35,6 @@ export class CallFunction extends Expression {
         else {
             printList.push(`Error, La Función "${this.id}" no existe, línea ${this.line} columna ${this.column}`)
         }
-        return {value: 'NULL',type: Type.NULL}
     }
     getType(type: Type): string {
         if(type === Type.INT) {

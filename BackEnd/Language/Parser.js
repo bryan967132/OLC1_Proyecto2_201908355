@@ -92,7 +92,7 @@ break;
 case 3: case 35: case 61: case 68:
 this.$ = [$$[$0]]
 break;
-case 4: case 12: case 71: case 101: case 102: case 103:
+case 4: case 9: case 12: case 71: case 101: case 102: case 103:
 this.$ = $$[$0]
 break;
 case 5: case 6: case 7: case 8: case 13: case 14: case 15: case 87:
@@ -142,6 +142,12 @@ this.$ = new Add(_$[$0-5].first_line,_$[$0-5].first_column,$$[$0-5],$$[$0-1])
 break;
 case 33:
 this.$ = new AsignList(_$[$0-7].first_line,_$[$0-7].first_column,$$[$0-7],$$[$0-4],$$[$0])
+break;
+case 36:
+this.$ = new If(_$[$0-4].first_line,_$[$0-4].first_column,$$[$0-2],$$[$0],undefined)
+break;
+case 37: case 38:
+this.$ = new If(_$[$0-6].first_line,_$[$0-6].first_column,$$[$0-4],$$[$0-2],$$[$0])
 break;
 case 56:
 this.$ = new Function(_$[$0-4].first_line,_$[$0-4].first_column,$$[$0-4],$$[$0-2],$$[$0],$$[$0-5])
@@ -505,6 +511,8 @@ _handle_error:
     const {Add} = require('../Classes/Instructions/Add');
     const {Block} = require('../Classes/Instructions/Block');
     const {Function} = require('../Classes/Instructions/Function');
+    const {If} = require('../Classes/Instructions/If');
+    const {Else} = require('../Classes/Instructions/Else');
     const {MainMethod} = require('../Classes/Instructions/MainMethod');
     //Expresiones
     const {Primitive} = require('../Classes/Expressions/Primitive');

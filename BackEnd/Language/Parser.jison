@@ -102,6 +102,8 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
     const {Add} = require('../Classes/Instructions/Add');
     const {Block} = require('../Classes/Instructions/Block');
     const {Function} = require('../Classes/Instructions/Function');
+    const {If} = require('../Classes/Instructions/If');
+    const {Else} = require('../Classes/Instructions/Else');
     const {MainMethod} = require('../Classes/Instructions/MainMethod');
     //Expresiones
     const {Primitive} = require('../Classes/Expressions/Primitive');
@@ -150,7 +152,7 @@ INSTRUCTION:
     ID_ASIGN TOK_semicolon          {$$ = $1} |
     NEW_ARRAY TOK_semicolon         {$$ = $1} |
     ARRAY_ASIGN TOK_semicolon       {$$ = $1} |
-    IF_STRCT                        {} |
+    IF_STRCT                        {$$ = $1} |
     SWITCH_STRCT                    {} |
     LOOP                            {} |
     FUNCTION                        {$$ = $1} |
@@ -195,9 +197,9 @@ VALUE_LIST:
     EXP                                 {$$ = [$1]};
 
 IF_STRCT:
-    RW_if TOK_lpar EXP TOK_rpar BLOCK                   {} |
-    RW_if TOK_lpar EXP TOK_rpar BLOCK RW_else BLOCK     {} |
-    RW_if TOK_lpar EXP TOK_rpar BLOCK RW_else IF_STRCT  {};
+    RW_if TOK_lpar EXP TOK_rpar BLOCK                   {$$ = new If(@1.first_line,@1.first_column,$3,$5,undefined)} |
+    RW_if TOK_lpar EXP TOK_rpar BLOCK RW_else BLOCK     {$$ = new If(@1.first_line,@1.first_column,$3,$5,$7)} |
+    RW_if TOK_lpar EXP TOK_rpar BLOCK RW_else IF_STRCT  {$$ = new If(@1.first_line,@1.first_column,$3,$5,$7)};
 
 SWITCH_STRCT:
     RW_switch TOK_lpar EXP TOK_rpar TOK_lbrc CASE_BLOCK TOK_rbrc     {};
