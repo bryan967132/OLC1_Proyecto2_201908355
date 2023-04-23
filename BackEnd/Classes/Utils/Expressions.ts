@@ -10,5 +10,7 @@ export enum TypeExp {
     NATIVE_FUNC   = "NATIVE_FUNC",
     ACCESS_ARRAY  = "ACCESS_ARRAY",
     ACCESS_LIST   = "ACCESS_LIST",
-    CAST          = "CAST"
+    CAST          = "CAST",
+    PARAMETER     = "PARAMETER",
+    CALL_FUNC     = "CALL_FUNC"
 }

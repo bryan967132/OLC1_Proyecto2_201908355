@@ -1,0 +1,9 @@
+void init() {
+    print("Inicio");
+
+}
+PRINT("HOLA");
+void otro() {
+    print("OTRO");
+}
+init();

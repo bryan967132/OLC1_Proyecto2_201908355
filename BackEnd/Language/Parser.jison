@@ -100,6 +100,8 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
     const {AsignArray} = require('../Classes/Instructions/AsignArray');
     const {AsignList} = require('../Classes/Instructions/AsignList');
     const {Add} = require('../Classes/Instructions/Add');
+    const {Block} = require('../Classes/Instructions/Block');
+    const {Function} = require('../Classes/Instructions/Function');
     //Expresiones
     const {Primitive} = require('../Classes/Expressions/Primitive');
     const {Arithmetic} = require('../Classes/Expressions/Arithmetic');
@@ -112,6 +114,8 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
     const {AccessArray} = require('../Classes/Expressions/AccessArray');
     const {AccessList} = require('../Classes/Expressions/AccessList');
     const {Cast} = require('../Classes/Expressions/Cast');
+    const {Parameter} = require('../Classes/Expressions/Parameter');
+    const {CallFunction} = require('../Classes/Expressions/CallFunction');
 %}
 //precedencia de operadores
 %left 'TOK_question' 'TOK_colon'
@@ -149,8 +153,8 @@ INSTRUCTION:
     RW_break TOK_semicolon          {} |
     RW_continue TOK_semicolon       {} |
     LOOP                            {} |
-    FUNCTION                        {} |
-    CALLED_FUNCTION TOK_semicolon   {} |
+    FUNCTION                        {$$ = $1} |
+    CALLED_FUNCTION TOK_semicolon   {$$ = $1} |
     NATIVES_FUNCTION TOK_semicolon  {$$ = $1} |
     INCR_DECR TOK_semicolon         {$$ = $1} |
     RW_return TOK_semicolon         {} |
@@ -231,26 +235,29 @@ ID_ASIGN_FOR:
     TOK_id TOK_equal EXP    {};
 
 FUNCTION:
-    TYPE TOK_id TOK_lpar PARAMETERS TOK_rpar BLOCK          {} |
-    RW_void TOK_id TOK_lpar PARAMETERS TOK_rpar BLOCK       {} |
-    TYPE TOK_id TOK_lpar TOK_rpar BLOCK                     {} |
-    RW_void TOK_id TOK_lpar TOK_rpar BLOCK                  {};
+    TYPE TOK_id TOK_lpar PARAMETERS TOK_rpar BLOCK          {$$ = new Function(@2.first_line,@2.first_column,$2,$4,$6,$1)} |
+    RW_void TOK_id TOK_lpar PARAMETERS TOK_rpar BLOCK       {$$ = new Function(@2.first_line,@2.first_column,$2,$4,$6,Type.NULL)} |
+    TYPE TOK_id TOK_lpar TOK_rpar BLOCK                     {$$ = new Function(@2.first_line,@2.first_column,$2,[],$5,$1)} |
+    RW_void TOK_id TOK_lpar TOK_rpar BLOCK                  {$$ = new Function(@2.first_line,@2.first_column,$2,[],$5,Type.NULL)};
 
 PARAMETERS:
-    PARAMETERS TOK_comma TYPE TOK_id    {} |
-    TYPE TOK_id                         {};
+    PARAMETERS TOK_comma PARAMETER  {$$.push($3)} |
+    PARAMETER                       {$$ = [$1]};
+
+PARAMETER:
+    TYPE TOK_id                     {$$ = new Parameter(@2.first_line,@2.first_column,$2,$1)};
 
 BLOCK:
-    TOK_lbrc INSTRUCTIONS TOK_rbrc      {} |
-    TOK_lbrc TOK_rbrc                   {};
+    TOK_lbrc INSTRUCTIONS TOK_rbrc      {$$ = new Block(@1.first_line,@1.first_column,$2)} |
+    TOK_lbrc TOK_rbrc                   {$$ = new Block(@1.first_line,@1.first_column,[])};
 
 CALLED_FUNCTION:
-    TOK_id TOK_lpar LIST_EXPS TOK_rpar    {} |
-    TOK_id TOK_lpar TOK_rpar              {};
+    TOK_id TOK_lpar LIST_ARGS TOK_rpar    {$$ = new CallFunction(@1.first_line,@1.first_column,$1,$3)} |
+    TOK_id TOK_lpar TOK_rpar              {$$ = new CallFunction(@1.first_line,@1.first_column,$1,[])};
 
-LIST_EXPS:
-    LIST_EXPS TOK_comma EXP     {} |
-    EXP                         {};
+LIST_ARGS:
+    LIST_ARGS TOK_comma EXP     {$$.push($3)} |
+    EXP                         {$$ = [$1]};
 
 NATIVES_FUNCTION:
     FN_print TOK_lpar EXP TOK_rpar      {$$ = new Print(@1.first_line,@1.first_column,$3)} |

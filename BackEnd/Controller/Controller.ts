@@ -32,6 +32,7 @@ export class Controller {
                 })
             }
             catch (error) {
+                console.log(error)
                 res.json({
                     console: error
                 })
