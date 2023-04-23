@@ -7,6 +7,8 @@ import { Expression } from "../Classes/Abstracts/Expression";
 import { Function } from "../Classes/Instructions/Function";
 import { InitID } from '../Classes/Instructions/InitID';
 import { MainMethod } from "../Classes/Instructions/MainMethod";
+import { InitArray } from '../Classes/Instructions/InitArray';
+import { InitList } from '../Classes/Instructions/InitList';
 export class Controller {
     public runing(req: Request,res: Response) {
         res.send('Interpreter is running!!!')
@@ -32,7 +34,7 @@ export class Controller {
                 let mainExecute: MainMethod | null = null
                 for(let instruction of ast) {
                     try {
-                        if(instruction instanceof Function || instruction instanceof InitID) {
+                        if(instruction instanceof Function || instruction instanceof InitID || instruction instanceof InitArray || instruction instanceof InitList) {
                             instruction.execute(global)
                         }
                         else if(instruction instanceof MainMethod) {

@@ -13,7 +13,7 @@ export class Cast extends Expression {
                 return {value: parseInt(value.value),type: this.destiny}
             }
             if(value.type === Type.CHAR) {
-                return {value: value.value.charCodeAt(0),type: Type.NULL}
+                return {value: value.value.charCodeAt(0),type: this.destiny}
             }
             return {value: 'NULL',type: Type.NULL}
         }

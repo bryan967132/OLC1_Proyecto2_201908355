@@ -12,5 +12,6 @@ export enum TypeExp {
     ACCESS_LIST   = "ACCESS_LIST",
     CAST          = "CAST",
     PARAMETER     = "PARAMETER",
-    CALL_FUNC     = "CALL_FUNC"
+    CALL_FUNC     = "CALL_FUNC",
+    RETURN        = "RETURN"
 }

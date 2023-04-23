@@ -1,5 +1,6 @@
 import { Instruction } from '../Abstracts/Instruction';
 import { Environment } from '../Env/Environment';
+import { Return } from '../Expressions/Return';
 import { TypeInst } from '../Utils/Instructions';
 export class Block extends Instruction {
     constructor(line: number,column: number,private instructions: Array<Instruction>) {
@@ -10,12 +11,13 @@ export class Block extends Instruction {
         for(const instruction of this.instructions) {
             try {
                 const ret = instruction.execute(newEnv)
-                if(ret) {
+                if(instruction instanceof Return && ret) {
                     return ret
                 }
             }
             catch (error) {
-                console.log('Error en ejecución de instrucciones')
+                //console.log(error)
+                //console.log('Error en ejecución de instrucciones')
             }
         }
     }

@@ -117,6 +117,7 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
     const {Cast} = require('../Classes/Expressions/Cast');
     const {Parameter} = require('../Classes/Expressions/Parameter');
     const {CallFunction} = require('../Classes/Expressions/CallFunction');
+    const {Return} = require('../Classes/Expressions/Return');
 %}
 //precedencia de operadores
 %left 'TOK_question' 'TOK_colon'
@@ -147,19 +148,19 @@ INSTRUCTION:
     MAIN_METHOD                     {$$ = $1} |
     INIT_ID TOK_semicolon           {$$ = $1} |
     ID_ASIGN TOK_semicolon          {$$ = $1} |
-    NEW_ARRAY TOK_semicolon         {} |
-    ARRAY_ASIGN TOK_semicolon       {} |
+    NEW_ARRAY TOK_semicolon         {$$ = $1} |
+    ARRAY_ASIGN TOK_semicolon       {$$ = $1} |
     IF_STRCT                        {} |
     SWITCH_STRCT                    {} |
-    RW_break TOK_semicolon          {} |
-    RW_continue TOK_semicolon       {} |
     LOOP                            {} |
     FUNCTION                        {$$ = $1} |
     CALLED_FUNCTION TOK_semicolon   {$$ = $1} |
     NATIVES_FUNCTION TOK_semicolon  {$$ = $1} |
     INCR_DECR TOK_semicolon         {$$ = $1} |
+    RW_break TOK_semicolon          {} |
+    RW_continue TOK_semicolon       {} |
     RW_return TOK_semicolon         {} |
-    RW_return EXP TOK_semicolon     {} |
+    RW_return EXP TOK_semicolon     {$$ = new Return(@1.first_line,@1.first_column,$2)} |
     error                           {console.log({line: this._$.first_line, column: this._$.first_column, type: 'Sintáctico', message: `Error sintáctico, token no esperado '${yytext}' .`})};
 
 MAIN_METHOD:
@@ -297,7 +298,7 @@ EXP:
     EXP TOK_question EXP TOK_colon EXP                      {$$ = new Ternary(@1.first_line,@1.first_column,$1,$3,$5)} |
     TOK_id TOK_lbrckt EXP TOK_rbrckt                        {$$ = new AccessArray(@1.first_line,@1.first_column,$1,$3)} |
     TOK_id TOK_lbrckt TOK_lbrckt EXP TOK_rbrckt TOK_rbrckt  {$$ = new AccessList(@1.first_line,@1.first_column,$1,$4)} |
-    CALLED_FUNCTION                                         {} |
+    CALLED_FUNCTION                                         {$$ = $1} |
     NATIVES_FUNCTION_EXP                                    {$$ = $1} |
     INCR_DECR                                               {$$ = $1} |
     TOK_id                                                  {$$ = new AccessID(@1.first_line,@1.first_column,$1)} |

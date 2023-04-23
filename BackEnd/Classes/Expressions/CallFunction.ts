@@ -23,7 +23,10 @@ export class CallFunction extends Expression {
                         printList.push(`Error, El Parámetro "${param.value}" no es del tipo "${this.getType(param.type)}", linea ${this.line} columna ${this.column}`)
                     }
                 }
-                func.block.execute(envFunc)
+                let execute: any = func.block.execute(envFunc)
+                if(execute) {
+                    return execute
+                }
             }
             else {
                 printList.push(`Error, La Función "${this.id}" no tiene la cantidad correcta de parámetros, línea ${this.line} columna ${this.column}`)

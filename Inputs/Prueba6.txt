@@ -4,10 +4,21 @@ void init() {
     double r = a + 3.1416;
     print("a = " + a);
     print("r = " + r);
+    print(suma(mult(a,2),(int) 'd'));
     otro();
 }
-PRINT("HOLA");
+int mult(int a,int b) {
+    return a * b;
+}
+int suma(int a,int b) {
+    return a + b;
+}
+string[] nombre = {"Danny","Tejaxún"};
+string getNombre() {
+    return nombre[0] + " " + nombre[1];
+}
 void otro() {
     print("l = " + l);
+    print("Nombre: " + toUpper(getNombre()));
 }
 main init();
