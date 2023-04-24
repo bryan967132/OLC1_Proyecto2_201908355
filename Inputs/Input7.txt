@@ -1,0 +1,39 @@
+string[] datos = new string[5];
+void llenarDatos() {
+    int i = 0;
+    while(i < length(datos)) {
+        if(i == 0) {
+            datos[i] = "Danny";
+        }
+        else if(i == 1) {
+            datos[i] = "Hugo";
+        }
+        else if(i == 2) {
+            datos[i] = "Bryan";
+        }
+        else if(i == 3) {
+            datos[i] = "Tejaxún";
+        }
+        else if(i == 4) {
+            datos[i] = "Pichiyá";
+        }
+        i ++;
+    }
+}
+void printDatos() {
+    int i = length(datos) - 1;
+    string nombreCompleto = "";
+    do {
+        nombreCompleto = nombreCompleto + datos[i];
+        if(i >= 1) {
+            nombreCompleto = nombreCompleto + " ";
+        }
+        i --;
+    } while(i >= 0);
+    print(nombreCompleto);
+}
+void init() {
+    llenarDatos();
+    printDatos();
+}
+main init();
