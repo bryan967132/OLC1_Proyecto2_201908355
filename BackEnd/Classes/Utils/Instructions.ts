@@ -15,5 +15,6 @@ export enum TypeInst {
     BREAK         = "BREAK",
     CONTINUE      = "CONTINUE",
     LOOP_WHILE    = "LOOP_WHILE",
-    LOOP_DOWHILE  = "LOOP_DOWHILE"
+    LOOP_DOWHILE  = "LOOP_DOWHILE",
+    LOOP_FOR      = "LOOP_FOR"
 }

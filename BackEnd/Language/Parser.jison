@@ -107,6 +107,7 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
     const {Continue} = require('../Classes/Instructions/Continue');
     const {While} = require('../Classes/Instructions/While');
     const {DoWhile} = require('../Classes/Instructions/DoWhile');
+    const {For} = require('../Classes/Instructions/For');
     const {MainMethod} = require('../Classes/Instructions/MainMethod');
     //Expresiones
     const {Primitive} = require('../Classes/Expressions/Primitive');
@@ -225,21 +226,18 @@ DEFAULT:
 LOOP:
     RW_while TOK_lpar EXP TOK_rpar BLOCK                        {$$ = new While(@1.first_line,@1.first_column,$3,$5)} |
     RW_do BLOCK RW_while TOK_lpar EXP TOK_rpar TOK_semicolon    {$$ = new DoWhile(@1.first_line,@1.first_column,$5,$2)} |
-    RW_for TOK_lpar FOR_PARAMS TOK_rpar BLOCK                   {};
+    RW_for TOK_lpar FOR_ARGS TOK_rpar BLOCK                     {$$ = new For(@1.first_line,@1.first_column,$3,$5)};
 
-FOR_PARAMS:
-    INIT_ID TOK_semicolon EXP TOK_semicolon UPDATE_FOR {};
-
-UPDATE_FOR:
-    UPDATE_FOR TOK_comma UPDATE     {} |
-    UPDATE                          {};
-
-UPDATE:
-    INCR_DECR       {} |
-    ID_ASIGN_FOR    {};
+FOR_ARGS:
+    ID_ASIGN_FOR TOK_semicolon EXP TOK_semicolon UPDATE {$$ = [$1,$3,$5]};
 
 ID_ASIGN_FOR:
-    TOK_id TOK_equal EXP    {};
+    TYPE TOK_id TOK_equal EXP   {$$ = new InitID(@1.first_line,@1.first_column,$2,$1,$4)} |
+    TOK_id TOK_equal EXP        {$$ = new AsignID(@1.first_line,@1.first_column,$1,$3)};
+
+UPDATE:
+    INCR_DECR                   {$$ = $1} |
+    TOK_id TOK_equal EXP        {$$ = new AsignID(@1.first_line,@1.first_column,$1,$3)};
 
 FUNCTION:
     TYPE TOK_id TOK_lpar PARAMETERS TOK_rpar BLOCK          {$$ = new Function(@2.first_line,@2.first_column,$2,$4,$6,$1)} |

@@ -1,0 +1,44 @@
+main inicio();
+void inicio() {
+    //tablasMultiplicacion(10);
+    bubbleSort();
+}
+void bubbleSort() {
+    List<int> array = new List<int>;
+    array.add(7);   array.add(13);
+    array.add(40);  array.add(2);
+    array.add(8);   array.add(-14);
+    string lista = "";
+    int i;
+    for(i = 0; i < length(array); i++) {
+        lista = lista + array[[i]];
+        if(i < length(array) - 1) {
+            lista = lista + ", ";
+        }
+    }
+    print(lista);
+    int aux;
+    for(i = 0; i < length(array) - 1; i++) {
+        for(int j = 0; j < length(array) - 1 - i; j = j + 1) {
+            if(array[[j]] > array[[j + 1]]) {
+                aux = array[[j]];
+                array[[j]] = array[[j + 1]];
+                array[[j + 1]] = aux;
+            }
+        }
+    }
+    lista = "";
+    for(i = 0; i < length(array); i = i + 1) {
+        lista = lista + array[[i]];
+        if(i < length(array) - 1) {
+            lista = lista + ", ";
+        }
+    }
+    print(lista);
+}
+void tablasMultiplicacion(int a) {
+    print("Tabla del " + a);
+    for(int i = 1; i <= 10; i ++) {
+        print(a + " x " + i + " = " + a * i);
+    }
+}
