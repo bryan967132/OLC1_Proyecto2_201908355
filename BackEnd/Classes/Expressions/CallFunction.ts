@@ -25,6 +25,9 @@ export class CallFunction extends Expression {
                 }
                 let execute: any = func.block.execute(envFunc)
                 if(execute) {
+                    if(execute.value === TypeExp.RETURN) {
+                        return
+                    }
                     return execute
                 }
             }

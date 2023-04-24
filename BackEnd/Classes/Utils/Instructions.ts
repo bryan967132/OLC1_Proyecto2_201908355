@@ -13,5 +13,7 @@ export enum TypeInst {
     IF            = "IF",
     ELSE          = "ELSE",
     BREAK         = "BREAK",
-    CONTINUE      = "CONTINUE"
+    CONTINUE      = "CONTINUE",
+    LOOP_WHILE    = "LOOP_WHILE",
+    LOOP_DOWHILE  = "LOOP_DOWHILE"
 }

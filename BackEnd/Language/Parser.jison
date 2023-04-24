@@ -103,9 +103,10 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
     const {Block} = require('../Classes/Instructions/Block');
     const {Function} = require('../Classes/Instructions/Function');
     const {If} = require('../Classes/Instructions/If');
-    const {Else} = require('../Classes/Instructions/Else');
     const {Break} = require('../Classes/Instructions/Break');
     const {Continue} = require('../Classes/Instructions/Continue');
+    const {While} = require('../Classes/Instructions/While');
+    const {DoWhile} = require('../Classes/Instructions/DoWhile');
     const {MainMethod} = require('../Classes/Instructions/MainMethod');
     //Expresiones
     const {Primitive} = require('../Classes/Expressions/Primitive');
@@ -156,7 +157,7 @@ INSTRUCTION:
     ARRAY_ASIGN TOK_semicolon       {$$ = $1} |
     IF_STRCT                        {$$ = $1} |
     SWITCH_STRCT                    {} |
-    LOOP                            {} |
+    LOOP                            {$$ = $1} |
     FUNCTION                        {$$ = $1} |
     CALLED_FUNCTION TOK_semicolon   {$$ = $1} |
     NATIVES_FUNCTION TOK_semicolon  {$$ = $1} |
@@ -222,9 +223,9 @@ DEFAULT:
     RW_default TOK_colon INSTRUCTIONS       {};
 
 LOOP:
-    RW_while TOK_lpar EXP TOK_rpar BLOCK                        {} |
-    RW_for TOK_lpar FOR_PARAMS TOK_rpar BLOCK                   {} |
-    RW_do BLOCK RW_while TOK_lpar EXP TOK_rpar TOK_semicolon    {};
+    RW_while TOK_lpar EXP TOK_rpar BLOCK                        {$$ = new While(@1.first_line,@1.first_column,$3,$5)} |
+    RW_do BLOCK RW_while TOK_lpar EXP TOK_rpar TOK_semicolon    {$$ = new DoWhile(@1.first_line,@1.first_column,$5,$2)} |
+    RW_for TOK_lpar FOR_PARAMS TOK_rpar BLOCK                   {};
 
 FOR_PARAMS:
     INIT_ID TOK_semicolon EXP TOK_semicolon UPDATE_FOR {};
