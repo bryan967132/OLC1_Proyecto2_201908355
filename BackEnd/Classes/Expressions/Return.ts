@@ -7,8 +7,11 @@ export class Return extends Expression {
         super(line,column,Type.NULL,TypeExp.RETURN)
     }
     public execute(env: Environment): ReturnType {
-        let value: ReturnType = this.exp.execute(env)
-        this.type = value.type
-        return {value: value.value,type: this.type}
+        if(this.exp) {
+            let value: ReturnType = this.exp.execute(env)
+            this.type = value.type
+            return {value: value.value,type: this.type}
+        }
+        return {value: this.typeExp,type: this.type}
     }
 }

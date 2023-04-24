@@ -11,5 +11,7 @@ export enum TypeInst {
     INIT_FUNCTION = "INIT_FUNCTION",
     MAIN          = "MAIN",
     IF            = "IF",
-    ELSE          = "ELSE"
+    ELSE          = "ELSE",
+    BREAK         = "BREAK",
+    CONTINUE      = "CONTINUE"
 }

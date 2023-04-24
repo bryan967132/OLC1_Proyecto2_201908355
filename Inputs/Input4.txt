@@ -1,6 +1,4 @@
-
 main inicio();
-
 int ack(int m, int n){
     if (m == 0) {
         return n + 1;
@@ -10,18 +8,14 @@ int ack(int m, int n){
         return ack(m - 1, ack(m, n - 1));
     }
 }
-
-
 void inicio(){
-  
-    print("Ackerman de 3,0 "+ack(3,0));
-    print("Ackerman de 2,8 "+ack(2,8));
-    print("Ackerman de 2,1 "+ack(2,1));
+    print("Ackerman de 3, 0, "+ack(3,0));
+    print("Ackerman de 2, 8, "+ack(2,8));
+    print("Ackerman de 2, 1, "+ack(2,1));
 }
 
-
 /*
-Ackerman de 3,0 5
-Ackerman de 2,8 19
-Ackerman de 2,1 5
+Ackerman de 3, 0, 5
+Ackerman de 2, 8, 19
+Ackerman de 2, 1, 5
 */

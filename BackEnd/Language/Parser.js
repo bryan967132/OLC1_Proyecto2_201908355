@@ -98,6 +98,15 @@ break;
 case 5: case 6: case 7: case 8: case 13: case 14: case 15: case 87:
 this.$ = $$[$0-1]
 break;
+case 16:
+this.$ = new Break(_$[$0-1].first_line,_$[$0-1].first_column)
+break;
+case 17:
+this.$ = new Continue(_$[$0-1].first_line,_$[$0-1].first_column)
+break;
+case 18:
+this.$ = new Return(_$[$0-1].first_line,_$[$0-1].first_column,undefined)
+break;
 case 19:
 this.$ = new Return(_$[$0-2].first_line,_$[$0-2].first_column,$$[$0-1])
 break;
@@ -513,6 +522,8 @@ _handle_error:
     const {Function} = require('../Classes/Instructions/Function');
     const {If} = require('../Classes/Instructions/If');
     const {Else} = require('../Classes/Instructions/Else');
+    const {Break} = require('../Classes/Instructions/Break');
+    const {Continue} = require('../Classes/Instructions/Continue');
     const {MainMethod} = require('../Classes/Instructions/MainMethod');
     //Expresiones
     const {Primitive} = require('../Classes/Expressions/Primitive');

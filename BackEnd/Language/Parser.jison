@@ -104,6 +104,8 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
     const {Function} = require('../Classes/Instructions/Function');
     const {If} = require('../Classes/Instructions/If');
     const {Else} = require('../Classes/Instructions/Else');
+    const {Break} = require('../Classes/Instructions/Break');
+    const {Continue} = require('../Classes/Instructions/Continue');
     const {MainMethod} = require('../Classes/Instructions/MainMethod');
     //Expresiones
     const {Primitive} = require('../Classes/Expressions/Primitive');
@@ -159,9 +161,9 @@ INSTRUCTION:
     CALLED_FUNCTION TOK_semicolon   {$$ = $1} |
     NATIVES_FUNCTION TOK_semicolon  {$$ = $1} |
     INCR_DECR TOK_semicolon         {$$ = $1} |
-    RW_break TOK_semicolon          {} |
-    RW_continue TOK_semicolon       {} |
-    RW_return TOK_semicolon         {} |
+    RW_break TOK_semicolon          {$$ = new Break(@1.first_line,@1.first_column)} |
+    RW_continue TOK_semicolon       {$$ = new Continue(@1.first_line,@1.first_column)} |
+    RW_return TOK_semicolon         {$$ = new Return(@1.first_line,@1.first_column,undefined)} |
     RW_return EXP TOK_semicolon     {$$ = new Return(@1.first_line,@1.first_column,$2)} |
     error                           {console.log({line: this._$.first_line, column: this._$.first_column, type: 'Sintáctico', message: `Error sintáctico, token no esperado '${yytext}' .`})};
 
