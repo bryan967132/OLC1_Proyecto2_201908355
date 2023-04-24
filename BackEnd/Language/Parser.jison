@@ -108,6 +108,8 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
     const {While} = require('../Classes/Instructions/While');
     const {DoWhile} = require('../Classes/Instructions/DoWhile');
     const {For} = require('../Classes/Instructions/For');
+    const {Switch} = require('../Classes/Instructions/Switch');
+    const {Case} = require('../Classes/Instructions/Case');
     const {MainMethod} = require('../Classes/Instructions/MainMethod');
     //Expresiones
     const {Primitive} = require('../Classes/Expressions/Primitive');
@@ -157,7 +159,7 @@ INSTRUCTION:
     NEW_ARRAY TOK_semicolon         {$$ = $1} |
     ARRAY_ASIGN TOK_semicolon       {$$ = $1} |
     IF_STRCT                        {$$ = $1} |
-    SWITCH_STRCT                    {} |
+    SWITCH_STRCT                    {$$ = $1} |
     LOOP                            {$$ = $1} |
     FUNCTION                        {$$ = $1} |
     CALLED_FUNCTION TOK_semicolon   {$$ = $1} |
@@ -206,22 +208,24 @@ IF_STRCT:
     RW_if TOK_lpar EXP TOK_rpar BLOCK RW_else IF_STRCT  {$$ = new If(@1.first_line,@1.first_column,$3,$5,$7)};
 
 SWITCH_STRCT:
-    RW_switch TOK_lpar EXP TOK_rpar TOK_lbrc CASE_BLOCK TOK_rbrc     {};
+    RW_switch TOK_lpar EXP TOK_rpar TOK_lbrc CASE_BLOCK TOK_rbrc     {$$ = new Switch(@1.first_line,@1.first_column,$3,$6[0],$6[1])};
 
 CASE_BLOCK:
-    CASE_LIST DEFAULT   {} |
-    CASE_LIST           {} |
-    DEFAULT             {};
+    CASE_LIST DEFAULT   {$$ = [$1,$2]} |
+    CASE_LIST           {$$ = [$1,undefined]} |
+    DEFAULT             {$$ = [undefined,$1]};
 
 CASE_LIST:
-    CASE_LIST CASE              {} |
-    CASE                        {};
+    CASE_LIST CASE              {$$.push($2)} |
+    CASE                        {$$ = [$1]};
 
 CASE:
-    RW_case EXP TOK_colon INSTRUCTIONS      {};
+    RW_case EXP TOK_colon INSTRUCTIONS      {$$ = new Case(@1.first_line,@1.first_column,$2,new Block(@4.first_line,@4.first_column,$4))} |
+    RW_case EXP TOK_colon                   {$$ = new Case(@1.first_line,@1.first_column,$2,new Block(@4.first_line,@4.first_column,[]))};
 
 DEFAULT:
-    RW_default TOK_colon INSTRUCTIONS       {};
+    RW_default TOK_colon INSTRUCTIONS       {$$ = new Block(@1.first_line,@1.first_column,$3)} |
+    RW_default TOK_colon                    {$$ = new Block(@1.first_line,@1.first_column,[])};
 
 LOOP:
     RW_while TOK_lpar EXP TOK_rpar BLOCK                        {$$ = new While(@1.first_line,@1.first_column,$3,$5)} |

@@ -16,5 +16,7 @@ export enum TypeInst {
     CONTINUE      = "CONTINUE",
     LOOP_WHILE    = "LOOP_WHILE",
     LOOP_DOWHILE  = "LOOP_DOWHILE",
-    LOOP_FOR      = "LOOP_FOR"
+    LOOP_FOR      = "LOOP_FOR",
+    SWITCH        = "SWITCH",
+    CASE          = "CASE"
 }
