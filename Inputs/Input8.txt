@@ -1,9 +1,10 @@
 main inicio();
 void inicio() {
-    //tablasMultiplicacion(10);
+    tablasMultiplicacion(10);
     bubbleSort();
 }
 void bubbleSort() {
+    print("BubbleSort");
     List<int> array = new List<int>;
     array.add(7);   array.add(13);
     array.add(40);  array.add(2);
