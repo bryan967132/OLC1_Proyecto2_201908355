@@ -1,0 +1,72 @@
+﻿void funcionesEspecialesYNativas(){
+    int a = 15;
+    print("------------------TOLOWER-------------------");
+    print("SIN TOLOWER");
+    print(toLower("CON TOLOWER"));
+    print("------------------TOUPPER-------------------");
+    print("sin toupper");
+    print(toUpper("con toupper"));
+    print("------------------TRUNCATE------------------");
+    double b=17.8;
+    print("sin truncate: "+b);
+    int b2=truncate(b);
+    print("con truncate "+b2);
+    print("------------------ROUND-------------------");
+    double c=26.5;
+    print("sin round: "+c);
+    c=round(c);
+    print("con round "+c);
+    double cc=26.4;
+    print("sin round: "+cc);
+    cc=round(cc);
+    print("con round "+cc);
+    print("-----------------TYPEOF--------------------");
+    string x="soy una cadena";
+    int y = 50;
+    double z = 78.5;
+    char xx = 'a';
+    boolean yy = true;
+    print("tipo: "+typeof(x));
+    print("tipo: "+typeof(y));
+    print("tipo: "+typeof(z));
+    print("tipo: "+typeof(xx));
+    print("tipo: "+typeof(yy));
+    print("------------------LENGTH-------------------");
+    string cadena="soy una cadena";
+    print("tamaño: "+length(cadena));
+    print("------------------TOSTRING-------------------");
+    int numero=105;
+    print("tipo: "+typeof(numero));
+    print("tipo: "+typeof(toString(numero)));
+}
+
+main funcionesEspecialesYNativas();
+
+/*
+--------------------SALIDA ESPERADA-----------------
+------------------TOLOWER-------------------
+SIN TOLOWER
+con tolower
+------------------TOUPPER-------------------
+sin toupper
+CON TOUPPER
+------------------TRUNCATE------------------
+sin truncate: 17.8
+con truncate 17
+------------------ROUND-------------------
+sin round: 26.5
+con round 27
+sin round: 26.4
+con round 26
+-----------------TYPEOF--------------------
+tipo: STRING
+tipo: INT
+tipo: DOUBLE
+tipo: CHAR
+tipo: BOOLEAN
+------------------LENGTH-------------------
+tamaño: 14
+------------------TOSTRING-------------------
+tipo: INT
+tipo: STRING
+*/

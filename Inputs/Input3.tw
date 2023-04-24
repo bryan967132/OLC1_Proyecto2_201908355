@@ -1,9 +1,4 @@
-char a = '@';
-main validarPar();
-void validarPar() {
-    int num = (int) a;
-    print(num + (par(num) ? " es par." : " es impar."));
-}
+main inicio();
 boolean par(int n) {
     if(n == 0) {
         return true;
@@ -15,4 +10,10 @@ boolean impar(int n) {
         return false;
     }
     return par(n - 1);
+}
+void inicio() {
+    int num = 18;
+    print(num + " es " + (impar(num) ? "impar." : "par."));
+    num = 13;
+    print(num + " es " + (par(num) ? "par." : "impar."));
 }
