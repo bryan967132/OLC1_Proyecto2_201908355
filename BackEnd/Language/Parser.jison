@@ -233,11 +233,11 @@ FOR_ARGS:
 
 ID_ASIGN_FOR:
     TYPE TOK_id TOK_equal EXP   {$$ = new InitID(@1.first_line,@1.first_column,$2,$1,$4)} |
-    TOK_id TOK_equal EXP        {$$ = new AsignID(@1.first_line,@1.first_column,$1,$3)};
+    ID_ASIGN                    {$$ = $1};
 
 UPDATE:
     INCR_DECR                   {$$ = $1} |
-    TOK_id TOK_equal EXP        {$$ = new AsignID(@1.first_line,@1.first_column,$1,$3)};
+    ID_ASIGN                    {$$ = $1};
 
 FUNCTION:
     TYPE TOK_id TOK_lpar PARAMETERS TOK_rpar BLOCK          {$$ = new Function(@2.first_line,@2.first_column,$2,$4,$6,$1)} |
