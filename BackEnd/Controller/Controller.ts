@@ -92,4 +92,43 @@ export class Controller {
             }
         })
     }
+    public parserAST(req: Request,res: Response) {
+        let code = req.body.code
+        let parser = require('../AST/Parser')
+        try {
+            let ast: Node = parser.parse(code)
+            res.json({
+                console: ast.getDot(),
+                errors: printErrors
+            })
+        }
+        catch (error) {
+            console.log(error)
+            res.json({
+                console: error
+            })
+        }
+    }
+    public parserAST_path(req: Request,res: Response) {
+        let path = req.body.path
+        let parser = require('../AST/Parser')
+        fs.readFile(path,(err,data) => {
+            try {
+                let code = data.toString()
+                let ast: Node = parser.parse(code)
+                let dot = ast.getDot()
+                fs.writeFile('./AST.dot',dot,(err) => {try {} catch(error) {}})
+                res.json({
+                    console: ast.getDot(),
+                    errors: printErrors
+                })
+            }
+            catch (error) {
+                console.log(error)
+                res.json({
+                    console: error
+                })
+            }
+        })
+    }
 }
