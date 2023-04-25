@@ -3,6 +3,9 @@ var editor = CodeMirror(document.getElementById("editor"), {
     lineNumbers: true,
     styleActiveLine: true,
     indentUnit: 4,
+    autoCloseBrackets: true,
+    matchBrackets: true,
+    caseFold: true,
     theme: "darcula"
 });
 
@@ -12,10 +15,12 @@ editor.setSize(null, window.innerHeight - document.getElementById("editor").offs
 });
 
 var console = CodeMirror(document.getElementById("console"), {
-    mode: "text/x-java",
+    mode: "text",
     lineNumbers: true,
     styleActiveLine: false,
     readOnly: true,
+    cursorHeight: 0,
+    lineWrapping: false,
     theme: "darcula"
 });
 
