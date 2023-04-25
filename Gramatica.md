@@ -31,10 +31,10 @@ INSTRUCTION:
     CALLED_FUNCTION ';'  |
     NATIVES_FUNCTION ';' |
     INCR_DECR ';'        |
-    break ';'            |
-    continue ';'         |
-    return ';'           |
-    return EXP ';'       |
+    'break' ';'          |
+    'continue' ';'       |
+    'return' ';'         |
+    'return' EXP ';'     |
     error                
 
 MAIN_METHOD:
@@ -48,16 +48,16 @@ ID_ASIGN:
     TOK_id '=' EXP
 
 NEW_ARRAY:
-    TYPE '[' ']' TOK_id '=' ARRAY_VALUE     |
-    list '<' TYPE '>' TOK_id '=' LIST_VALUE 
+    TYPE '[' ']' TOK_id '=' ARRAY_VALUE       |
+    'list' '<' TYPE '>' TOK_id '=' LIST_VALUE 
 
 ARRAY_VALUE:
-    new TYPE '[' EXP ']' |
+    'new' TYPE '[' EXP ']' |
     '{' VALUE_LIST '}'   
 
 LIST_VALUE:
-    new list '<' TYPE '>'   |
-    toCharArray '(' EXP ')' 
+    'new' 'list' '<' TYPE '>'   |
+    'toCharArray' '(' EXP ')' 
 
 ARRAY_ASIGN:
     TOK_id '[' EXP ']' '=' EXP         |
@@ -69,12 +69,12 @@ VALUE_LIST:
     EXP                
 
 IF_STRCT:
-    if '(' EXP ')' BLOCK               |
-    if '(' EXP ')' BLOCK else BLOCK    |
-    if '(' EXP ')' BLOCK else IF_STRCT 
+    'if' '(' EXP ')' BLOCK                 |
+    'if' '(' EXP ')' BLOCK 'else' BLOCK    |
+    'if' '(' EXP ')' BLOCK 'else' IF_STRCT 
 
 SWITCH_STRCT:
-    switch '(' EXP ')' '{' CASE_BLOCK '}' 
+    'switch' '(' EXP ')' '{' CASE_BLOCK '}' 
 
 CASE_BLOCK:
     CASE_LIST DEFAULT |
@@ -86,17 +86,17 @@ CASE_LIST:
     CASE           
 
 CASE:
-    case EXP ':' INSTRUCTIONS |
-    case EXP ':'              
+    'case' EXP ':' INSTRUCTIONS |
+    'case' EXP ':'              
 
 DEFAULT:
-    default ':' INSTRUCTIONS |
-    default ':'              
+    'default' ':' INSTRUCTIONS |
+    'default' ':'              
 
 LOOP:
-    while '(' EXP ')' BLOCK        |
-    do BLOCK while '(' EXP ')' ';' |
-    for '(' FOR_ARGS ')' BLOCK     
+    'while' '(' EXP ')' BLOCK          |
+    'do' BLOCK 'while' '(' EXP ')' ';' |
+    'for' '(' FOR_ARGS ')' BLOCK     
 
 FOR_ARGS:
     ID_ASIGN_FOR ';' EXP ';' UPDATE 
@@ -110,10 +110,10 @@ UPDATE:
     ID_ASIGN  
 
 FUNCTION:
-    TYPE TOK_id '(' PARAMETERS ')' BLOCK |
-    void TOK_id '(' PARAMETERS ')' BLOCK |
-    TYPE TOK_id '(' ')' BLOCK            |
-    void TOK_id '(' ')' BLOCK            
+    TYPE   TOK_id '(' PARAMETERS ')' BLOCK |
+    'void' TOK_id '(' PARAMETERS ')' BLOCK |
+    TYPE   TOK_id '(' ')' BLOCK            |
+    'void' TOK_id '(' ')' BLOCK            
 
 PARAMETERS:
     PARAMETERS ',' PARAMETER |
@@ -135,19 +135,19 @@ LIST_ARGS:
     EXP                     
 
 NATIVES_FUNCTION:
-    print '(' EXP ')'    |
-    print '(' ')'        |
+    'print' '(' EXP ')'    |
+    'print' '(' ')'        |
     NATIVES_FUNCTION_EXP
 
 NATIVES_FUNCTION_EXP:
-    toLower     '(' EXP ')' |
-    toUpper     '(' EXP ')' |
-    length      '(' EXP ')' |
-    truncate    '(' EXP ')' |
-    round       '(' EXP ')' |
-    typeOf      '(' EXP ')' |
-    toString    '(' EXP ')' |
-    toCharArray '(' EXP ')' 
+    'toLower'     '(' EXP ')' |
+    'toUpper'     '(' EXP ')' |
+    'length'      '(' EXP ')' |
+    'truncate'    '(' EXP ')' |
+    'round'       '(' EXP ')' |
+    'typeOf'      '(' EXP ')' |
+    'toString'    '(' EXP ')' |
+    'toCharArray' '(' EXP ')' 
 
 EXP:
     EXP '+' EXP                |
@@ -179,17 +179,17 @@ EXP:
     TOK_double                 |
     TOK_string                 |
     TOK_char                   |
-    true                       |
-    false                      
+    'true'                     |
+    'false'                      
 
 INCR_DECR:
     TOK_id '++' |
     TOK_id '--' 
 
 TYPE:
-    int      |
-    double   |
-    boolean  |
-    char     |
-    String   
+    'int'     |
+    'double'  |
+    'boolean' |
+    'char'    |
+    'String'   
 ```
