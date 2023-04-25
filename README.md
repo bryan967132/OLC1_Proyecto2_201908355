@@ -8,9 +8,9 @@ void inicio() {
     num = 13;
     print(num + " es " + (pair(num) ? "par." : "impar."));
     print("-----------Factorial Iterativo---------");
-    print("8! = " + factorialIterativo(8));
+    print("8! = " + iterativeFactorial(8));
     print("-----------Factorial Recursivo---------");
-    print("8! = " + factorialRecursivo(8));
+    print("8! = " + recursiveFactorial(8));
 }
 boolean pair(int n) {
     if(n == 0) {
