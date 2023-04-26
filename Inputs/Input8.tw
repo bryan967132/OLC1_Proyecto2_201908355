@@ -1,0 +1,46 @@
+main init();
+void init() {
+    int a = 4;
+    int b = 5;
+    print(a + " * " + b + " = " + sumasSucesivas(a,b));
+    print(a + " / " + b + " = " + restasSucesivas(a,b));
+    print(a + " ^ " + b + " = " + potencia(a,b));
+    print(a + " ^ 0.5" + " = " + raizCuadrada(a));
+}
+double sumasSucesivas(int a,int b) {
+    return sumasSucesivas1(a,a,b,0);
+}
+double sumasSucesivas1(int a,int a1,int b,int c) {
+    if(c + 1 < b) {
+        return sumasSucesivas1(a + a1,a1,b,c + 1);
+    }
+    return a;
+}
+double restasSucesivas(int a,int b) {
+    return restasSucesivas1(a,b,0);
+}
+double restasSucesivas1(int a,int b,int c)  {
+    if(a - b > 0) {
+        return restasSucesivas1(a - b,b,c + 1);
+    }
+    return c + a / b;
+}
+double potencia(int a,int b) {
+    return potencia1(a,a,b,0);
+}
+double potencia1(int a,int a1,int b,int c) {
+    if(c + 1 < b) {
+        return potencia1(a * a1,a1,b,c + 1);
+    }
+    return a;
+}
+double raizCuadrada(int a) {
+    return raizCuadrada1(a,a);
+}
+double raizCuadrada1(int x,int b) {
+    if(b != x / b) {
+        b = ((x / b) + b) / 2;
+    	return raizCuadrada1(x,b);
+    }
+    return b;
+}
