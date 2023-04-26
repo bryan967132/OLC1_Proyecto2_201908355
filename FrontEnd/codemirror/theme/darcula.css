@@ -4,7 +4,7 @@
  */
 
 .cm-s-darcula  { font-family: Consolas, Menlo, Monaco, 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace, serif;}
-.cm-s-darcula.CodeMirror { background: #1E1E1E; color: #ffffff; } 
+.cm-s-darcula.CodeMirror { background: #1E1E1E; color: #ffffff; z-index: 0; } 
 
 .cm-s-darcula span.cm-meta { color: #BBB529; }
 .cm-s-darcula span.cm-number { color: #B5CEA8; }

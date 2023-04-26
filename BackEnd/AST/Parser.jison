@@ -106,9 +106,14 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 
 %%
 
-INIT: INSTRUCTIONS EOF {
+INIT: INSTRUCTIONS EOF | EOF {
     $$ = new Node('INIT');
-    $$.pushChild($1);
+    if($1 != 'EOF') {
+        $$.pushChild($1);
+    }
+    else {
+        $$.pushChild(new Node('EOF'))
+    }
     return $$;
 } ;
 

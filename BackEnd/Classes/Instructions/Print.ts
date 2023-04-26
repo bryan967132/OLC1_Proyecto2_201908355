@@ -10,6 +10,5 @@ export class Print extends Instruction {
     public execute(env: Environment) {
         const value = this.expression ? this.expression.execute(env) : null
         printConsole.push(value ? value.value : '')
-        console.log('->',value ? value.value : '')
     }
 }

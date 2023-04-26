@@ -9,6 +9,9 @@ export class InitArray extends Instruction {
     }
     public execute(env: Environment): any {
         if(this.values) {
+            for(let i = 0; i < this.values.length; i ++) {
+                this.values[i] = this.values[i].execute(env)
+            }
             env.saveArray(this.id,this.values,this.type,this.line,this.column)
         }
         else {

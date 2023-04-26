@@ -146,7 +146,9 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 
 %%
 
-INIT: INSTRUCTIONS EOF {return $1};
+INIT:
+    INSTRUCTIONS EOF {return $1} |
+    EOF              {return []} ;
 
 INSTRUCTIONS:
     INSTRUCTIONS INSTRUCTION        {$$.push($2)} |

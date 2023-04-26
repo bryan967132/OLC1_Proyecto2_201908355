@@ -1,5 +1,5 @@
+list <int> l1 = new list <int>;
 void funcion_main(){
-	list <int> l1 = new list <int>;
 	l1.add(3);
 	l1.add(1);
 	l1.add(5);
@@ -10,55 +10,37 @@ void funcion_main(){
 	l1.add(31);
 	l1.add(17);
 	l1.add(9);
-
+    
 	int n = length(l1);
 	print("Arreglo desordenado");
-	for(int i =0; i<n;i++){
-		print((i+1)+".-"+l1[[i]]);
-	}
+	printArray();
 	int aux;
-    	for(int i =0;i<n;i++){
- 		for(int j =0;j<(n-i-1);j++){
+    for(int i = 0; i < n; i ++){
+ 		for(int j =0;j < (n - i - 1); j ++){
 	  		if(l1[[j]] > l1[[j+1]]){
-	    			aux = l1[[j+1]];
-            			l1[[j+1]] = l1[[j]];
-            			l1[[j]] = aux;
-          		}
-        	}
+	    		aux = l1[[j+1]];
+        		l1[[j+1]] = l1[[j]];
+        		l1[[j]] = aux;
+       		}
        	}
-
-	print(" ");
+    }
+	print();
 	print("Arreglo ordenado");
-	for(int i =0; i<n;i++){
-		print((i+1)+".-"+l1[[i]]);
-	}
+	printArray();
 }
-
+void printArray() {
+    String arr = "";
+    for(int i = 0; i < length(l1); i ++) {
+        arr = arr + (arr != "" ? ", " : "") + l1[[i]];
+    }
+    print(arr);
+}
 main funcion_main();
 
 /*   resultado:
 Arreglo desordenado
-1.-3
-2.-1
-3.-5
-4.-2
-5.-7
-6.-11
-7.-12
-8.-31
-9.-17
-10.-9
+3, 1, 5, 2, 7, 11, 12, 31, 17, 9
  
 Arreglo ordenado
-1.-1
-2.-2
-3.-3
-4.-5
-5.-7
-6.-9
-7.-11
-8.-12
-9.-17
-10.-31
-
+1, 2, 3, 5, 7, 9, 11, 12, 17, 31
 */

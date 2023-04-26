@@ -14,7 +14,7 @@ editor.setSize(null, window.innerHeight - document.getElementById("editor").offs
 	editor.setSize(null, window.innerHeight - document.getElementById("editor").offsetTop - 16);
 });
 
-var console = CodeMirror(document.getElementById("console"), {
+var out = CodeMirror(document.getElementById("console"), {
     mode: "text",
     lineNumbers: true,
     styleActiveLine: false,
@@ -24,7 +24,7 @@ var console = CodeMirror(document.getElementById("console"), {
     theme: "darcula"
 });
 
-console.setSize(null, window.innerHeight - document.getElementById("editor").offsetTop - 16);
+out.setSize(null, window.innerHeight - document.getElementById("editor").offsetTop - 16);
 	window.addEventListener("resize", function() {
-	console.setSize(null, window.innerHeight - document.getElementById("editor").offsetTop - 16);
+	out.setSize(null, window.innerHeight - document.getElementById("editor").offsetTop - 16);
 });
