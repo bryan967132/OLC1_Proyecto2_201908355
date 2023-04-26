@@ -83,17 +83,19 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 
 var $0 = $$.length - 1;
 switch (yystate) {
+case 1:
+
+        this.$ = new Node('INIT');
+        this.$.pushChild($$[$0-1]);
+        return this.$;
+    
+break;
 case 2:
 
-    this.$ = new Node('INIT');
-    if($$[$0] != 'EOF') {
-        this.$.pushChild($$[$0]);
-    }
-    else {
+        this.$ = new Node('INIT');
         this.$.pushChild(new Node('EOF'))
-    }
-    return this.$;
-
+        return this.$;
+    
 break;
 case 3:
 
@@ -102,28 +104,32 @@ case 3:
         this.$.pushChild($$[$0])
     
 break;
-case 4:
+case 4: case 5: case 10: case 11: case 12: case 13: case 45: case 57:
 
-        this.$ = new Node('INSTRUCTIONS');
-        this.$.pushChild($$[$0])
+        this.$ = $$[$0]
     
 break;
-case 5: case 10: case 11: case 12: case 13:
+case 6: case 7: case 8: case 9:
 
-        this.$ = new Node('INSTRUCTION')
-        this.$.pushChild($$[$0])
+        this.$ = $$[$0-1]
+        this.$.pushChild(new Node($$[$0]))
     
 break;
-case 6: case 7: case 8: case 9: case 14:
+case 14:
 
-        this.$ = new Node('INSTRUCTION')
-        this.$.pushChild($$[$0-1])
+        this.$ = new Node('CALL_FUNC')
+        this.$.pushChild($$[$0-1][0])
+        this.$.pushChild($$[$0-1][1])
+        if($$[$0-1][2]) {
+            this.$.pushChild($$[$0-1][2])
+        }
+        this.$.pushChild($$[$0-1][3])
         this.$.pushChild(new Node($$[$0]))
     
 break;
 case 15:
 
-        this.$ = new Node('INSTRUCTION')
+        this.$ = new Node('NATIVE')
         this.$.pushChild($$[$0-1][0])
         this.$.pushChild($$[$0-1][1])
         if($$[$0-1][2]) {
@@ -135,22 +141,36 @@ case 15:
 break;
 case 16:
 
-        this.$ = new Node('INSTRUCTION')
+        this.$ = new Node('INCR_DECR')
         this.$.pushChild($$[$0-1][0])
         this.$.pushChild($$[$0-1][1])
         this.$.pushChild(new Node($$[$0]))
     
 break;
-case 17: case 18: case 19:
+case 17:
 
-        this.$ = new Node('INSTRUCTION')
+        this.$ = new Node('BREAK')
+        this.$.pushChild(new Node($$[$0-1]))
+        this.$.pushChild(new Node($$[$0]))
+    
+break;
+case 18:
+
+        this.$ = new Node('CONTINUE')
+        this.$.pushChild(new Node($$[$0-1]))
+        this.$.pushChild(new Node($$[$0]))
+    
+break;
+case 19:
+
+        this.$ = new Node('RETURN')
         this.$.pushChild(new Node($$[$0-1]))
         this.$.pushChild(new Node($$[$0]))
     
 break;
 case 20:
 
-        this.$ = new Node('INSTRUCTION')
+        this.$ = new Node('RETURN')
         this.$.pushChild(new Node($$[$0-2]))
         this.$.pushChild($$[$0-1])
         this.$.pushChild(new Node($$[$0]))
@@ -160,7 +180,12 @@ case 22:
 
         this.$ = new Node('MAIN_METHOD')
         this.$.pushChild(new Node($$[$0-2]))
-        this.$.pushChild($$[$0-1])
+        this.$.pushChild($$[$0-1][0])
+        this.$.pushChild($$[$0-1][1])
+        if($$[$0-1][2]) {
+            this.$.pushChild($$[$0-1][2])
+        }
+        this.$.pushChild($$[$0-1][3])
         this.$.pushChild(new Node($$[$0]))
     
 break;
@@ -379,11 +404,6 @@ case 44:
         this.$.pushChild($$[$0])
     
 break;
-case 45: case 57:
-
-        this.$ = $$[$0]
-    
-break;
 case 46:
 
         this.$ = new Node('CASE')
@@ -528,10 +548,8 @@ case 61:
         this.$.pushChild($$[$0][2])
     
 break;
-case 62:
+case 62: case 69:
 
-        this.$ = new Node('PARAMS')
-        this.$.pushChild($$[$0-2])
         this.$.pushChild(new Node($$[$0-1]))
         this.$.pushChild($$[$0])
     
@@ -553,44 +571,19 @@ case 65:
 this.$ = [new Node($$[$0-2]),$$[$0-1],new Node($$[$0])]
 break;
 case 66:
-this.$ = [new Node($$[$0-1]),undefined,new Node($$[$01])]
+this.$ = [new Node($$[$0-1]),undefined,new Node($$[$0])]
 break;
-case 67:
-
-        this.$ = new Node('CALL_FUNC')
-        this.$.pushChild(new Node($$[$0-3]))
-        this.$.pushChild(new Node($$[$0-2]))
-        this.$.pushChild($$[$0-1])
-        this.$.pushChild(new Node($$[$0]))
-    
+case 67: case 71: case 74: case 75: case 76: case 77: case 78: case 79: case 80: case 81:
+this.$ = [new Node($$[$0-3]),new Node($$[$0-2]),$$[$0-1],new Node($$[$0])]
 break;
-case 68:
-
-        this.$ = new Node('CALL_FUNC')
-        this.$.pushChild(new Node($$[$0-2]))
-        this.$.pushChild(new Node($$[$0-1]))
-        this.$.pushChild(new Node($$[$0]))
-    
-break;
-case 69:
-
-        this.$ = new Node('ARGS')
-        this.$.pushChild($$[$0-2])
-        this.$.pushChild(new Node($$[$0-1]))
-        this.$.pushChild($$[$0])
-    
+case 68: case 72:
+this.$ = [new Node($$[$0-2]),new Node($$[$0-1]),undefined,new Node($$[$0])]
 break;
 case 70:
 
         this.$ = new Node('ARGS')
         this.$.pushChild($$[$0])
     
-break;
-case 71: case 74: case 75: case 76: case 77: case 78: case 79: case 80: case 81:
-this.$ = [new Node($$[$0-3]),new Node($$[$0-2]),$$[$0-1],new Node($$[$0])]
-break;
-case 72:
-this.$ = [new Node($$[$0-2]),new Node($$[$0-1]),undefined,new Node($$[$01])]
 break;
 case 73:
 this.$ = $$[$0]
@@ -660,7 +653,12 @@ break;
 case 103:
 
         this.$ = new Node('EXP')
-        this.$.pushChild($$[$0])
+        this.$.pushChild($$[$0][0])
+        this.$.pushChild($$[$0][1])
+        if($$[$0][2]) {
+            this.$.pushChild($$[$0][2])
+        }
+        this.$.pushChild($$[$0][3])
     
 break;
 case 104:
@@ -679,47 +677,16 @@ case 105:
         this.$.pushChild($$[$0][1])
     
 break;
-case 106:
+case 106: case 107:
 
-        this.$ = new Node('ID')
-        this.$.pushChild(new Node(yytext))
+        this.$ = new Node(yytext)
     
 break;
-case 107:
-
-        this.$ = new Node('int')
-        this.$.pushChild(new Node(yytext))
-    
-break;
-case 108:
-
-        this.$ = new Node('double')
-        this.$.pushChild(new Node(yytext))
-    
-break;
-case 109:
-
-        this.$ = new Node('string')
-        this.$.pushChild(new Node(yytext))
-    
-break;
-case 110:
-
-        this.$ = new Node('char')
-        this.$.pushChild(new Node(yytext))
-    
-break;
-case 111: case 112:
-
-        this.$ = new Node('boolean')
-        this.$.pushChild(new Node(yytext))
-    
+case 108: case 109: case 110: case 111: case 112: case 115: case 116: case 117: case 118: case 119:
+this.$ = new Node(yytext)
 break;
 case 113: case 114:
 this.$ = [new Node($$[$0-1]),new Node($$[$0])]
-break;
-case 115: case 116: case 117: case 118: case 119:
-this.$ = new Node(yytext)
 break;
 }
 },

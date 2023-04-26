@@ -99,23 +99,23 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 %nonassoc 'TOK_pow'
 %right uminus
 %left 'TOK_incr' 'TOK_decr'
-%left 'TOK_dot' 'TOK_lbrckt' 'TOK_rbrckt'
 
 //análisis sintáctico
 %start INIT
 
 %%
 
-INIT: INSTRUCTIONS EOF | EOF {
-    $$ = new Node('INIT');
-    if($1 != 'EOF') {
+INIT:
+    INSTRUCTIONS EOF {
+        $$ = new Node('INIT');
         $$.pushChild($1);
-    }
-    else {
+        return $$;
+    } |
+    EOF {
+        $$ = new Node('INIT');
         $$.pushChild(new Node('EOF'))
-    }
-    return $$;
-} ;
+        return $$;
+    } ;
 
 INSTRUCTIONS:
     INSTRUCTIONS INSTRUCTION      {
@@ -124,58 +124,53 @@ INSTRUCTIONS:
         $$.pushChild($2)
     } |
     INSTRUCTION           {
-        $$ = new Node('INSTRUCTIONS');
-        $$.pushChild($1)
+        $$ = $1
     } ;
 
 INSTRUCTION:
     MAIN_METHOD                    {
-        $$ = new Node('INSTRUCTION')
-        $$.pushChild($1)
+        $$ = $1
     } |
     INIT_ID TOK_semicolon          {
-        $$ = new Node('INSTRUCTION')
-        $$.pushChild($1)
+        $$ = $1
         $$.pushChild(new Node($2))
     } |
     ID_ASIGN TOK_semicolon         {
-        $$ = new Node('INSTRUCTION')
-        $$.pushChild($1)
+        $$ = $1
         $$.pushChild(new Node($2))
     } |
     NEW_ARRAY TOK_semicolon        {
-        $$ = new Node('INSTRUCTION')
-        $$.pushChild($1)
+        $$ = $1
         $$.pushChild(new Node($2))
     } |
     ARRAY_ASIGN TOK_semicolon      {
-        $$ = new Node('INSTRUCTION')
-        $$.pushChild($1)
+        $$ = $1
         $$.pushChild(new Node($2))
     } |
     IF_STRCT                       {
-        $$ = new Node('INSTRUCTION')
-        $$.pushChild($1)
+        $$ = $1
     } |
     SWITCH_STRCT                   {
-        $$ = new Node('INSTRUCTION')
-        $$.pushChild($1)
+        $$ = $1
     } |
     LOOP                           {
-        $$ = new Node('INSTRUCTION')
-        $$.pushChild($1)
+        $$ = $1
     } |
     FUNCTION                       {
-        $$ = new Node('INSTRUCTION')
-        $$.pushChild($1)
+        $$ = $1
     } |
     CALLED_FUNCTION TOK_semicolon  {
-        $$ = new Node('INSTRUCTION')
-        $$.pushChild($1)
+        $$ = new Node('CALL_FUNC')
+        $$.pushChild($1[0])
+        $$.pushChild($1[1])
+        if($1[2]) {
+            $$.pushChild($1[2])
+        }
+        $$.pushChild($1[3])
         $$.pushChild(new Node($2))
     } |
     NATIVES_FUNCTION TOK_semicolon {
-        $$ = new Node('INSTRUCTION')
+        $$ = new Node('NATIVE')
         $$.pushChild($1[0])
         $$.pushChild($1[1])
         if($1[2]) {
@@ -185,28 +180,28 @@ INSTRUCTION:
         $$.pushChild(new Node($2))
     } |
     INCR_DECR TOK_semicolon        {
-        $$ = new Node('INSTRUCTION')
+        $$ = new Node('INCR_DECR')
         $$.pushChild($1[0])
         $$.pushChild($1[1])
         $$.pushChild(new Node($2))
     } |
     RW_break TOK_semicolon         {
-        $$ = new Node('INSTRUCTION')
+        $$ = new Node('BREAK')
         $$.pushChild(new Node($1))
         $$.pushChild(new Node($2))
     } |
     RW_continue TOK_semicolon      {
-        $$ = new Node('INSTRUCTION')
+        $$ = new Node('CONTINUE')
         $$.pushChild(new Node($1))
         $$.pushChild(new Node($2))
     } |
     RW_return TOK_semicolon        {
-        $$ = new Node('INSTRUCTION')
+        $$ = new Node('RETURN')
         $$.pushChild(new Node($1))
         $$.pushChild(new Node($2))
     } |
     RW_return EXP TOK_semicolon    {
-        $$ = new Node('INSTRUCTION')
+        $$ = new Node('RETURN')
         $$.pushChild(new Node($1))
         $$.pushChild($2)
         $$.pushChild(new Node($3))
@@ -217,7 +212,12 @@ MAIN_METHOD:
     RW_main CALLED_FUNCTION TOK_semicolon {
         $$ = new Node('MAIN_METHOD')
         $$.pushChild(new Node($1))
-        $$.pushChild($2)
+        $$.pushChild($2[0])
+        $$.pushChild($2[1])
+        if($2[2]) {
+            $$.pushChild($2[2])
+        }
+        $$.pushChild($2[3])
         $$.pushChild(new Node($3))
     } ;
 
@@ -579,8 +579,6 @@ FUNCTION:
 
 PARAMETERS:
     PARAMETERS TOK_comma PARAMETER {
-        $$ = new Node('PARAMS')
-        $$.pushChild($1)
         $$.pushChild(new Node($2))
         $$.pushChild($3)
     } |
@@ -598,27 +596,14 @@ PARAMETER:
 
 BLOCK:
     TOK_lbrc INSTRUCTIONS TOK_rbrc {$$ = [new Node($1),$2,new Node($3)]} |
-    TOK_lbrc TOK_rbrc              {$$ = [new Node($1),undefined,new Node($3)]} ;
+    TOK_lbrc TOK_rbrc              {$$ = [new Node($1),undefined,new Node($2)]} ;
 
 CALLED_FUNCTION:
-    TOK_id TOK_lpar LIST_ARGS TOK_rpar {
-        $$ = new Node('CALL_FUNC')
-        $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
-        $$.pushChild($3)
-        $$.pushChild(new Node($4))
-    } |
-    TOK_id TOK_lpar TOK_rpar           {
-        $$ = new Node('CALL_FUNC')
-        $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
-        $$.pushChild(new Node($3))
-    } ;
+    TOK_id TOK_lpar LIST_ARGS TOK_rpar {$$ = [new Node($1),new Node($2),$3,new Node($4)]} |
+    TOK_id TOK_lpar TOK_rpar           {$$ = [new Node($1),new Node($2),undefined,new Node($3)]} ;
 
 LIST_ARGS:
     LIST_ARGS TOK_comma EXP {
-        $$ = new Node('ARGS')
-        $$.pushChild($1)
         $$.pushChild(new Node($2))
         $$.pushChild($3)
     } |
@@ -629,7 +614,7 @@ LIST_ARGS:
 
 NATIVES_FUNCTION:
     FN_print TOK_lpar EXP TOK_rpar {$$ = [new Node($1),new Node($2),$3,new Node($4)]} |
-    FN_print TOK_lpar TOK_rpar     {$$ = [new Node($1),new Node($2),undefined,new Node($4)]} |
+    FN_print TOK_lpar TOK_rpar     {$$ = [new Node($1),new Node($2),undefined,new Node($3)]} |
     NATIVES_FUNCTION_EXP           {$$ = $1} ;
 
 NATIVES_FUNCTION_EXP:
@@ -776,7 +761,12 @@ EXP:
     } |
     CALLED_FUNCTION                                        {
         $$ = new Node('EXP')
-        $$.pushChild($1)
+        $$.pushChild($1[0])
+        $$.pushChild($1[1])
+        if($1[2]) {
+            $$.pushChild($1[2])
+        }
+        $$.pushChild($1[3])
     } |
     NATIVES_FUNCTION_EXP                                   {
         $$ = new Node('EXP')
@@ -791,33 +781,16 @@ EXP:
         $$.pushChild($1[1])
     } |
     TOK_id                                                 {
-        $$ = new Node('ID')
-        $$.pushChild(new Node(yytext))
+        $$ = new Node(yytext)
     } |
     TOK_integer                                            {
-        $$ = new Node('int')
-        $$.pushChild(new Node(yytext))
+        $$ = new Node(yytext)
     } |
-    TOK_double                                             {
-        $$ = new Node('double')
-        $$.pushChild(new Node(yytext))
-    } |
-    TOK_string                                             {
-        $$ = new Node('string')
-        $$.pushChild(new Node(yytext))
-    } |
-    TOK_char                                               {
-        $$ = new Node('char')
-        $$.pushChild(new Node(yytext))
-    } |
-    RW_true                                                {
-        $$ = new Node('boolean')
-        $$.pushChild(new Node(yytext))
-    } |
-    RW_false                                               {
-        $$ = new Node('boolean')
-        $$.pushChild(new Node(yytext))
-    } ;
+    TOK_double                                             {$$ = new Node(yytext)} |
+    TOK_string                                             {$$ = new Node(yytext)} |
+    TOK_char                                               {$$ = new Node(yytext)} |
+    RW_true                                                {$$ = new Node(yytext)} |
+    RW_false                                               {$$ = new Node(yytext)} ;
 
 INCR_DECR:
     TOK_id TOK_incr {$$ = [new Node($1),new Node($2)]} |
