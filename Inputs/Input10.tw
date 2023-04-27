@@ -1,0 +1,10 @@
+main hanoi(3,"A", "C", "B");
+void hanoi(int n,String origen,String destino,String medio) {
+    if (n == 1) {
+        print("Mover disco: 1, desde: "+ origen+ " hasta: "+ destino);
+        return;
+    }
+    hanoi(n - 1,origen,medio,destino);
+    print("Mover disco: "+ n + ", desde: "+ origen+ " hasta: "+ destino);
+    hanoi(n - 1,medio,destino,origen);
+}

@@ -38,10 +38,10 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#" class="navigation__link">Archivo</a>
+                        <a href="#" class="navigation__link">Reportes</a>
                         <ul>
                             <li><a href="#">Errores</a></li>
-                            <li><a href="#modal">Generar Arbol</a></li>
+                            <li><a href="#modal" onclick="graphAST()">Generar Arbol</a></li>
                             <li><a href="#">Tabla de Simbolos</a></li>
                         </ul>
                     </li>
@@ -54,8 +54,7 @@
             <form action="" autocomplete="off">
                 <div class="modalbox movedown">
                     <a href="#close" title="Close" class="close">&times;</a>
-                    <h2 class="center-text">OLC1 - PROYECTO 2</h2>
-                    <h4 class="center-text">Danny Hugo Bryan Tejaxún Pichiyá - 201908355</h4>
+                    <div id="graphAST" class="graphAST"></div>
                 </div>
             </form>
         </div>
@@ -69,6 +68,9 @@
         <div id="editor" class="panel1"></div>
         <div id="console" class="panel2"></div>
     </div>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
+    <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
     <script src="js/script.js"></script>
     <script src="js/headers.js"></script>
     <script src="js/functions.js"></script>
