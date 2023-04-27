@@ -7,7 +7,7 @@ export class For extends Instruction {
         super(line,column,TypeInst.LOOP_FOR)
     }
     public execute(env: Environment) {
-        const envFor: Environment = new Environment(env)
+        const envFor: Environment = new Environment(env,`${env.name} for`)
         this.args[0].execute(envFor)
         let condition: ReturnType = this.args[1].execute(envFor)
         while(condition.value) {

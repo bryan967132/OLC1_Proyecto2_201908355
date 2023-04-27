@@ -8,12 +8,13 @@ export class While extends Instruction {
         super(line,column,TypeInst.LOOP_WHILE)
     }
     public execute(env: Environment) {
-        let condition: ReturnType | null = this.condition.execute(env)
+        const whileEnv: Environment = new Environment(env,`${env.name} while`)
+        let condition: ReturnType | null = this.condition.execute(whileEnv)
         while(condition.value) {
-            let block: ReturnType = this.block.execute(env)
+            let block: ReturnType = this.block.execute(whileEnv)
             if(block) {
                 if(block.value === TypeInst.CONTINUE) {
-                    condition = this.condition.execute(env)
+                    condition = this.condition.execute(whileEnv)
                     continue
                 }
                 else if(block.value === TypeInst.BREAK) {
@@ -21,7 +22,7 @@ export class While extends Instruction {
                 }
                 return block
             }
-            condition = this.condition.execute(env)
+            condition = this.condition.execute(whileEnv)
         }
     }
 }

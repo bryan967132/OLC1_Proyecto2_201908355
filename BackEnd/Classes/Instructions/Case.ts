@@ -13,9 +13,10 @@ export class Case extends Instruction {
         this.caseEvaluate = caseEvaluate
     }
     public execute(env: Environment): ReturnType | any {
-        const envCase: Environment = new Environment(env)
+        const envCase: Environment = new Environment(env,`${env.name} case`)
         let caseE: ReturnType = this.caseEvaluate
         let case_: ReturnType = this.case_.execute(envCase)
+        envCase.name = `${envCase.name} ${case_.value}`
         if(case_.value === caseE.value) {
             let block: ReturnType = this.block.execute(envCase)
             if(block) {

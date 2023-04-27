@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Node } from "../AST/Node";
 import * as fs from 'fs'
 import { Environment } from "../Classes/Env/Environment";
-import { printErrors, printList, printConsole } from "../Classes/Utils/Reports";
+import { printErrors, printList, printConsole, symbolTable } from "../Classes/Utils/Reports";
 import { Function } from "../Classes/Instructions/Function";
 import { InitID } from '../Classes/Instructions/InitID';
 import { MainMethod } from "../Classes/Instructions/MainMethod";
@@ -19,7 +19,9 @@ export class Controller {
             let ast = parser.parse(code)
             printList.splice(0,printList.length)
             printConsole.splice(0,printConsole.length)
-            const global: Environment = new Environment(null)
+            printErrors.splice(0,printErrors.length)
+            symbolTable.splice(0,symbolTable.length)
+            const global: Environment = new Environment(null,'Global')
             let mainExecute: MainMethod | null = null
             for(let instruction of ast) {
                 try {
@@ -38,6 +40,7 @@ export class Controller {
                 mainExecute.execute(global)
             }
             console.log(printErrors.map((errObj) => errObj.toString()).join('\n'))
+            console.log(symbolTable.join('\n'))
             res.json({
                 console: printConsole,
                 errors: printErrors
@@ -62,7 +65,7 @@ export class Controller {
                 console.log('════════════════════════════════════════════════════════')
                 console.log(code)
                 console.log('══ RESULT:')
-                const global: Environment = new Environment(null)
+                const global: Environment = new Environment(null,'Global')
                 let mainExecute: MainMethod | null = null
                 for(let instruction of ast) {
                     try {

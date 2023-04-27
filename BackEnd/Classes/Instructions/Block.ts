@@ -7,7 +7,7 @@ export class Block extends Instruction {
         super(line,column,TypeInst.BLOCK_INST)
     }
     public execute(env: Environment): any {
-        const newEnv: Environment = new Environment(env)
+        const newEnv: Environment = new Environment(env,env.name)
         for(const instruction of this.instructions) {
             try {
                 const ret = instruction.execute(newEnv)

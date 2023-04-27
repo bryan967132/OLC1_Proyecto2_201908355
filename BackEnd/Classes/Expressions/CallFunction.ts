@@ -11,7 +11,7 @@ export class CallFunction extends Expression {
     public execute(env: Environment): ReturnType | any {
         const func: Function | null = env.getFunction(this.id)
         if(func) {
-            const envFunc: Environment = new Environment(env.getGlobal())
+            const envFunc: Environment = new Environment(env.getGlobal(),`Funcion ${this.id}`)
             if(func.parameters.length == this.args.length) {
                 for(let i = 0; i < func.parameters.length; i ++) {
                     const value: ReturnType = this.args[i].execute(env)

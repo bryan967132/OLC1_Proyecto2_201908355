@@ -10,7 +10,7 @@ export class Switch extends Instruction {
         super(line,column,TypeInst.SWITCH)
     }
     public execute(env: Environment) {
-        const envSwitch: Environment = new Environment(env)
+        const envSwitch: Environment = new Environment(env,'switch')
         if(this.cases) {
             let case_: Case
             let arg: ReturnType = this.arg.execute(env)
