@@ -114,7 +114,7 @@ case 20:
 this.$ = new Return(_$[$0-2].first_line,_$[$0-2].first_column,$$[$0-1])
 break;
 case 21:
-console.log({line: this._$.first_line, column: this._$.first_column, type: 'Sintáctico', message: `Error sintáctico, token no esperado '${yytext}' .`})
+printErrors.push(new Error(this._$.first_line,this._$.first_column,TypeError.SYNTAX,`No se esperaba ${yytext}`))
 break;
 case 22:
 this.$ = new MainMethod(_$[$0-2].first_line,_$[$0-2].first_column,$$[$0-1])
@@ -542,44 +542,46 @@ _handle_error:
     return true;
 }};
 
-    
+    let {printErrors} = require('../Classes/Utils/Reports')
+    let {Error} = require('../Classes/Utils/Error')
+    let {TypeError} = require('../Classes/Utils/Error')
 
-    const {Type} = require('../Classes/Utils/Type');
+    const {Type} = require('../Classes/Utils/Type')
     //Instrucciones
-    const {Print} = require('../Classes/Instructions/Print');
-    const {InitID} = require('../Classes/Instructions/InitID');
-    const {AsignID} = require('../Classes/Instructions/AsignID');
-    const {InitArray} = require('../Classes/Instructions/InitArray');
-    const {InitList} = require('../Classes/Instructions/InitList');
-    const {AsignArray} = require('../Classes/Instructions/AsignArray');
-    const {AsignList} = require('../Classes/Instructions/AsignList');
-    const {Add} = require('../Classes/Instructions/Add');
-    const {Block} = require('../Classes/Instructions/Block');
-    const {Function} = require('../Classes/Instructions/Function');
-    const {If} = require('../Classes/Instructions/If');
-    const {Break} = require('../Classes/Instructions/Break');
-    const {Continue} = require('../Classes/Instructions/Continue');
-    const {While} = require('../Classes/Instructions/While');
-    const {DoWhile} = require('../Classes/Instructions/DoWhile');
-    const {For} = require('../Classes/Instructions/For');
-    const {Switch} = require('../Classes/Instructions/Switch');
-    const {Case} = require('../Classes/Instructions/Case');
-    const {MainMethod} = require('../Classes/Instructions/MainMethod');
+    const {Print} = require('../Classes/Instructions/Print')
+    const {InitID} = require('../Classes/Instructions/InitID')
+    const {AsignID} = require('../Classes/Instructions/AsignID')
+    const {InitArray} = require('../Classes/Instructions/InitArray')
+    const {InitList} = require('../Classes/Instructions/InitList')
+    const {AsignArray} = require('../Classes/Instructions/AsignArray')
+    const {AsignList} = require('../Classes/Instructions/AsignList')
+    const {Add} = require('../Classes/Instructions/Add')
+    const {Block} = require('../Classes/Instructions/Block')
+    const {Function} = require('../Classes/Instructions/Function')
+    const {If} = require('../Classes/Instructions/If')
+    const {Break} = require('../Classes/Instructions/Break')
+    const {Continue} = require('../Classes/Instructions/Continue')
+    const {While} = require('../Classes/Instructions/While')
+    const {DoWhile} = require('../Classes/Instructions/DoWhile')
+    const {For} = require('../Classes/Instructions/For')
+    const {Switch} = require('../Classes/Instructions/Switch')
+    const {Case} = require('../Classes/Instructions/Case')
+    const {MainMethod} = require('../Classes/Instructions/MainMethod')
     //Expresiones
-    const {Primitive} = require('../Classes/Expressions/Primitive');
-    const {Arithmetic} = require('../Classes/Expressions/Arithmetic');
-    const {Logic} = require('../Classes/Expressions/Logic');
-    const {Relational} = require('../Classes/Expressions/Relational');
-    const {Ternary} = require('../Classes/Expressions/Ternary');
-    const {AccessID} = require('../Classes/Expressions/AccessID');
-    const {IncrDecr} = require('../Classes/Expressions/IncrDecr');
-    const {NativeFunc} = require('../Classes/Expressions/NativeFunc');
-    const {AccessArray} = require('../Classes/Expressions/AccessArray');
-    const {AccessList} = require('../Classes/Expressions/AccessList');
-    const {Cast} = require('../Classes/Expressions/Cast');
-    const {Parameter} = require('../Classes/Expressions/Parameter');
-    const {CallFunction} = require('../Classes/Expressions/CallFunction');
-    const {Return} = require('../Classes/Expressions/Return');
+    const {Primitive} = require('../Classes/Expressions/Primitive')
+    const {Arithmetic} = require('../Classes/Expressions/Arithmetic')
+    const {Logic} = require('../Classes/Expressions/Logic')
+    const {Relational} = require('../Classes/Expressions/Relational')
+    const {Ternary} = require('../Classes/Expressions/Ternary')
+    const {AccessID} = require('../Classes/Expressions/AccessID')
+    const {IncrDecr} = require('../Classes/Expressions/IncrDecr')
+    const {NativeFunc} = require('../Classes/Expressions/NativeFunc')
+    const {AccessArray} = require('../Classes/Expressions/AccessArray')
+    const {AccessList} = require('../Classes/Expressions/AccessList')
+    const {Cast} = require('../Classes/Expressions/Cast')
+    const {Parameter} = require('../Classes/Expressions/Parameter')
+    const {CallFunction} = require('../Classes/Expressions/CallFunction')
+    const {Return} = require('../Classes/Expressions/Return')
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
@@ -1048,7 +1050,7 @@ case 68:return 33
 break;
 case 69:return 88
 break;
-case 70:console.log('Error: ' + yy_.yytext)
+case 70:printErrors.push(new Error(yy_.yylloc.first_line,yy_.yylloc.first_column,TypeError.LEXICAL,`El caracter "${yy_.yytext}" no pertenece al lenguaje.`))
 break;
 case 71:return 5
 break;

@@ -1,6 +1,8 @@
 //Código JavaScript necesario
 %{
-    
+    let {printErrors} = require('../Classes/Utils/Reports')
+    let {Error} = require('../Classes/Utils/Error')
+    let {TypeError} = require('../Classes/Utils/Error')
 %}
 
 //análisis léxico
@@ -85,47 +87,47 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 '<'                                     {return 'TOK_less'}
 '>'                                     {return 'TOK_great'}
 '?'                                     {return 'TOK_question'}
-.                                       {console.log('Error: ' + yytext)}
+.                                       {printErrors.push(new Error(yylloc.first_line,yylloc.first_column,TypeError.LEXICAL,`El caracter "${yytext}" no pertenece al lenguaje.`))}
 <<EOF>>                                 {return 'EOF'}
 /lex
 //Código JavaScript necesario
 %{
-    const {Type} = require('../Classes/Utils/Type');
+    const {Type} = require('../Classes/Utils/Type')
     //Instrucciones
-    const {Print} = require('../Classes/Instructions/Print');
-    const {InitID} = require('../Classes/Instructions/InitID');
-    const {AsignID} = require('../Classes/Instructions/AsignID');
-    const {InitArray} = require('../Classes/Instructions/InitArray');
-    const {InitList} = require('../Classes/Instructions/InitList');
-    const {AsignArray} = require('../Classes/Instructions/AsignArray');
-    const {AsignList} = require('../Classes/Instructions/AsignList');
-    const {Add} = require('../Classes/Instructions/Add');
-    const {Block} = require('../Classes/Instructions/Block');
-    const {Function} = require('../Classes/Instructions/Function');
-    const {If} = require('../Classes/Instructions/If');
-    const {Break} = require('../Classes/Instructions/Break');
-    const {Continue} = require('../Classes/Instructions/Continue');
-    const {While} = require('../Classes/Instructions/While');
-    const {DoWhile} = require('../Classes/Instructions/DoWhile');
-    const {For} = require('../Classes/Instructions/For');
-    const {Switch} = require('../Classes/Instructions/Switch');
-    const {Case} = require('../Classes/Instructions/Case');
-    const {MainMethod} = require('../Classes/Instructions/MainMethod');
+    const {Print} = require('../Classes/Instructions/Print')
+    const {InitID} = require('../Classes/Instructions/InitID')
+    const {AsignID} = require('../Classes/Instructions/AsignID')
+    const {InitArray} = require('../Classes/Instructions/InitArray')
+    const {InitList} = require('../Classes/Instructions/InitList')
+    const {AsignArray} = require('../Classes/Instructions/AsignArray')
+    const {AsignList} = require('../Classes/Instructions/AsignList')
+    const {Add} = require('../Classes/Instructions/Add')
+    const {Block} = require('../Classes/Instructions/Block')
+    const {Function} = require('../Classes/Instructions/Function')
+    const {If} = require('../Classes/Instructions/If')
+    const {Break} = require('../Classes/Instructions/Break')
+    const {Continue} = require('../Classes/Instructions/Continue')
+    const {While} = require('../Classes/Instructions/While')
+    const {DoWhile} = require('../Classes/Instructions/DoWhile')
+    const {For} = require('../Classes/Instructions/For')
+    const {Switch} = require('../Classes/Instructions/Switch')
+    const {Case} = require('../Classes/Instructions/Case')
+    const {MainMethod} = require('../Classes/Instructions/MainMethod')
     //Expresiones
-    const {Primitive} = require('../Classes/Expressions/Primitive');
-    const {Arithmetic} = require('../Classes/Expressions/Arithmetic');
-    const {Logic} = require('../Classes/Expressions/Logic');
-    const {Relational} = require('../Classes/Expressions/Relational');
-    const {Ternary} = require('../Classes/Expressions/Ternary');
-    const {AccessID} = require('../Classes/Expressions/AccessID');
-    const {IncrDecr} = require('../Classes/Expressions/IncrDecr');
-    const {NativeFunc} = require('../Classes/Expressions/NativeFunc');
-    const {AccessArray} = require('../Classes/Expressions/AccessArray');
-    const {AccessList} = require('../Classes/Expressions/AccessList');
-    const {Cast} = require('../Classes/Expressions/Cast');
-    const {Parameter} = require('../Classes/Expressions/Parameter');
-    const {CallFunction} = require('../Classes/Expressions/CallFunction');
-    const {Return} = require('../Classes/Expressions/Return');
+    const {Primitive} = require('../Classes/Expressions/Primitive')
+    const {Arithmetic} = require('../Classes/Expressions/Arithmetic')
+    const {Logic} = require('../Classes/Expressions/Logic')
+    const {Relational} = require('../Classes/Expressions/Relational')
+    const {Ternary} = require('../Classes/Expressions/Ternary')
+    const {AccessID} = require('../Classes/Expressions/AccessID')
+    const {IncrDecr} = require('../Classes/Expressions/IncrDecr')
+    const {NativeFunc} = require('../Classes/Expressions/NativeFunc')
+    const {AccessArray} = require('../Classes/Expressions/AccessArray')
+    const {AccessList} = require('../Classes/Expressions/AccessList')
+    const {Cast} = require('../Classes/Expressions/Cast')
+    const {Parameter} = require('../Classes/Expressions/Parameter')
+    const {CallFunction} = require('../Classes/Expressions/CallFunction')
+    const {Return} = require('../Classes/Expressions/Return')
 %}
 //precedencia de operadores
 %left 'TOK_question' 'TOK_colon'
@@ -171,7 +173,7 @@ INSTRUCTION:
     RW_continue TOK_semicolon       {$$ = new Continue(@1.first_line,@1.first_column)} |
     RW_return TOK_semicolon         {$$ = new Return(@1.first_line,@1.first_column,undefined)} |
     RW_return EXP TOK_semicolon     {$$ = new Return(@1.first_line,@1.first_column,$2)} |
-    error                           {console.log({line: this._$.first_line, column: this._$.first_column, type: 'Sintáctico', message: `Error sintáctico, token no esperado '${yytext}' .`})};
+    error                           {printErrors.push(new Error(this._$.first_line,this._$.first_column,TypeError.SYNTAX,`No se esperaba ${yytext}`))};
 
 MAIN_METHOD:
     RW_main CALLED_FUNCTION TOK_semicolon   {$$ = new MainMethod(@1.first_line,@1.first_column,$2)};

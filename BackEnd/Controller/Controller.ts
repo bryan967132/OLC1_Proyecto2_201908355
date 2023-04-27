@@ -37,6 +37,7 @@ export class Controller {
             if(mainExecute) {
                 mainExecute.execute(global)
             }
+            console.log(printErrors.map((errObj) => errObj.toString()).join('\n'))
             res.json({
                 console: printConsole,
                 errors: printErrors
