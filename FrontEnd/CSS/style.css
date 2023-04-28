@@ -6,6 +6,7 @@
     --tab: #333333;
     --bar: #3C3C3C;
     --button: #007ACC;
+    --button_hover: #1894e7;
 }
 html{
     box-sizing: border-box;
@@ -151,7 +152,10 @@ li ul li a:hover{
     width: 5rem;
     margin-bottom: 7rem;
 }
-button img{
+.button:hover {
+    background-color:var(--button_hover);
+}
+.button img{
     width: 4rem;
     height: 4rem;
 }
@@ -165,13 +169,13 @@ button img{
     margin: 0rem .5rem 0 1rem;
     line-height: 1.4;
     font-size: 11pt;
-    width: 83rem;
+    width: 89.5rem;
 }
 .panel2{
     margin: 0rem 1rem 0 .5rem;
     line-height: 1.4;
     font-size: 11pt;
-    width: 83rem;
+    width: 89.5rem;
 }
 #editor{
     height: 100%;
