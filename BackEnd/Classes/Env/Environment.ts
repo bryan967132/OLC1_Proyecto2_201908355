@@ -3,6 +3,7 @@ import { Function } from "../Instructions/Function";
 import { printList, symbolTable } from "../Utils/Reports";
 import { ReturnType, Type } from "../Utils/Type";
 import { Symbol } from "./Symbol"
+import { Symbol as TabSym } from "../Utils/Symbol";
 export class Environment {
     private ids: Map<string,Symbol> = new Map<string,Symbol>()
     private functions: Map<string,Function> = new Map<string,Function>()
@@ -11,10 +12,7 @@ export class Environment {
         let env: Environment = this
         if(!env.ids.has(id.toLowerCase())) {
             env.ids.set(id.toLowerCase(),new Symbol(value,id,type,undefined))
-            let valueS: string = `Identificador: ${id.toLowerCase()}, Tipo ID: Variable, Tipo: ${this.getTypeOf(type)}, Entorno: ${env.name}`
-            if(!symbolTable.includes(valueS)) {
-                symbolTable.push(valueS)
-            }
+            symbolTable.push(new TabSym(line,column,id.toLowerCase(),'Variable',this.getTypeOf(type),env.name))
         }
         else {
             printList.push(`Error, La variable "${id}" ya existe en el entorno, linea ${line} columna ${column}.`)
@@ -24,10 +22,7 @@ export class Environment {
         let env: Environment = this
         if(!env.ids.has(id.toLowerCase())) {
             env.ids.set(id.toLowerCase(),new Symbol(value,id,Type.ARRAY,type))
-            let valueS: string = `Identificador: ${id.toLowerCase()}, Tipo ID: Variable, Tipo: Array ${this.getTypeOf(type)}, Entorno: ${env.name}`
-            if(!symbolTable.includes(valueS)) {
-                symbolTable.push(valueS)
-            }
+            symbolTable.push(new TabSym(line,column,id.toLowerCase(),'Variable',`Array ${this.getTypeOf(type)}`,env.name))
         }
         else {
             printList.push(`Error, El vector "${id}" ya existe en el entorno, linea ${line} columna ${column}.`)
@@ -37,10 +32,7 @@ export class Environment {
         let env: Environment = this
         if(!env.ids.has(id.toLowerCase())) {
             env.ids.set(id.toLowerCase(),new Symbol(value,id,Type.LIST,type))
-            let valueS: string = `Identificador: ${id.toLowerCase()}, Tipo ID: Variable, Tipo: List ${this.getTypeOf(type)}, Entorno: ${env.name}`
-            if(!symbolTable.includes(valueS)) {
-                symbolTable.push(valueS)
-            }
+            symbolTable.push(new TabSym(line,column,id.toLowerCase(),'Variable',`List ${this.getTypeOf(type)}`,env.name))
         }
         else {
             printList.push(`Error, La lista "${id}" ya existe en el entorno, linea ${line} columna ${column}.`)
@@ -114,10 +106,7 @@ export class Environment {
         if(!env.functions.has(id.toLowerCase())) {
             env.functions.set(id.toLowerCase(),func)
             let typeFunc: string = this.getTypeOfFunc(func.type)
-            let valueS: string = `Identificador: ${id.toLowerCase()}, Tipo ID: ${typeFunc == 'void' ? 'Método' : 'Función'}, Tipo: ${typeFunc}, Entorno: ${env.name}`
-            if(!symbolTable.includes(valueS)) {
-                symbolTable.push(valueS)
-            }
+            symbolTable.push(new TabSym(func.line,func.column,id.toLowerCase(),typeFunc == 'void' ? 'Método' : 'Función',typeFunc,env.name))
         }
         else {
             printList.push(`Error, La función ${id} ya existe en el entorno`)

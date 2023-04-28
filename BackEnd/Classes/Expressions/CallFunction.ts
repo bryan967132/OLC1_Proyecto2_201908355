@@ -11,13 +11,13 @@ export class CallFunction extends Expression {
     public execute(env: Environment): ReturnType | any {
         const func: Function | null = env.getFunction(this.id)
         if(func) {
-            const envFunc: Environment = new Environment(env.getGlobal(),`Funcion ${this.id}`)
+            const envFunc: Environment = new Environment(env.getGlobal(),`Funcion ${this.id.toLowerCase()}`)
             if(func.parameters.length == this.args.length) {
                 for(let i = 0; i < func.parameters.length; i ++) {
                     const value: ReturnType = this.args[i].execute(env)
                     const param: ReturnType = func.parameters[i].execute(env)
                     if(value.type === param.type) {
-                        envFunc.saveID(param.value,value.value,value.type,this.line,this.column)
+                        envFunc.saveID(param.value,value.value,value.type,func.parameters[i].line,func.parameters[i].column)
                     }
                     else {
                         printList.push(`Error, El Parámetro "${param.value}" no es del tipo "${this.getType(param.type)}", linea ${this.line} columna ${this.column}`)

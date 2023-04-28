@@ -5,7 +5,7 @@ export class Node {
         this.children = []
     }
     public getDot(): string {
-        return 'digraph AFD {\n\tgraph[fontname=\"Arial\" labelloc=\"t\" bgcolor=\"#252526\"];\n\tnode[fontname=\"Arial\" fontsize=\"8\" width=\"0\" height=\"0\" color=\"white\" fontcolor=\"white\"];\n\tedge[fontname=\"Arial\" color=\"white\"];' + this.getNodes('i') + '\n}';
+        return `digraph AFD {\n\tgraph[fontname="Arial" labelloc="t" bgcolor="#252526"];\n\tnode[fontname="Arial" fontsize="8" width="0" height="0" color="white" fontcolor="white"];\n\tedge[fontname="Arial" color="white"];${this.getNodes('i')}\n}`;
     }
     private getNodes(tag: string): string {
         let dot: string = `\n\tnode_${tag}[label = "${this.tag}"];`

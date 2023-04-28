@@ -40,9 +40,9 @@
                     <li>
                         <a href="#" class="navigation__link">Reportes</a>
                         <ul>
-                            <li><a href="#">Errores</a></li>
+                            <li><a href="#modal" onclick="getErrors()">Errores</a></li>
                             <li><a href="#modal" onclick="graphAST()">Generar Arbol</a></li>
-                            <li><a href="#">Tabla de Simbolos</a></li>
+                            <li><a href="#modal" onclick="getSymbolsTable()">Tabla de Simbolos</a></li>
                         </ul>
                     </li>
                 </nav>
@@ -53,8 +53,8 @@
         <div id="modal" class="modalmask">
             <form action="" autocomplete="off">
                 <div class="modalbox movedown">
-                    <a href="#close" title="Close" class="close">&times;</a>
-                    <div id="graphAST" class="graphAST"></div>
+                    <a href="#close" title="Close" class="close" onclick="resetGraph()">&times;</a>
+                    <div id="report" class="report"></div>
                 </div>
             </form>
         </div>

@@ -15,9 +15,7 @@ export class Block extends Instruction {
                     return ret
                 }
             }
-            catch (error) {
-                console.log(error)
-            }
+            catch (error) {}
         }
     }
 }

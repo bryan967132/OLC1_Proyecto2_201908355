@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Node } from "../AST/Node";
-import * as fs from 'fs'
 import { Environment } from "../Classes/Env/Environment";
 import { printErrors, printList, printConsole, symbolTable } from "../Classes/Utils/Reports";
 import { Function } from "../Classes/Instructions/Function";
@@ -16,11 +15,11 @@ export class Controller {
         let code = req.body.code
         let parser = require('../Language/Parser')
         try {
-            let ast = parser.parse(code)
             printList.splice(0,printList.length)
             printConsole.splice(0,printConsole.length)
-            printErrors.splice(0,printErrors.length)
-            symbolTable.splice(0,symbolTable.length)
+            printErrors.splice()
+            symbolTable.splice()
+            let ast = parser.parse(code)
             const global: Environment = new Environment(null,'Global')
             let mainExecute: MainMethod | null = null
             for(let instruction of ast) {
@@ -32,107 +31,61 @@ export class Controller {
                         mainExecute = instruction
                     }
                 }
-                catch (error) {
-                    
-                }
+                catch (error) {}
             }
             if(mainExecute) {
                 mainExecute.execute(global)
             }
-            console.log(printErrors.map((errObj) => errObj.toString()).join('\n'))
-            console.log(symbolTable.join('\n'))
+            if(printErrors.length() > 0) {
+                printConsole.push('Errores Encontrados.')
+            }
             res.json({
-                console: printConsole,
-                errors: printErrors
+                console: printConsole
             })
         }
         catch (error) {
-            console.log(error)
             res.json({
                 console: error
             })
         }
     }
-    public parser_path(req: Request,res: Response) {
-        let path = req.body.path
-        let parser = require('../Language/Parser')
-        fs.readFile(path,(err,data) => {
-            try {
-                let code = data.toString()
-                let ast = parser.parse(code)
-                printList.splice(0,printList.length)
-                printConsole.splice(0,printConsole.length)
-                console.log('════════════════════════════════════════════════════════')
-                console.log(code)
-                console.log('══ RESULT:')
-                const global: Environment = new Environment(null,'Global')
-                let mainExecute: MainMethod | null = null
-                for(let instruction of ast) {
-                    try {
-                        if(instruction instanceof Function || instruction instanceof InitID || instruction instanceof InitArray || instruction instanceof InitList) {
-                            instruction.execute(global)
-                        }
-                        else if(instruction instanceof MainMethod) {
-                            mainExecute = instruction
-                        }
-                    }
-                    catch (error) {
-                        
-                    }
-                }
-                if(mainExecute) {
-                    mainExecute.execute(global)
-                }
-                res.json({
-                    console: printConsole,
-                    errors: printErrors
-                })
-            }
-            catch (error) {
-                console.log(error)
-                res.json({
-                    console: error
-                })
-            }
-        })
-    }
-    public parserAST(req: Request,res: Response) {
+    public getAST(req: Request,res: Response) {
         let code = req.body.code
         let parser = require('../AST/Parser')
         try {
             let ast: Node = parser.parse(code)
             res.json({
-                console: ast.getDot(),
-                errors: printErrors
+                ast: ast.getDot()
             })
         }
         catch (error) {
-            console.log(error)
             res.json({
-                console: error
+                ast: error
             })
         }
     }
-    public parserAST_path(req: Request,res: Response) {
-        let path = req.body.path
-        let parser = require('../AST/Parser')
-        fs.readFile(path,(err,data) => {
-            try {
-                let code = data.toString()
-                let ast: Node = parser.parse(code)
-                let dot = ast.getDot()
-                fs.writeFile('./AST.dot',dot,(err) => {try {} catch(error) {}})
-                res.json({
-                    console: ast.getDot(),
-                    errors: printErrors
-                })
-            }
-            catch (error) {
-                console.log(error)
-                res.json({
-                    console: error
-                })
-            }
-        })
+    public getSymbolsTable(req: Request,res: Response) {
+        try {
+            res.json({
+                table: symbolTable.getDot()
+            })
+        }
+        catch (error) {
+            res.json({
+                table: error
+            })
+        }
+    }
+    public getErrors(req: Request,res: Response) {
+        try {
+            res.json({
+                errors: printErrors.getDot()
+            })
+        }
+        catch (error) {
+            res.json({
+                errors: error
+            })
+        }
     }
 }
