@@ -128,83 +128,50 @@ INSTRUCTIONS:
     } ;
 
 INSTRUCTION:
-    MAIN_METHOD                    {
-        $$ = $1
-    } |
-    INIT_ID TOK_semicolon          {
-        $$ = $1
-        $$.pushChild(new Node($2))
-    } |
-    ID_ASIGN TOK_semicolon         {
-        $$ = $1
-        $$.pushChild(new Node($2))
-    } |
-    NEW_ARRAY TOK_semicolon        {
-        $$ = $1
-        $$.pushChild(new Node($2))
-    } |
-    ARRAY_ASIGN TOK_semicolon      {
-        $$ = $1
-        $$.pushChild(new Node($2))
-    } |
-    IF_STRCT                       {
-        $$ = $1
-    } |
-    SWITCH_STRCT                   {
-        $$ = $1
-    } |
-    LOOP                           {
-        $$ = $1
-    } |
-    FUNCTION                       {
-        $$ = $1
-    } |
+    MAIN_METHOD                    {$$ = $1} |
+    INIT_ID TOK_semicolon          {$$ = $1} |
+    ID_ASIGN TOK_semicolon         {$$ = $1} |
+    NEW_ARRAY TOK_semicolon        {$$ = $1} |
+    ARRAY_ASIGN TOK_semicolon      {$$ = $1} |
+    IF_STRCT                       {$$ = $1} |
+    SWITCH_STRCT                   {$$ = $1} |
+    LOOP                           {$$ = $1} |
+    FUNCTION                       {$$ = $1} |
     CALLED_FUNCTION TOK_semicolon  {
         $$ = new Node('CALL_FUNC')
         $$.pushChild($1[0])
-        $$.pushChild($1[1])
         if($1[2]) {
             $$.pushChild($1[2])
         }
-        $$.pushChild($1[3])
-        $$.pushChild(new Node($2))
     } |
     NATIVES_FUNCTION TOK_semicolon {
         $$ = new Node('NATIVE')
         $$.pushChild($1[0])
-        $$.pushChild($1[1])
         if($1[2]) {
             $$.pushChild($1[2])
         }
-        $$.pushChild($1[3])
-        $$.pushChild(new Node($2))
     } |
     INCR_DECR TOK_semicolon        {
         $$ = new Node('INCR_DECR')
         $$.pushChild($1[0])
         $$.pushChild($1[1])
-        $$.pushChild(new Node($2))
     } |
     RW_break TOK_semicolon         {
         $$ = new Node('BREAK')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
     } |
     RW_continue TOK_semicolon      {
         $$ = new Node('CONTINUE')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
     } |
     RW_return TOK_semicolon        {
         $$ = new Node('RETURN')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
     } |
     RW_return EXP TOK_semicolon    {
         $$ = new Node('RETURN')
         $$.pushChild(new Node($1))
         $$.pushChild($2)
-        $$.pushChild(new Node($3))
     } |
     error                          ;
 
@@ -213,12 +180,9 @@ MAIN_METHOD:
         $$ = new Node('MAIN_METHOD')
         $$.pushChild(new Node($1))
         $$.pushChild($2[0])
-        $$.pushChild($2[1])
         if($2[2]) {
             $$.pushChild($2[2])
         }
-        $$.pushChild($2[3])
-        $$.pushChild(new Node($3))
     } ;
 
 INIT_ID:
@@ -226,7 +190,6 @@ INIT_ID:
         $$ = new Node('INIT_ID')
         $$.pushChild($1)
         $$.pushChild(new Node($2))
-        $$.pushChild(new Node($3))
         $$.pushChild($4)
     } |
     TYPE TOK_id               {
@@ -239,7 +202,6 @@ ID_ASIGN:
     TOK_id TOK_equal EXP {
         $$ = new Node('ASIGN_ID')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
         $$.pushChild($3)
     } ;
 
@@ -247,141 +209,97 @@ NEW_ARRAY:
     TYPE TOK_lbrckt TOK_rbrckt TOK_id TOK_equal ARRAY_VALUE     {
         $$ = new Node('NEW_ARRAY')
         $$.pushChild($1)
-        $$.pushChild(new Node($2))
-        $$.pushChild(new Node($3))
         $$.pushChild(new Node($4))
-        $$.pushChild(new Node($5))
         $$.pushChild($6)
     } |
     RW_list TOK_less TYPE TOK_great TOK_id TOK_equal LIST_VALUE {
-        $$ = new Node('NEW_ARRAY')
+        $$ = new Node('NEW_LIST')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
         $$.pushChild($3)
-        $$.pushChild(new Node($4))
         $$.pushChild(new Node($5))
-        $$.pushChild(new Node($6))
         $$.pushChild($7)
     } ;
 
 ARRAY_VALUE:
     RW_new TYPE TOK_lbrckt EXP TOK_rbrckt {
-        $$ = new Node('ARRAY_VALUE')
+        $$ = new Node('VALUE')
         $$.pushChild(new Node($1))
         $$.pushChild($2)
-        $$.pushChild(new Node($3))
         $$.pushChild($4)
-        $$.pushChild(new Node($5))
     } |
-    TOK_lbrc VALUE_LIST TOK_rbrc          {
-        $$ = new Node('ARRAY_VALUE')
-        $$.pushChild(new Node($1))
-        $$.pushChild($2)
-        $$.pushChild(new Node($3))
-    } ;
+    TOK_lbrc VALUE_LIST TOK_rbrc          {$$ = $2} ;
 
 LIST_VALUE:
     RW_new RW_list TOK_less TYPE TOK_great {
-        $$ = new Node('LIST_VALUE')
+        $$ = new Node('VALUE')
         $$.pushChild(new Node($1))
         $$.pushChild(new Node($2))
-        $$.pushChild(new Node($3))
         $$.pushChild($4)
-        $$.pushChild(new Node($5))
     } |
     FN_toCharArray TOK_lpar EXP TOK_rpar   {
         $$ = new Node('LIST_VALUE')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
         $$.pushChild($3)
-        $$.pushChild(new Node($4))
     } ;
 
 ARRAY_ASIGN:
     TOK_id TOK_lbrckt EXP TOK_rbrckt TOK_equal EXP                       {
         $$ = new Node('ASIGN_ARRAY')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
         $$.pushChild($3)
-        $$.pushChild(new Node($4))
-        $$.pushChild(new Node($5))
         $$.pushChild($6)
     } |
     TOK_id TOK_dot FN_add TOK_lpar EXP TOK_rpar                          {
-        $$ = new Node('ASIGN_ARRAY')
+        $$ = new Node('ADD')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
         $$.pushChild(new Node($3))
-        $$.pushChild(new Node($4))
         $$.pushChild($5)
-        $$.pushChild(new Node($6))
     } |
     TOK_id TOK_lbrckt TOK_lbrckt EXP TOK_rbrckt TOK_rbrckt TOK_equal EXP {
         $$ = new Node('ASIGN_ARRAY')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
-        $$.pushChild(new Node($3))
         $$.pushChild($4)
-        $$.pushChild(new Node($5))
-        $$.pushChild(new Node($6))
         $$.pushChild(new Node($7))
         $$.pushChild($8)
     } ;
 
 VALUE_LIST:
     VALUE_LIST TOK_comma EXP {
-        $$ = new Node('VALUES')
-        $$.pushChild($1)
-        $$.pushChild(new Node($2))
         $$.pushChild($3)
     } |
     EXP                      {
-        $$ = new Node('VALUE')
-        $$.pushChild(new Node($1))
+        $$ = new Node('VALUES')
+        $$.pushChild($1)
     } ;
 
 IF_STRCT:
     RW_if TOK_lpar EXP TOK_rpar BLOCK                  {
         $$ = new Node('IF_STRCT')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
         $$.pushChild($3)
-        $$.pushChild(new Node($4))
-        $$.pushChild($5[0])
         if($5[1]) {
             $$.pushChild($5[1])
         }
-        $$.pushChild($5[2])
     } |
     RW_if TOK_lpar EXP TOK_rpar BLOCK RW_else BLOCK    {
         $$ = new Node('IF_STRCT')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
         $$.pushChild($3)
-        $$.pushChild(new Node($4))
-        $$.pushChild($5[0])
         if($5[1]) {
             $$.pushChild($5[1])
         }
-        $$.pushChild($5[2])
         $$.pushChild(new Node($6))
-        $$.pushChild($7[0])
         if($7[1]) {
             $$.pushChild($7[1])
         }
-        $$.pushChild($7[2])
     } |
     RW_if TOK_lpar EXP TOK_rpar BLOCK RW_else IF_STRCT {
         $$ = new Node('IF_STRCT')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
         $$.pushChild($3)
-        $$.pushChild(new Node($4))
-        $$.pushChild($5[0])
         if($5[1]) {
             $$.pushChild($5[1])
         }
-        $$.pushChild($5[2])
         $$.pushChild(new Node($6))
         $$.pushChild($7)
     } ;
@@ -390,12 +308,8 @@ SWITCH_STRCT:
     RW_switch TOK_lpar EXP TOK_rpar TOK_lbrc CASE_BLOCK TOK_rbrc {
         $$ = new Node('SWITCH_STRCT')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
         $$.pushChild($3)
-        $$.pushChild(new Node($4))
-        $$.pushChild(new Node($5))
         $$.pushChild($6)
-        $$.pushChild(new Node($7))
     } ;
 
 CASE_BLOCK:
@@ -419,85 +333,64 @@ CASE_LIST:
         $$.pushChild($1)
         $$.pushChild($2)
     } |
-    CASE           {
-        $$ = $1
-    } ;
+    CASE           {$$ = $1} ;
 
 CASE:
     RW_case EXP TOK_colon INSTRUCTIONS {
         $$ = new Node('CASE')
         $$.pushChild(new Node($1))
         $$.pushChild($2)
-        $$.pushChild(new Node($3))
         $$.pushChild($4)
     } |
     RW_case EXP TOK_colon              {
         $$ = new Node('CASE')
         $$.pushChild(new Node($1))
         $$.pushChild($2)
-        $$.pushChild(new Node($3))
     } ;
 
 DEFAULT:
     RW_default TOK_colon INSTRUCTIONS {
         $$ = new Node('DEFAULT')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
         $$.pushChild($3)
     } |
     RW_default TOK_colon              {
         $$ = new Node('DEFAULT')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
     } ;
 
 LOOP:
     RW_while TOK_lpar EXP TOK_rpar BLOCK                     {
         $$ = new Node('LOOP')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
         $$.pushChild($3)
-        $$.pushChild(new Node($4))
-        $$.pushChild($5[0])
         if($5[1]) {
             $$.pushChild($5[1])
         }
-        $$.pushChild($5[2])
     } |
     RW_do BLOCK RW_while TOK_lpar EXP TOK_rpar TOK_semicolon {
         $$ = new Node('LOOP')
         $$.pushChild(new Node($1))
-        $$.pushChild($2[0])
         if($2[1]) {
             $$.pushChild($2[1])
         }
-        $$.pushChild($2[2])
         $$.pushChild(new Node($3))
-        $$.pushChild(new Node($4))
         $$.pushChild($5)
-        $$.pushChild(new Node($6))
-        $$.pushChild(new Node($7))
     } |
     RW_for TOK_lpar FOR_ARGS TOK_rpar BLOCK                  {
         $$ = new Node('LOOP')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
         $$.pushChild($3)
-        $$.pushChild(new Node($4))
-        $$.pushChild($5[0])
         if($5[1]) {
             $$.pushChild($5[1])
         }
-        $$.pushChild($5[2])
     } ;
 
 FOR_ARGS:
     ID_ASIGN_FOR TOK_semicolon EXP TOK_semicolon UPDATE {
         $$ = new Node('ARGS')
         $$.pushChild($1)
-        $$.pushChild(new Node($2))
         $$.pushChild($3)
-        $$.pushChild(new Node($4))
         $$.pushChild($5)
     } ;
 
@@ -506,7 +399,6 @@ ID_ASIGN_FOR:
         $$ = new Node('INIT_ID')
         $$.pushChild($1)
         $$.pushChild(new Node($2))
-        $$.pushChild(new Node($3))
         $$.pushChild($4)
     } |
     ID_ASIGN                  {
@@ -529,57 +421,40 @@ FUNCTION:
         $$ = new Node('FUNCTION')
         $$.pushChild($1)
         $$.pushChild(new Node($2))
-        $$.pushChild(new Node($3))
         $$.pushChild($4)
-        $$.pushChild(new Node($5))
-        $$.pushChild($6[0])
         if($6[1]) {
             $$.pushChild($6[1])
         }
-        $$.pushChild($6[2])
         
     } |
     RW_void TOK_id TOK_lpar PARAMETERS TOK_rpar BLOCK   {
         $$ = new Node('FUNCTION')
         $$.pushChild(new Node($1))
         $$.pushChild(new Node($2))
-        $$.pushChild(new Node($3))
         $$.pushChild($4)
-        $$.pushChild(new Node($5))
-        $$.pushChild($6[0])
         if($6[1]) {
             $$.pushChild($6[1])
         }
-        $$.pushChild($6[2])
     } |
     TYPE TOK_id TOK_lpar TOK_rpar BLOCK                 {
         $$ = new Node('FUNCTION')
         $$.pushChild($1)
         $$.pushChild(new Node($2))
-        $$.pushChild(new Node($3))
-        $$.pushChild(new Node($4))
-        $$.pushChild($5[0])
         if($5[1]) {
             $$.pushChild($5[1])
         }
-        $$.pushChild($5[2])
     } |
     RW_void TOK_id TOK_lpar TOK_rpar BLOCK              {
         $$ = new Node('FUNCTION')
         $$.pushChild(new Node($1))
         $$.pushChild(new Node($2))
-        $$.pushChild(new Node($3))
-        $$.pushChild(new Node($4))
-        $$.pushChild($5[0])
         if($5[1]) {
             $$.pushChild($5[1])
         }
-        $$.pushChild($5[2])
     } ;
 
 PARAMETERS:
     PARAMETERS TOK_comma PARAMETER {
-        $$.pushChild(new Node($2))
         $$.pushChild($3)
     } |
     PARAMETER                      {
@@ -604,7 +479,6 @@ CALLED_FUNCTION:
 
 LIST_ARGS:
     LIST_ARGS TOK_comma EXP {
-        $$.pushChild(new Node($2))
         $$.pushChild($3)
     } |
     EXP                     {
@@ -730,9 +604,7 @@ EXP:
     } |
     TOK_lpar TYPE TOK_rpar EXP                             {
         $$ = new Node('EXP')
-        $$.pushChild(new Node($1))
         $$.pushChild($2)
-        $$.pushChild(new Node($3))
         $$.pushChild($4)
     } |
     EXP TOK_question EXP TOK_colon EXP                     {
@@ -746,46 +618,32 @@ EXP:
     TOK_id TOK_lbrckt EXP TOK_rbrckt                       {
         $$ = new Node('EXP')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
         $$.pushChild($3)
-        $$.pushChild(new Node($4))
     } |
     TOK_id TOK_lbrckt TOK_lbrckt EXP TOK_rbrckt TOK_rbrckt {
         $$ = new Node('EXP')
         $$.pushChild(new Node($1))
-        $$.pushChild(new Node($2))
-        $$.pushChild(new Node($3))
         $$.pushChild($4)
-        $$.pushChild(new Node($5))
-        $$.pushChild(new Node($6))
     } |
     CALLED_FUNCTION                                        {
         $$ = new Node('EXP')
         $$.pushChild($1[0])
-        $$.pushChild($1[1])
         if($1[2]) {
             $$.pushChild($1[2])
         }
-        $$.pushChild($1[3])
     } |
     NATIVES_FUNCTION_EXP                                   {
         $$ = new Node('EXP')
         $$.pushChild($1[0])
-        $$.pushChild($1[1])
         $$.pushChild($1[2])
-        $$.pushChild($1[3])
     } |
     INCR_DECR                                              {
         $$ = new Node('EXP')
         $$.pushChild($1[0])
         $$.pushChild($1[1])
     } |
-    TOK_id                                                 {
-        $$ = new Node(yytext)
-    } |
-    TOK_integer                                            {
-        $$ = new Node(yytext)
-    } |
+    TOK_id                                                 {$$ = new Node(yytext)} |
+    TOK_integer                                            {$$ = new Node(yytext)} |
     TOK_double                                             {$$ = new Node(yytext)} |
     TOK_string                                             {$$ = new Node(yytext)} |
     TOK_char                                               {$$ = new Node(yytext)} |

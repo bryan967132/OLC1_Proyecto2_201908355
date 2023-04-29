@@ -104,39 +104,33 @@ case 3:
         this.$.pushChild($$[$0])
     
 break;
-case 4: case 5: case 10: case 11: case 12: case 13: case 45: case 57:
+case 4: case 57:
 
         this.$ = $$[$0]
     
 break;
-case 6: case 7: case 8: case 9:
-
-        this.$ = $$[$0-1]
-        this.$.pushChild(new Node($$[$0]))
-    
+case 5: case 10: case 11: case 12: case 13: case 45: case 73:
+this.$ = $$[$0]
+break;
+case 6: case 7: case 8: case 9: case 29:
+this.$ = $$[$0-1]
 break;
 case 14:
 
         this.$ = new Node('CALL_FUNC')
         this.$.pushChild($$[$0-1][0])
-        this.$.pushChild($$[$0-1][1])
         if($$[$0-1][2]) {
             this.$.pushChild($$[$0-1][2])
         }
-        this.$.pushChild($$[$0-1][3])
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 15:
 
         this.$ = new Node('NATIVE')
         this.$.pushChild($$[$0-1][0])
-        this.$.pushChild($$[$0-1][1])
         if($$[$0-1][2]) {
             this.$.pushChild($$[$0-1][2])
         }
-        this.$.pushChild($$[$0-1][3])
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 16:
@@ -144,28 +138,24 @@ case 16:
         this.$ = new Node('INCR_DECR')
         this.$.pushChild($$[$0-1][0])
         this.$.pushChild($$[$0-1][1])
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 17:
 
         this.$ = new Node('BREAK')
         this.$.pushChild(new Node($$[$0-1]))
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 18:
 
         this.$ = new Node('CONTINUE')
         this.$.pushChild(new Node($$[$0-1]))
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 19:
 
         this.$ = new Node('RETURN')
         this.$.pushChild(new Node($$[$0-1]))
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 20:
@@ -173,7 +163,6 @@ case 20:
         this.$ = new Node('RETURN')
         this.$.pushChild(new Node($$[$0-2]))
         this.$.pushChild($$[$0-1])
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 22:
@@ -181,12 +170,9 @@ case 22:
         this.$ = new Node('MAIN_METHOD')
         this.$.pushChild(new Node($$[$0-2]))
         this.$.pushChild($$[$0-1][0])
-        this.$.pushChild($$[$0-1][1])
         if($$[$0-1][2]) {
             this.$.pushChild($$[$0-1][2])
         }
-        this.$.pushChild($$[$0-1][3])
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 23: case 54:
@@ -194,7 +180,6 @@ case 23: case 54:
         this.$ = new Node('INIT_ID')
         this.$.pushChild($$[$0-3])
         this.$.pushChild(new Node($$[$0-2]))
-        this.$.pushChild(new Node($$[$0-1]))
         this.$.pushChild($$[$0])
     
 break;
@@ -209,7 +194,6 @@ case 25:
 
         this.$ = new Node('ASIGN_ID')
         this.$.pushChild(new Node($$[$0-2]))
-        this.$.pushChild(new Node($$[$0-1]))
         this.$.pushChild($$[$0])
     
 break;
@@ -217,157 +201,110 @@ case 26:
 
         this.$ = new Node('NEW_ARRAY')
         this.$.pushChild($$[$0-5])
-        this.$.pushChild(new Node($$[$0-4]))
-        this.$.pushChild(new Node($$[$0-3]))
         this.$.pushChild(new Node($$[$0-2]))
-        this.$.pushChild(new Node($$[$0-1]))
         this.$.pushChild($$[$0])
     
 break;
 case 27:
 
-        this.$ = new Node('NEW_ARRAY')
+        this.$ = new Node('NEW_LIST')
         this.$.pushChild(new Node($$[$0-6]))
-        this.$.pushChild(new Node($$[$0-5]))
         this.$.pushChild($$[$0-4])
-        this.$.pushChild(new Node($$[$0-3]))
         this.$.pushChild(new Node($$[$0-2]))
-        this.$.pushChild(new Node($$[$0-1]))
         this.$.pushChild($$[$0])
     
 break;
 case 28:
 
-        this.$ = new Node('ARRAY_VALUE')
+        this.$ = new Node('VALUE')
         this.$.pushChild(new Node($$[$0-4]))
         this.$.pushChild($$[$0-3])
-        this.$.pushChild(new Node($$[$0-2]))
         this.$.pushChild($$[$0-1])
-        this.$.pushChild(new Node($$[$0]))
-    
-break;
-case 29:
-
-        this.$ = new Node('ARRAY_VALUE')
-        this.$.pushChild(new Node($$[$0-2]))
-        this.$.pushChild($$[$0-1])
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 30:
 
-        this.$ = new Node('LIST_VALUE')
+        this.$ = new Node('VALUE')
         this.$.pushChild(new Node($$[$0-4]))
         this.$.pushChild(new Node($$[$0-3]))
-        this.$.pushChild(new Node($$[$0-2]))
         this.$.pushChild($$[$0-1])
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 31:
 
         this.$ = new Node('LIST_VALUE')
         this.$.pushChild(new Node($$[$0-3]))
-        this.$.pushChild(new Node($$[$0-2]))
         this.$.pushChild($$[$0-1])
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 32:
 
         this.$ = new Node('ASIGN_ARRAY')
         this.$.pushChild(new Node($$[$0-5]))
-        this.$.pushChild(new Node($$[$0-4]))
         this.$.pushChild($$[$0-3])
-        this.$.pushChild(new Node($$[$0-2]))
-        this.$.pushChild(new Node($$[$0-1]))
         this.$.pushChild($$[$0])
     
 break;
 case 33:
 
-        this.$ = new Node('ASIGN_ARRAY')
+        this.$ = new Node('ADD')
         this.$.pushChild(new Node($$[$0-5]))
-        this.$.pushChild(new Node($$[$0-4]))
         this.$.pushChild(new Node($$[$0-3]))
-        this.$.pushChild(new Node($$[$0-2]))
         this.$.pushChild($$[$0-1])
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 34:
 
         this.$ = new Node('ASIGN_ARRAY')
         this.$.pushChild(new Node($$[$0-7]))
-        this.$.pushChild(new Node($$[$0-6]))
-        this.$.pushChild(new Node($$[$0-5]))
         this.$.pushChild($$[$0-4])
-        this.$.pushChild(new Node($$[$0-3]))
-        this.$.pushChild(new Node($$[$0-2]))
         this.$.pushChild(new Node($$[$0-1]))
         this.$.pushChild($$[$0])
     
 break;
-case 35:
+case 35: case 62: case 69:
 
-        this.$ = new Node('VALUES')
-        this.$.pushChild($$[$0-2])
-        this.$.pushChild(new Node($$[$0-1]))
         this.$.pushChild($$[$0])
     
 break;
 case 36:
 
-        this.$ = new Node('VALUE')
-        this.$.pushChild(new Node($$[$0]))
+        this.$ = new Node('VALUES')
+        this.$.pushChild($$[$0])
     
 break;
 case 37:
 
         this.$ = new Node('IF_STRCT')
         this.$.pushChild(new Node($$[$0-4]))
-        this.$.pushChild(new Node($$[$0-3]))
         this.$.pushChild($$[$0-2])
-        this.$.pushChild(new Node($$[$0-1]))
-        this.$.pushChild($$[$0][0])
         if($$[$0][1]) {
             this.$.pushChild($$[$0][1])
         }
-        this.$.pushChild($$[$0][2])
     
 break;
 case 38:
 
         this.$ = new Node('IF_STRCT')
         this.$.pushChild(new Node($$[$0-6]))
-        this.$.pushChild(new Node($$[$0-5]))
         this.$.pushChild($$[$0-4])
-        this.$.pushChild(new Node($$[$0-3]))
-        this.$.pushChild($$[$0-2][0])
         if($$[$0-2][1]) {
             this.$.pushChild($$[$0-2][1])
         }
-        this.$.pushChild($$[$0-2][2])
         this.$.pushChild(new Node($$[$0-1]))
-        this.$.pushChild($$[$0][0])
         if($$[$0][1]) {
             this.$.pushChild($$[$0][1])
         }
-        this.$.pushChild($$[$0][2])
     
 break;
 case 39:
 
         this.$ = new Node('IF_STRCT')
         this.$.pushChild(new Node($$[$0-6]))
-        this.$.pushChild(new Node($$[$0-5]))
         this.$.pushChild($$[$0-4])
-        this.$.pushChild(new Node($$[$0-3]))
-        this.$.pushChild($$[$0-2][0])
         if($$[$0-2][1]) {
             this.$.pushChild($$[$0-2][1])
         }
-        this.$.pushChild($$[$0-2][2])
         this.$.pushChild(new Node($$[$0-1]))
         this.$.pushChild($$[$0])
     
@@ -376,12 +313,8 @@ case 40:
 
         this.$ = new Node('SWITCH_STRCT')
         this.$.pushChild(new Node($$[$0-6]))
-        this.$.pushChild(new Node($$[$0-5]))
         this.$.pushChild($$[$0-4])
-        this.$.pushChild(new Node($$[$0-3]))
-        this.$.pushChild(new Node($$[$0-2]))
         this.$.pushChild($$[$0-1])
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 41:
@@ -409,7 +342,6 @@ case 46:
         this.$ = new Node('CASE')
         this.$.pushChild(new Node($$[$0-3]))
         this.$.pushChild($$[$0-2])
-        this.$.pushChild(new Node($$[$0-1]))
         this.$.pushChild($$[$0])
     
 break;
@@ -418,14 +350,12 @@ case 47:
         this.$ = new Node('CASE')
         this.$.pushChild(new Node($$[$0-2]))
         this.$.pushChild($$[$0-1])
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 48:
 
         this.$ = new Node('DEFAULT')
         this.$.pushChild(new Node($$[$0-2]))
-        this.$.pushChild(new Node($$[$0-1]))
         this.$.pushChild($$[$0])
     
 break;
@@ -433,46 +363,34 @@ case 49:
 
         this.$ = new Node('DEFAULT')
         this.$.pushChild(new Node($$[$0-1]))
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 50: case 52:
 
         this.$ = new Node('LOOP')
         this.$.pushChild(new Node($$[$0-4]))
-        this.$.pushChild(new Node($$[$0-3]))
         this.$.pushChild($$[$0-2])
-        this.$.pushChild(new Node($$[$0-1]))
-        this.$.pushChild($$[$0][0])
         if($$[$0][1]) {
             this.$.pushChild($$[$0][1])
         }
-        this.$.pushChild($$[$0][2])
     
 break;
 case 51:
 
         this.$ = new Node('LOOP')
         this.$.pushChild(new Node($$[$0-6]))
-        this.$.pushChild($$[$0-5][0])
         if($$[$0-5][1]) {
             this.$.pushChild($$[$0-5][1])
         }
-        this.$.pushChild($$[$0-5][2])
         this.$.pushChild(new Node($$[$0-4]))
-        this.$.pushChild(new Node($$[$0-3]))
         this.$.pushChild($$[$0-2])
-        this.$.pushChild(new Node($$[$0-1]))
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 53:
 
         this.$ = new Node('ARGS')
         this.$.pushChild($$[$0-4])
-        this.$.pushChild(new Node($$[$0-3]))
         this.$.pushChild($$[$0-2])
-        this.$.pushChild(new Node($$[$0-1]))
         this.$.pushChild($$[$0])
     
 break;
@@ -494,14 +412,10 @@ case 58:
         this.$ = new Node('FUNCTION')
         this.$.pushChild($$[$0-5])
         this.$.pushChild(new Node($$[$0-4]))
-        this.$.pushChild(new Node($$[$0-3]))
         this.$.pushChild($$[$0-2])
-        this.$.pushChild(new Node($$[$0-1]))
-        this.$.pushChild($$[$0][0])
         if($$[$0][1]) {
             this.$.pushChild($$[$0][1])
         }
-        this.$.pushChild($$[$0][2])
         
     
 break;
@@ -510,14 +424,10 @@ case 59:
         this.$ = new Node('FUNCTION')
         this.$.pushChild(new Node($$[$0-5]))
         this.$.pushChild(new Node($$[$0-4]))
-        this.$.pushChild(new Node($$[$0-3]))
         this.$.pushChild($$[$0-2])
-        this.$.pushChild(new Node($$[$0-1]))
-        this.$.pushChild($$[$0][0])
         if($$[$0][1]) {
             this.$.pushChild($$[$0][1])
         }
-        this.$.pushChild($$[$0][2])
     
 break;
 case 60:
@@ -525,13 +435,9 @@ case 60:
         this.$ = new Node('FUNCTION')
         this.$.pushChild($$[$0-4])
         this.$.pushChild(new Node($$[$0-3]))
-        this.$.pushChild(new Node($$[$0-2]))
-        this.$.pushChild(new Node($$[$0-1]))
-        this.$.pushChild($$[$0][0])
         if($$[$0][1]) {
             this.$.pushChild($$[$0][1])
         }
-        this.$.pushChild($$[$0][2])
     
 break;
 case 61:
@@ -539,19 +445,9 @@ case 61:
         this.$ = new Node('FUNCTION')
         this.$.pushChild(new Node($$[$0-4]))
         this.$.pushChild(new Node($$[$0-3]))
-        this.$.pushChild(new Node($$[$0-2]))
-        this.$.pushChild(new Node($$[$0-1]))
-        this.$.pushChild($$[$0][0])
         if($$[$0][1]) {
             this.$.pushChild($$[$0][1])
         }
-        this.$.pushChild($$[$0][2])
-    
-break;
-case 62: case 69:
-
-        this.$.pushChild(new Node($$[$0-1]))
-        this.$.pushChild($$[$0])
     
 break;
 case 63:
@@ -585,9 +481,6 @@ case 70:
         this.$.pushChild($$[$0])
     
 break;
-case 73:
-this.$ = $$[$0]
-break;
 case 82: case 83: case 84: case 85: case 86: case 87: case 90: case 91: case 92: case 93: case 94: case 95: case 96: case 97:
 
         this.$ = new Node('EXP')
@@ -614,9 +507,7 @@ break;
 case 99:
 
         this.$ = new Node('EXP')
-        this.$.pushChild(new Node($$[$0-3]))
         this.$.pushChild($$[$0-2])
-        this.$.pushChild(new Node($$[$0-1]))
         this.$.pushChild($$[$0])
     
 break;
@@ -634,40 +525,30 @@ case 101:
 
         this.$ = new Node('EXP')
         this.$.pushChild(new Node($$[$0-3]))
-        this.$.pushChild(new Node($$[$0-2]))
         this.$.pushChild($$[$0-1])
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 102:
 
         this.$ = new Node('EXP')
         this.$.pushChild(new Node($$[$0-5]))
-        this.$.pushChild(new Node($$[$0-4]))
-        this.$.pushChild(new Node($$[$0-3]))
         this.$.pushChild($$[$0-2])
-        this.$.pushChild(new Node($$[$0-1]))
-        this.$.pushChild(new Node($$[$0]))
     
 break;
 case 103:
 
         this.$ = new Node('EXP')
         this.$.pushChild($$[$0][0])
-        this.$.pushChild($$[$0][1])
         if($$[$0][2]) {
             this.$.pushChild($$[$0][2])
         }
-        this.$.pushChild($$[$0][3])
     
 break;
 case 104:
 
         this.$ = new Node('EXP')
         this.$.pushChild($$[$0][0])
-        this.$.pushChild($$[$0][1])
         this.$.pushChild($$[$0][2])
-        this.$.pushChild($$[$0][3])
     
 break;
 case 105:
@@ -677,12 +558,7 @@ case 105:
         this.$.pushChild($$[$0][1])
     
 break;
-case 106: case 107:
-
-        this.$ = new Node(yytext)
-    
-break;
-case 108: case 109: case 110: case 111: case 112: case 115: case 116: case 117: case 118: case 119:
+case 106: case 107: case 108: case 109: case 110: case 111: case 112: case 115: case 116: case 117: case 118: case 119:
 this.$ = new Node(yytext)
 break;
 case 113: case 114:
