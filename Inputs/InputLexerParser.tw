@@ -523,7 +523,7 @@ void analizar(String instrucciones) {
 }
 main iniciar();
 void iniciar() {
-    String suma = "mas(mult(4,mult(32)),1);";
+    String suma = "mas(mult(4,mult(3,2)),1);";
     String resta = "min(7,4);";
     String mult = "mult(7,12);";
     String div = "div(10,5);";
