@@ -150,7 +150,7 @@ li ul li a:hover{
     outline: 0;
     text-align: center;
     width: 5rem;
-    margin-bottom: 7rem;
+    margin-bottom: 1rem;
 }
 .button:hover {
     background-color:var(--button_hover);
@@ -243,4 +243,55 @@ li ul li a:hover{
 .report {
     width: 100%;
     height: 100%;
+}
+/*Pestañas*/
+.containerTags {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    padding: 0rem 1rem;
+}
+.tag {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1rem;
+    color: var(--white);
+    background-color: #3C3C3C;
+    border-radius: 2rem 2rem 0 0;
+    padding: 0.5rem 1rem 0.5rem 2rem;
+}
+.tag:hover {
+    background-color: #505050;
+}
+.close-b{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:transparent;
+    border-radius: 5rem;
+    border: 0;
+    box-sizing: border-box;
+    color: var(--white);
+    cursor: pointer;
+    font-size: 1.5rem;
+    height: 2rem;
+    outline: 0;
+    text-align: center;
+    width: 2rem;
+}
+.close-b:hover {
+    background-color: #ff4949;
+}
+
+.tmp {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1rem;
+    color: transparent;
+    width: 0;
+    background-color: transparent;
+    border-radius: 2rem 2rem 0 0;
+    padding: 0.5rem 0 0.5rem 0;
 }
