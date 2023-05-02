@@ -524,8 +524,8 @@ void analizar(String instrucciones) {
 main iniciar();
 void iniciar() {
     String suma = "mas(mult(4,mult(3,2)),1);";
-    String resta = "min(7,4);";
-    String mult = "mult(7,12);";
+    String resta = "min(mas(1,mult(6,3)),mas(div(46,2),div(16,2)));";
+    String mult = "mult(mas(5,7),min(8,3));";
     String div = "div(10,5);";
     String instrucciones = suma + "\n" + resta + "\n" + mult + "\n" + div;
     analizar(instrucciones);
