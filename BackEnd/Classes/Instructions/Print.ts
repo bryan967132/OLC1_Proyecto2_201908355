@@ -19,7 +19,7 @@ export class Print extends Instruction {
         if((typeof value.value) === 'object') {
             let content: string = ''
             for(let i = 0; i < value.value.length; i ++) {
-                content += (content != '' ? ', ' : '') + this.getQuote(value.value[i].type) + String(value.value[i].value) + this.getQuote(value.value[i].type)
+                content += (content != '' ? ', ' : '') + this.getQuote(value.value[i].type) + this.getCharacter(value.value[i]) + this.getQuote(value.value[i].type)
             }
             return {value: `[${content}]`,type: Type.STRING}
         }
@@ -33,5 +33,14 @@ export class Print extends Instruction {
             return "'"
         }
         return ''
+    }
+    getCharacter(element: ReturnType) {
+        if(element.type === Type.CHAR) {
+            element.value = element.value.replace(/\\/g,'\\\\')
+            element.value = element.value.replace(/\t/g,'    ')
+            element.value = element.value.replace(/\r?\n|\r/g,'\\n')
+            element.value = element.value.replace(/"/g,'\\"')
+        }
+        return element.value
     }
 }
