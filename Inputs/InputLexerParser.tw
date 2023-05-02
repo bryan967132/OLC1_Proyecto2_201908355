@@ -1,0 +1,560 @@
+//Analizador Léxico
+List<String> tokens = new List<String>;
+List<String> tipos = new List<String>;
+List<int> lineaN = new List<int>;
+List<int> columnaN = new List<int>;
+List<String> errores = new List<String>;
+int lToken = 5;
+int lTipo = 4;
+int lLineaN = 5;
+int lColumnaN = 7;
+int i;
+int linea;
+int columna;
+int estado;
+String buffer = "";
+String[] reservadas = {"mas","min","mult","div"};
+
+String getLineToken(String token,String tipo,String linea,String columna) {
+    String line = "│ ";
+    int i;
+    line = line + token;
+    for(i = 1; i <= lToken - length(token); i ++) {
+        line = line + " ";
+    }
+    line = line + " │ " + tipo;
+    for(i = 1; i <= lTipo - length(tipo); i ++) {
+        line = line + " ";
+    }
+    line = line + " │ " + linea;
+    for(i = 1; i <= lLineaN - length(linea); i ++) {
+        line = line + " ";
+    }
+    line = line + " │ " + columna;
+    for(i = 1; i <= lColumnaN - length(columna); i ++) {
+        line = line + " ";
+    }
+    line = line + " │";
+    return line;
+}
+
+String getDiv(int tipo) {
+    String line = tipo == 1 ? "┌" : (tipo == 2 ? "├" : "└");
+    for(int i = 1; i <= lToken + lTipo + lLineaN + lColumnaN + 11; i ++) {
+        if(i == lToken + 3 || i == lToken + lTipo + 6 || i == lToken + lTipo + lLineaN + 9) {
+            line = line + (tipo == 1 ? "┬" : (tipo == 2 ? "┼" : "┴"));
+            continue;
+        }
+        line = line + "─";
+    }
+    line = line + (tipo == 1 ? "┐" : (tipo == 2 ? "┤" : "┘"));
+    return line;
+}
+
+void printTokens() {
+    print("TOKENS");
+    print(getDiv(1));
+    print(getLineToken("Token","Tipo","Linea","Columna"));
+    print(getDiv(2));
+    for(int i = 0; i < length(tokens); i ++) {
+        print(getLineToken(tokens[[i]],tipos[[i]],toString(lineaN[[i]]),toString(columnaN[[i]])));
+    }
+    print(getDiv(3));
+}
+
+void printErrores() {
+    print("ERRORES LEXICOS");
+    for(int i = 0; i < length(errores); i ++) {
+        print("-> " + errores[[i]]);
+    }
+}
+
+List<char> numeros = toCharArray("0123456789");
+boolean esDigito(char caracter) {
+    for(int i = 0; i < length(numeros); i ++) {
+        if(caracter == numeros[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+List<char> letras = toCharArray("abcdefghijklmnopqrstuvwxyz");
+boolean esLetra(char caracter) {
+    for(int i = 0; i < length(letras); i ++) {
+        if(toUpper(caracter) == toUpper(letras[i])) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void agregarToken(String token,String tipo) {
+    tokens.add(token);
+    tipos.add(tipo);
+    lineaN.add(linea);
+    columnaN.add(columna);
+    i --;
+    estado = 0;
+    buffer = "";
+    lToken = length(token) > lToken ? length(token) : lToken;
+    lTipo = length(tipo) > lTipo ? length(tipo) : lTipo;
+    lLineaN = length(toString(linea)) > lLineaN ? length(toString(linea)) : lLineaN;
+    lColumnaN = length(toString(columna)) > lColumnaN ? length(toString(columna)) : lColumnaN;
+}
+
+void agregarError(char caracter) {
+    errores.add("Caracter no reconocido: \"" + caracter + "\". " + linea + ":" + columna);
+    buffer = "";
+    estado = 0;
+}
+
+boolean esReservada(String word) {
+    for(int i = 0; i < length(reservadas); i ++) {
+        if(word == reservadas[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void lex(String instrucciones) {
+    List<char> cadena = toCharArray(instrucciones);
+    cadena.add('`');
+    i = 0;
+    linea = 1;
+    columna = 1;
+    estado = 0;
+    while(i < length(cadena)) {
+        switch(estado) {
+            case 0:
+                s0(cadena[[i]]);
+                break;
+            case 1:
+                s1(cadena[[i]]);
+                break;
+            case 2:
+                s2(cadena[[i]]);
+                break;
+            case 3:
+                s3();
+                break;
+			case 4:
+                s4();
+                break;
+			case 5:
+                s5();
+                break;
+			case 6:
+                s6();
+                break;
+        }
+        i ++;
+    }
+}
+
+void s0(char caracter) {
+    if(esLetra(caracter)) {
+        columna ++;
+        estado = 1;
+        buffer = buffer + caracter;
+    }
+    else if(esDigito(caracter)) {
+        columna ++;
+        estado = 2;
+        buffer = buffer + caracter;
+    }
+    else if(caracter == '(') {
+        columna ++;
+        estado = 3;
+        buffer = buffer + caracter;
+    }
+    else if(caracter == ')') {
+        columna ++;
+        estado = 4;
+        buffer = buffer + caracter;
+    }
+    else if(caracter == ',') {
+        columna ++;
+        estado = 5;
+        buffer = buffer + caracter;
+    }
+	else if(caracter == ';') {
+        columna ++;
+        estado = 6;
+        buffer = buffer + caracter;
+    }
+    else if(caracter == '\n') {
+        linea ++;
+        columna = 1;
+    }
+    else if(caracter == ' ' || caracter == '\t') {
+        columna ++;
+    }
+    else if(caracter == '`') {}
+    else {
+        columna ++;
+        agregarError(caracter);
+    }
+}
+
+void s1(char caracter) {
+    if(esLetra(caracter)) {
+        columna ++;
+        estado = 1;
+        buffer = buffer + caracter;
+    }
+    else {
+        if(esReservada(buffer)) {
+        	agregarToken(buffer,"PR_" + buffer);
+        }
+        else {
+            agregarError(caracter);
+        }
+    }
+}
+
+void s2(char caracter) {
+    if(esDigito(caracter)) {
+        columna ++;
+        estado = 2;
+        buffer = buffer + caracter;
+    }
+    else {
+        agregarToken(buffer,"TOK_numero");
+    }
+}
+
+void s3() {
+    agregarToken(buffer,"TOK_parA");
+}
+
+void s4() {
+    agregarToken(buffer,"TOK_parC");
+}
+
+void s5() {
+    agregarToken(buffer,"TOK_coma");
+}
+
+void s6() {
+    agregarToken(buffer,"TOK_punto_coma");
+}
+//Fin de Analizador Léxico
+
+//Analizador Sintáctico
+List<String> err = new List<String>;
+List<String> console = new List<String>;
+int indiceActual = -1;
+String tokActual;
+String tipoActual;
+int lnActual;
+int clActual;
+
+void printErr() {
+    print("ERRORES SINTACTICOS");
+    for(int i = 0; i < length(err); i ++) {
+        print("-> " + err[[i]]);
+    }
+}
+
+void agregarErr(String esperado,String obtenido) {
+    String descripcion = "Se esperaba \"" + esperado + "\" y se obtuvo \"" + obtenido + "\". " + lnActual + ":" + clActual;
+    for(int i = 0; i < length(err); i ++) {
+        if(err[[I]] == descripcion) {
+            return;
+        }
+    }
+    err.add(descripcion);
+}
+
+void avanzar() {
+    if(indiceActual + 1 < length(tokens)) {
+        indiceActual ++;
+        tokActual = tokens[[indiceActual]];
+        tipoActual = tipos[[indiceActual]];
+        lnActual = lineaN[[indiceActual]];
+        clActual = columnaN[[indiceActual]];
+    }
+    else {
+        tokActual = "NULL";
+        tipoActual = "NULL";
+        //lnActual = lineaN[[length(lineaN) - 1]];
+        //clActual = columnaN[[length(columnaN) - 1]];
+    }
+}
+
+int parseInt(String cadena) {
+    int resultado = 0;
+    List<char> c = toCharArray(cadena);
+    int ascii;
+    for(int i = 0; i < length(c); i ++) {
+        ascii = (int) c[[i]];
+        resultado = resultado + (ascii - 48) * (10^(length(c) - i - 1));
+    }
+    return resultado;
+}
+
+void parse() {
+    INIT();
+}
+
+void INIT() {
+    avanzar();
+    if(tokActual != "NULL") {
+    	INSTRUCCIONES();
+    }
+}
+
+void INSTRUCCIONES() {
+    INSTRUCCION();
+    if(tokActual != "NULL" && length(err) == 0) {
+        INSTRUCCIONES();
+    }
+}
+
+void INSTRUCCION() {
+    int resultado;
+    //print(tipoActual);
+    if(tokActual == "NULL") {
+        agregarErr("PR_mas | PR_min | PR_mult | PR_div","EOF");
+    }
+    else if(tipoActual == "PR_mas") {
+        resultado = OPERACION("+");
+        if(resultado == 0.001) {
+            agregarErr("TOK_parA","EOF");
+        }
+        else {
+            avanzar();
+            if(tipoActual == "NULL") {
+                agregarErr("TOK_punto_coma","EOF");
+            }
+            else if(tipoActual == "TOK_punto_coma") {
+                avanzar();
+				console.add("Suma = " + resultado);
+            }
+            else {
+                agregarErr("TOK_punto_coma",tipoActual);
+            }
+        }
+    }
+    else if(tipoActual == "PR_min") {
+        resultado = OPERACION("-");
+        if(resultado == 0.001) {
+            agregarErr("TOK_parA","EOF");
+        }
+        else {
+            avanzar();
+            if(tipoActual == "NULL") {
+                agregarErr("TOK_punto_coma","EOF");
+            }
+            else if(tipoActual == "TOK_punto_coma") {
+                avanzar();
+				console.add("Resta = " + resultado);
+            }
+            else {
+                agregarErr("TOK_punto_coma",tipoActual);
+            }
+        }
+    }
+    else if(tipoActual == "PR_mult") {
+        resultado = OPERACION("*");
+        if(resultado == 0.001) {
+            agregarErr("TOK_parA","EOF");
+        }
+        else {
+            avanzar();
+            if(tipoActual == "NULL") {
+                agregarErr("TOK_punto_coma","EOF");
+            }
+            else if(tipoActual == "TOK_punto_coma") {
+                avanzar();
+				console.add("Multiplicación = " + resultado);
+            }
+            else {
+                agregarErr("TOK_punto_coma",tipoActual);
+            }
+        }
+    }
+    else if(tipoActual == "PR_div") {
+        resultado = OPERACION("/");
+        if(resultado == 0.001) {
+            agregarErr("TOK_parA","EOF");
+        }
+        else {
+            avanzar();
+            if(tipoActual == "NULL") {
+                agregarErr("TOK_punto_coma","EOF");
+            }
+            else if(tipoActual == "TOK_punto_coma") {
+                avanzar();
+				console.add("División = " + resultado);
+            }
+            else {
+                agregarErr("TOK_punto_coma",tipoActual);
+            }
+        }
+    }
+    else {
+        agregarErr("PR_mas | PR_min | PR_mult | PR_div",tipoActual);
+    }
+}
+
+int OPERACION(String operador) {
+    int instruccion1;
+    int instruccion2;
+    avanzar();
+    if(tokActual == "NULL") {
+        agregarErr("TOK_parA","EOF");
+        return 0.001;
+    }
+    else if(tipoActual == "TOK_parA") {
+        avanzar();
+        instruccion1 = INSTRUCCION1();
+        if(instruccion1 == 0.001) {
+            agregarErr("INSTRUCCION | TOK_numero","EOF");
+            return 0.001;
+        }
+        else if(tipoActual == "TOK_numero") {
+            avanzar();
+            if(tokActual == "NULL") {
+                agregarErr("TOK_coma","EOF");
+                return 0.001;
+            }
+            else if(tipoActual == "TOK_coma") {
+                avanzar();
+                instruccion2 = INSTRUCCION1();
+                if(instruccion2 == 0.001) {
+                    agregarErr("INSTRUCCION | TOK_numero","EOF");
+            		return 0.001;
+                }
+                else if(tipoActual == "TOK_numero") {
+                    avanzar();
+                    if(tipoActual == "NULL") {
+                        agregarErr("TOK_parC","EOF");
+                		return 0.001;
+                    }
+                    else if(tipoActual == "TOK_parC") {
+                        tipoActual = "TOK_numero";
+                        switch(operador) {
+                            case "+":
+                                return instruccion1 + instruccion2;
+                            case "-":
+                                return instruccion1 - instruccion2;
+                            case "*":
+                                return instruccion1 * instruccion2;
+                            default:
+                                return instruccion1 / instruccion2;
+                        }
+                    }
+                    else {
+                        agregarErr("TOK_parA",tipoActual);
+        				return 0.001;
+                    }
+                }
+                else {
+                    agregarErr("INSTRUCCION | TOK_numero",tipoActual);
+            		return 0.001;
+                }
+            }
+            else {
+                agregarErr("TOK_coma",tipoActual);
+                return 0.001;
+            }
+        }
+        else {
+            agregarErr("INSTRUCCION | TOK_numero",tipoActual);
+            return 0.001;
+        }
+    }
+    else {
+        agregarErr("TOK_parA",tipoActual);
+        return 0.001;
+    }
+}
+
+int INSTRUCCION1() {
+    if(tokActual == "NULL") {
+        agregarErr("PR_mas | PR_min | PR_mult | PR_div | TOK_numero","EOF");
+        return 0.001;
+    }
+    else if(tipoActual == "PR_mas") {
+        return OPERACION("+");
+    }
+    else if(tipoActual == "PR_min") {
+        return OPERACION("-");
+    }
+    else if(tipoActual == "PR_mult") {
+        return OPERACION("*");
+    }
+    else if(tipoActual == "PR_div") {
+        return OPERACION("/");
+    }
+    else if(tipoActual == "TOK_numero") {
+        return parseInt(tokActual);
+    }
+    else {
+        agregarErr("PR_mas | PR_min | PR_mult | PR_div | TOK_numero",tipoActual);
+        return 0.001;
+    }
+}
+
+void printConsole() {
+    print("\n-> RESULTADO:");
+    for(int i = 0; i < length(console); i ++) {
+        print("-> " + console[[i]]);
+    }
+}
+
+//Fin de Analizador Sintáctico
+void analizar(String instrucciones) {
+    print(instrucciones);
+    lex(instrucciones);
+    parse();
+    /*if(length(tokens) > 0) {
+        printTokens();
+    }
+    if(length(errores) > 0) {
+        printErrores();
+    }*/
+    printConsole();
+    if(length(err) > 0) {
+        printErr();
+    }
+}
+main iniciar();
+void iniciar() {
+    String suma = "mas(mult(4,mult(32)),1);";
+    String resta = "min(7,4);";
+    String mult = "mult(7,12);";
+    String div = "div(10,5);";
+    String instrucciones = suma + "\n" + resta + "\n" + mult + "\n" + div;
+    analizar(instrucciones);
+}
+
+/*
+'mas'		PR_mas
+'min'		PR_min
+'mult'		PR_mult
+'div'		PR_div
+[0-9]+		TOK_numero
+'('			TOK_parA
+')'			TOK_parC
+','			TOK_coma
+';'			TOK_punto_coma
+
+INIT ::= INSTRUCCIONES EOF | EOF
+INSTRUCCIONES ::= INSTRUCCION INSTRUCCIONES | INSTRUCCION
+INSTRUCCION ::=
+	PR_mas  TOK_parA INSTRUCCION1 TOK_coma INSTRUCCION1 TOK_parC TOK_punto_coma |
+    PR_min  TOK_parA INSTRUCCION1 TOK_coma INSTRUCCION1 TOK_parC TOK_punto_coma |
+    PR_mult TOK_parA INSTRUCCION1 TOK_coma INSTRUCCION1 TOK_parC TOK_punto_coma |
+    PR_div  TOK_parA INSTRUCCION1 TOK_coma INSTRUCCION1 TOK_parC TOK_punto_coma
+    
+INSTRUCCION1 ::=
+	PR_mas  TOK_parA INSTRUCCION1 TOK_coma INSTRUCCION1 TOK_parC TOK_punto_coma |
+    PR_min  TOK_parA INSTRUCCION1 TOK_coma INSTRUCCION1 TOK_parC TOK_punto_coma |
+    PR_mult TOK_parA INSTRUCCION1 TOK_coma INSTRUCCION1 TOK_parC TOK_punto_coma |
+    PR_div  TOK_parA INSTRUCCION1 TOK_coma INSTRUCCION1 TOK_parC TOK_punto_coma |
+    TOK_numero
+    
+*/
