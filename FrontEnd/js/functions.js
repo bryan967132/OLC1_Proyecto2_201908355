@@ -6,7 +6,7 @@ function analyze() {
     })
     .then(response => response.json())
     .then(response => {
-        out.setOption('value',response.console.join('\n'))
+        out.setOption('value',response.console)
     })
 }
 let graphviz
@@ -18,8 +18,7 @@ function graphAST() {
     })
     .then(response => response.json())
     .then(response => {
-        console.log(response.ast)
-        graphviz = d3.select('#report').graphviz().scale(0.8).height(document.getElementById('report').clientHeight).width(890*1.9).renderDot(response.ast)
+        graphviz = d3.select('#report').graphviz().scale(0.6).height(document.getElementById('report').clientHeight).width(890*1.9).renderDot(response.ast)
     })
 }
 function getSymbolsTable() {

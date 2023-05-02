@@ -10,6 +10,10 @@ export class AccessID extends Expression {
     public execute(env: Environment): ReturnType {
         const value: Symbol | null = env.getValue(this.id)
         if(value) {
+            if(value.type === Type.ARRAY || value.type === Type.LIST) {
+                this.type = Type.STRING
+                return {value: value.value,type: this.type}
+            }
             this.type = value.type
             return {value: value.value,type: this.type}
         }

@@ -114,7 +114,7 @@ case 20:
 this.$ = new Return(_$[$0-2].first_line,_$[$0-2].first_column,$$[$0-1])
 break;
 case 21:
-printErrors.push(new Error(this._$.first_line,this._$.first_column,TypeError.SYNTAX,`No se esperaba ${yytext}`))
+printErrors.push(new Error(this._$.first_line,this._$.first_column,TypeError.SYNTAX,`No se esperaba "${yytext}"`))
 break;
 case 22:
 this.$ = new MainMethod(_$[$0-2].first_line,_$[$0-2].first_column,$$[$0-1])
@@ -1050,7 +1050,7 @@ case 68:return 33
 break;
 case 69:return 88
 break;
-case 70:printErrors.push(new Error(yy_.yylloc.first_line,yy_.yylloc.first_column,TypeError.LEXICAL,`El caracter "${yy_.yytext}" no pertenece al lenguaje.`))
+case 70:printErrors.push(new Error(yy_.yylloc.first_line,yy_.yylloc.first_column,TypeError.LEXICAL,`El caracter "${yy_.yytext}" no pertenece al lenguaje`))
 break;
 case 71:return 5
 break;

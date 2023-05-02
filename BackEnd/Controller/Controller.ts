@@ -36,11 +36,12 @@ export class Controller {
             if(mainExecute) {
                 mainExecute.execute(global)
             }
+            let consRes = printConsole.join('\n')
             if(printErrors.length() > 0) {
-                printConsole.push('Errores Encontrados.')
+                consRes += (consRes != '' ? '\n\n↳ ERRORES\n' : '↳ ERRORES\n') + printErrors.get()
             }
             res.json({
-                console: printConsole
+                console: consRes
             })
         }
         catch (error) {

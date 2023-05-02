@@ -87,7 +87,7 @@ char2    ([^\n\"\\]?|[\\][n\\\"t\'])
 '<'                                     {return 'TOK_less'}
 '>'                                     {return 'TOK_great'}
 '?'                                     {return 'TOK_question'}
-.                                       {printErrors.push(new Error(yylloc.first_line,yylloc.first_column,TypeError.LEXICAL,`El caracter "${yytext}" no pertenece al lenguaje.`))}
+.                                       {printErrors.push(new Error(yylloc.first_line,yylloc.first_column,TypeError.LEXICAL,`El caracter "${yytext}" no pertenece al lenguaje`))}
 <<EOF>>                                 {return 'EOF'}
 /lex
 //Código JavaScript necesario
@@ -173,7 +173,7 @@ INSTRUCTION:
     RW_continue TOK_semicolon       {$$ = new Continue(@1.first_line,@1.first_column)} |
     RW_return TOK_semicolon         {$$ = new Return(@1.first_line,@1.first_column,undefined)} |
     RW_return EXP TOK_semicolon     {$$ = new Return(@1.first_line,@1.first_column,$2)} |
-    error                           {printErrors.push(new Error(this._$.first_line,this._$.first_column,TypeError.SYNTAX,`No se esperaba ${yytext}`))};
+    error                           {printErrors.push(new Error(this._$.first_line,this._$.first_column,TypeError.SYNTAX,`No se esperaba "${yytext}"`))};
 
 MAIN_METHOD:
     RW_main CALLED_FUNCTION TOK_semicolon   {$$ = new MainMethod(@1.first_line,@1.first_column,$2)};

@@ -44,9 +44,30 @@ export class Arithmetic extends Expression {
             result = parseFloat(value1.value) + parseFloat(value2.value)
         }
         else if(this.type === Type.STRING) {
+            value1 = this.getArray(value1)
+            value2 = this.getArray(value2)
             result = value1.value + value2.value
         }
         return {value: result,type: this.type}
+    }
+    getArray(value: ReturnType) {
+        if((typeof value.value) === 'object') {
+            let content: string = ''
+            for(let i = 0; i < value.value.length; i ++) {
+                content += (content != '' ? ', ' : '') + this.getQuote(value.value[i].type) + String(value.value[i].value) + this.getQuote(value.value[i].type)
+            }
+            return {value: `[${content}]`,type: Type.STRING}
+        }
+        return value
+    }
+    getQuote(type: Type) {
+        if(type === Type.STRING) {
+            return '"'
+        }
+        if(type === Type.CHAR) {
+            return "'"
+        }
+        return ''
     }
     minus(env: Environment): ReturnType {
         let value1: ReturnType = this.exp1.execute(env)

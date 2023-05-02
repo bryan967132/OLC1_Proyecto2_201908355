@@ -16,7 +16,28 @@ export class InitArray extends Instruction {
         }
         else {
             let len: ReturnType = this.len.execute(env)
-            env.saveArray(this.id,new Array(len.value),this.type,this.line,this.column)
+            env.saveArray(this.id,this.getArrayL(len.value,this.type),this.type,this.line,this.column)
+        }
+    }
+    getArrayL(length: number,type: Type): Array<any> {
+        let l = new Array(length)
+        for(let i = 0; i < l.length; i ++) {
+            l[i] = this.getValueDefault(type)
+        }
+        return l
+    }
+    getValueDefault(type: Type) {
+        switch(this.type) {
+            case Type.INT:
+                return {value:0,type: type}
+            case Type.DOUBLE:
+                return {value:0.0,type: type}
+            case Type.BOOLEAN:
+                return {value:true,type: type}
+            case Type.CHAR:
+                return {value:'0',type: type}
+            case Type.STRING:
+                return {value:"",type: type}
         }
     }
 }
