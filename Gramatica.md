@@ -108,7 +108,7 @@ INSTRUCTION:
     CALLED_FUNCTION ';'  |
     NATIVES_FUNCTION ';' |
     INCR_DECR ';'        |
-    //Instrucciones de Desplazamiento
+    //Instrucciones de Transferencia
     'break' ';'          |
     'continue' ';'       |
     'return' ';'         |
