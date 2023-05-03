@@ -110,6 +110,10 @@ switch(expresion) {
     case expresion:
         //instrucciones
     case expresion:
+    case expresion:
+    ...
+    case expresion:
+        //instrucciones
     default:
         //instrucciones
 }
