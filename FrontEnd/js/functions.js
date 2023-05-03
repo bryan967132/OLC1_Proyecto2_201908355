@@ -8,6 +8,7 @@ function analyze() {
     .then(response => {
         out.setOption('value',response.console)
     })
+    .catch(error => {})
 }
 let graphviz
 function graphAST() {
@@ -20,26 +21,23 @@ function graphAST() {
     .then(response => {
         graphviz = d3.select('#report').graphviz().scale(0.6).height(document.getElementById('report').clientHeight).width(890*1.9).renderDot(response.ast)
     })
+    .catch(error => {})
 }
 function getSymbolsTable() {
-    fetch(`${path}/interpreter/getSymbolsTable`,{
-        method: 'GET',
-        headers
-    })
+    fetch(`${path}/interpreter/getSymbolsTable`)
     .then(response => response.json())
     .then(response => {
         graphviz = d3.select('#report').graphviz().scale(1).height(document.getElementById('report').clientHeight).width(890*1.9).renderDot(response.table)
     })
+    .catch(error => {})
 }
 function getErrors() {
-    fetch(`${path}/interpreter/getErrors`,{
-        method: 'GET',
-        headers
-    })
+    fetch(`${path}/interpreter/getErrors`)
     .then(response => response.json())
     .then(response => {
         graphviz = d3.select('#report').graphviz().scale(1).height(document.getElementById('report').clientHeight).width(890*1.9).renderDot(response.errors)
     })
+    .catch(error => {})
 }
 function resetGraph() {
     graphviz.resetZoom(d3.transition().duration(500))

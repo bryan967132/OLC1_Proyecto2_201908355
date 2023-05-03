@@ -5,8 +5,8 @@
     --editorB: #1E1E1E;
     --tab: #333333;
     --bar: #3C3C3C;
-    --button: #007ACC;
-    --button_hover: #1894e7;
+    --button: #0075ff;
+    --button_hover: #1e87ff;
 }
 html{
     box-sizing: border-box;
@@ -263,6 +263,16 @@ li ul li a:hover{
 }
 .tag:hover {
     background-color: #505050;
+}
+.tag-active {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1rem;
+    color: var(--white);
+    background-color: #0075ff;
+    border-radius: 2rem 2rem 0 0;
+    padding: 0.5rem 1rem 0.5rem 2rem;
 }
 .close-b{
     display: flex;

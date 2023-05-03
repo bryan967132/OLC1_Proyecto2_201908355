@@ -32,9 +32,9 @@
                     <li>
                         <a href="#" class="navigation__link">Archivo</a>
                         <ul>
-                            <li><a href="#">Nuevo Archivo</a></li>
-                            <li><a href="#">Abrir Archivo</a></li>
-                            <li><a href="#">Guardar Archivo</a></li>
+                            <li><a href="#" onclick="">Nuevo Archivo</a></li>
+                            <li><a href="#" onclick="openFile()">Abrir Archivo</a></li>
+                            <li><a href="#" onclick="">Guardar Archivo</a></li>
                         </ul>
                     </li>
                     <li>
@@ -64,14 +64,10 @@
             <img src="icons/player.svg" alt="">
         </button>
     </div>
-    <div class="container containerTags">
+    <div id="tags" class="container containerTags">
         <div class="tmp">
             <div>d</div>
         </div>
-        <!-- <div class="tag">
-            <div onclick="changeTag()">Nuevo</div>
-            <div class="close-b" onclick="closeTag()">x</div>
-        </div> -->
     </div>
     <div class="columns">
         <div id="editor" class="panel1"></div>
@@ -83,6 +79,7 @@
     <script src="js/script.js"></script>
     <script src="js/headers.js"></script>
     <script src="js/functions.js"></script>
+    <script src="js/file.js"></script>
     <script src="js/tags.js"></script>
 </body>
 </html>
