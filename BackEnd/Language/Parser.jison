@@ -191,7 +191,8 @@ NEW_ARRAY:
 
 ARRAY_VALUE:
     RW_new TYPE TOK_lbrckt EXP TOK_rbrckt   {$$ = [$4,undefined]} |
-    TOK_lbrc VALUE_LIST TOK_rbrc            {$$ = [undefined,$2]};
+    TOK_lbrc VALUE_LIST TOK_rbrc            {$$ = [undefined,$2]} |
+    TOK_lbrc TOK_rbrc                       {$$ = [undefined,[]]};
 
 LIST_VALUE:
     RW_new RW_list TOK_less TYPE TOK_great  {$$ = undefined} |

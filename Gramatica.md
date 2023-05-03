@@ -53,7 +53,8 @@ NEW_ARRAY:
 
 ARRAY_VALUE:
     'new' TYPE '[' EXP ']' |
-    '{' VALUE_LIST '}'   
+    '{' VALUE_LIST '}'     |
+    '{' '}'
 
 LIST_VALUE:
     'new' 'list' '<' TYPE '>'   |

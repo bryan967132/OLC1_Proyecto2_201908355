@@ -227,7 +227,8 @@ ARRAY_VALUE:
         $$.pushChild($2)
         $$.pushChild($4)
     } |
-    TOK_lbrc VALUE_LIST TOK_rbrc          {$$ = $2} ;
+    TOK_lbrc VALUE_LIST TOK_rbrc        {$$ = $2} |
+    TOK_lbrc TOK_rbrc                   {$$ = new Node('VALUES')} ;
 
 LIST_VALUE:
     RW_new RW_list TOK_less TYPE TOK_great {
