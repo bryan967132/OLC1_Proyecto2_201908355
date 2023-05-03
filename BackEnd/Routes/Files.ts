@@ -7,4 +7,5 @@ routerF.get('/openedFiles',files.openedFiles)
 routerF.post('/setCurrentN',files.setCurrentN)
 routerF.get('/getCurrentN',files.getCurrentN)
 routerF.post('/close',files.close)
+routerF.post('/save',files.save)
 export default routerF

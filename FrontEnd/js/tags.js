@@ -1,8 +1,8 @@
-function changeTag(num) {
+function changeTag(num,name) {
     fetch(`${path}/files/setCurrentN`,{
         method: 'POST',
         headers,
-        body: `{"num": ${num}}`
+        body: `{"num": ${num},"name":"${name}"}`
     })
     .then(response => response.json())
     .then(response => {getOpenedFiles(response.num)})

@@ -29,7 +29,7 @@ function getOpenedFiles(num) {
         tags = `<div class="tmp"><div>d</div></div>`
         let c = 0;
         for(let key in response) {
-            tags += `<div class="${c == num ? 'tag-active' : 'tag'}"><div onclick="changeTag(${c + 1})">${key.split('_')[1]}</div><div class="close-b" onclick="closeTag('${key.split('_')[1]}')">x</div></div>`
+            tags += `<div class="${c == num ? 'tag-active' : 'tag'}"><div onclick="changeTag(${c + 1},'${key.split('_')[1]}')">${key.split('_')[1]}</div><div class="close-b" onclick="closeTag('${key.split('_')[1]}')">x</div></div>`
             if(c == num) {
                 editor.setOption('value',response[key])
             }
@@ -38,6 +38,16 @@ function getOpenedFiles(num) {
         document.getElementById('tags').innerHTML = tags
     })
     .catch(error => {})
+}
+function saveFile() {
+    fetch(`${path}/files/save`,{
+        method: 'POST',
+        headers,
+        body: `{"content":"${getCode()}"}`
+    })
+    .then(response => response.json())
+    .then(response => {})
+    .then(error => {})
 }
 function getCodeF(code) {
     code = code.replace(/\\/g,'\\\\')
