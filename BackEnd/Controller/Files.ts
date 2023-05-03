@@ -41,7 +41,7 @@ export class Files {
         res.json({num: num})
     }
     public close(req: Request,res: Response) {
-        filesOpened.delete(`${root}_${name}`.replace(/\\/g,'').replace(/\:/g,''))
+        filesOpened.delete(`${root}_${req.body.name}`.replace(/\\/g,'').replace(/\:/g,''))
         num = filesOpened.size > 0 ? 0 : -1
         name = filesOpened.size > 0 ? filesOpened.keys().next().value.split('_')[1] : 'NULL'
         res.json({num: num})
