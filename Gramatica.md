@@ -83,14 +83,14 @@
 ## Producciones
 ```java
 //Inicio de Gramática
-INIT: INSTRUCTIONS EOF | EOF ;
+INIT -> INSTRUCTIONS EOF | EOF ;
 
 //Instrucciones
-INSTRUCTIONS:
+INSTRUCTIONS ->
     INSTRUCTIONS INSTRUCTION |
     INSTRUCTION              
 
-INSTRUCTION:
+INSTRUCTION ->
     //Método Principal
     MAIN_METHOD          |
     //Finalización de Instrucción con ';'
@@ -116,27 +116,27 @@ INSTRUCTION:
     error                
 
 //Llamada a Método Principal
-MAIN_METHOD:
+MAIN_METHOD ->
     main CALLED_FUNCTION ';' 
 
 //Inicialización de Variable
-INIT_ID:
+INIT_ID ->
     TYPE TOK_id '=' EXP |
     TYPE TOK_id         
 
 //Asignación de Valor a Identificador
-ID_ASIGN:
+ID_ASIGN ->
     TOK_id '=' EXP
 
 //Declaración de Arreglos y Listas
-NEW_ARRAY:
+NEW_ARRAY ->
     //Arreglo
     TYPE '[' ']' TOK_id '=' ARRAY_VALUE       |
     //Lista
     'list' '<' TYPE '>' TOK_id '=' LIST_VALUE 
 
 //Valor de Un Arreglo
-ARRAY_VALUE:
+ARRAY_VALUE ->
     //Con Longitud
     'new' TYPE '[' EXP ']' |
     //Con Valores
@@ -144,14 +144,14 @@ ARRAY_VALUE:
     //Vacío
     '{' '}'
 
-LIST_VALUE:
+LIST_VALUE ->
     //Inicialización de una Lista Vacía
     'new' 'list' '<' TYPE '>'   |
     //Cadena a Lista de Caracteres
     'toCharArray' '(' EXP ')' 
 
 //Asignación de Valores a Arreglos y Listas
-ARRAY_ASIGN:
+ARRAY_ASIGN ->
     //Arreglo
     TOK_id '[' EXP ']' '=' EXP         |
     //Lista con método Add
@@ -160,12 +160,12 @@ ARRAY_ASIGN:
     TOK_id '[' '[' EXP ']' ']' '=' EXP 
 
 //Lista de Valores para Arreglo
-VALUE_LIST:
+VALUE_LIST ->
     VALUE_LIST ',' EXP |
     EXP                
 
 //Estructura If
-IF_STRCT:
+IF_STRCT ->
     //If
     'if' '(' EXP ')' BLOCK                 |
     //If Else
@@ -174,10 +174,10 @@ IF_STRCT:
     'if' '(' EXP ')' BLOCK 'else' IF_STRCT 
 
 //Estructura Switch Case
-SWITCH_STRCT:
+SWITCH_STRCT ->
     'switch' '(' EXP ')' '{' CASE_BLOCK '}' 
 
-CASE_BLOCK:
+CASE_BLOCK ->
     //Casos y Default
     CASE_LIST DEFAULT |
     //Solo Casos
@@ -186,21 +186,21 @@ CASE_BLOCK:
     DEFAULT           
 
 //Lista de Casos de Switch
-CASE_LIST:
+CASE_LIST ->
     CASE_LIST CASE |
     CASE           
 
 //Case en Switch (Con y sin instrucciones)
-CASE:
+CASE ->
     'case' EXP ':' INSTRUCTIONS |
     'case' EXP ':'              
 
 //Default en Switch (Con y sin instrucciones)
-DEFAULT:
+DEFAULT ->
     'default' ':' INSTRUCTIONS |
     'default' ':'              
 
-LOOP:
+LOOP ->
     //Bucle While
     'while' '(' EXP ')' BLOCK          |
     //Bucle Do While
@@ -209,58 +209,58 @@ LOOP:
     'for' '(' FOR_ARGS ')' BLOCK     
 
 //Lista de Argumentos de For
-FOR_ARGS:
+FOR_ARGS ->
     ID_ASIGN_FOR ';' EXP ';' UPDATE 
 
 //Asignacion de Variable para For
-ID_ASIGN_FOR:
+ID_ASIGN_FOR ->
     TYPE TOK_id '=' EXP |
     ID_ASIGN            
 
 //Actualización de Variable en For
-UPDATE:
+UPDATE ->
     INCR_DECR |
     ID_ASIGN  
 
 //Declaración de Funciones con y sin parámetros
-FUNCTION:
+FUNCTION ->
     TYPE   TOK_id '(' PARAMETERS ')' BLOCK |
     'void' TOK_id '(' PARAMETERS ')' BLOCK |
     TYPE   TOK_id '(' ')' BLOCK            |
     'void' TOK_id '(' ')' BLOCK            
 
 //Lista de Parmáetros
-PARAMETERS:
+PARAMETERS ->
     PARAMETERS ',' PARAMETER |
     PARAMETER                      
 
 //Parámetro
-PARAMETER:
+PARAMETER ->
     TYPE TOK_id 
 
 //Bloque de Instrucciones para Entornos Locales
-BLOCK:
+BLOCK ->
     '{' INSTRUCTIONS '}' |
     '{' '}'              
 
 //Llamada a métodos y funciones con y sin parámetros
-CALLED_FUNCTION:
+CALLED_FUNCTION ->
     TOK_id '(' LIST_ARGS ')' |
     TOK_id '(' ')'           
 
 //Lista de Argumentos
-LIST_ARGS:
+LIST_ARGS ->
     LIST_ARGS ',' EXP |
     EXP                     
 
-NATIVES_FUNCTION:
+NATIVES_FUNCTION ->
     //Función Nativa Print
     'print' '(' EXP ')'    |
     'print' '(' ')'        |
     //Funciones Nativas que retornan un Valor
     NATIVES_FUNCTION_EXP
 
-NATIVES_FUNCTION_EXP:
+NATIVES_FUNCTION_EXP ->
     //Funciones Nativas que retornan un Valor
     'toLower'     '(' EXP ')' |
     'toUpper'     '(' EXP ')' |
@@ -271,7 +271,7 @@ NATIVES_FUNCTION_EXP:
     'toString'    '(' EXP ')' |
     'toCharArray' '(' EXP ')' 
 
-EXP:
+EXP ->
     //Aritméticas
     EXP '+' EXP                |
     EXP '-' EXP                |
@@ -317,12 +317,12 @@ EXP:
     'false'                      
 
 //Incremento y Decremento
-INCR_DECR:
+INCR_DECR ->
     TOK_id '++' |
     TOK_id '--' 
 
 //Tipos
-TYPE:
+TYPE ->
     'int'     |
     'double'  |
     'boolean' |
