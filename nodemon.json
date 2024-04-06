@@ -1,5 +1,0 @@
-{
-    "watch": ["*.*"],
-    "ext": "ts,js,json,mjs,ejs",
-    "exec": "ts-node ./BackEnd/App/App.ts"
-}

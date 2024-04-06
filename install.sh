@@ -1,4 +1,5 @@
 clear
+cd src/BackEnd
 npm init --yes
 npm install express
 npm install @types/express

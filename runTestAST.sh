@@ -1,4 +1,3 @@
 clear
-cd BackEnd/AST
+cd src/BackEnd/AST
 jison Parser.jison
-cd ../../
