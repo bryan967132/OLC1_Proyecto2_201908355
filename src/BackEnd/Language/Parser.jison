@@ -9,8 +9,7 @@
 %lex
 %options case-insensitive
 
-char1    ([^\n\"\\]|\\.)
-char2    ([^\n\"\\]|[\\][n\\\"t\'])
+char ([^\n\"\\]|\\.)
 
 %%
 \s+                                     {}
@@ -41,19 +40,19 @@ char2    ([^\n\"\\]|[\\][n\\\"t\'])
 'void'                                  {return 'RW_void'}
 'main'                                  {return 'RW_main'}
 //funciones nativas
-'add'                                   {return 'R_add'}
-'toLower'                               {return 'R_toLower'}
-'toUpper'                               {return 'R_toUpper'}
-'length'                                {return 'R_length'}
-'truncate'                              {return 'R_truncate'}
-'round'                                 {return 'R_round'}
-'typeOf'                                {return 'R_typeOf'}
-'toString'                              {return 'R_toString'}
-'toCharArray'                           {return 'R_toCharArray'}
-'print'                                 {return 'R_print'}
+'add'                                   {return 'RW_add'}
+'toLower'                               {return 'RW_toLower'}
+'toUpper'                               {return 'RW_toUpper'}
+'length'                                {return 'RW_length'}
+'truncate'                              {return 'RW_truncate'}
+'round'                                 {return 'RW_round'}
+'typeOf'                                {return 'RW_typeOf'}
+'toString'                              {return 'RW_toString'}
+'toCharArray'                           {return 'RW_toCharArray'}
+'print'                                 {return 'RW_print'}
 //expresiones regulares
-\"{char1}*\"                            {yytext = yytext.substr(1, yyleng - 2);return 'TK_string'; }
-\'{char1}\'                             {yytext = yytext.substr(1, yyleng - 2);return 'TK_char'; }
+\"{char}*\"                             {yytext = yytext.substr(1, yyleng - 2);return 'TK_string'; }
+\'{char}\'                              {yytext = yytext.substr(1, yyleng - 2);return 'TK_char'; }
 [a-zA-Z_][a-zA-Z0-9_]*                  {return 'TK_id'}
 [0-9]+\.[0-9]+\b                        {return 'TK_double'}
 [0-9]+\b                                {return 'TK_integer'}
@@ -75,7 +74,7 @@ char2    ([^\n\"\\]|[\\][n\\\"t\'])
 '=='                                    {return 'TK_equalequal'}
 '='                                     {return 'TK_equal'}
 '.'                                     {return 'TK_dot'}
-', '                                     {return 'TK_comma'}
+','                                     {return 'TK_comma'}
 ':'                                     {return 'TK_colon'}
 ';'                                     {return 'TK_semicolon'}
 '||'                                    {return 'TK_or'}
@@ -139,9 +138,9 @@ char2    ([^\n\"\\]|[\\][n\\\"t\'])
 %left 'TK_plus' 'TK_minus'
 %left 'TK_mult' 'TK_div' 'TK_mod'
 %nonassoc 'TK_pow'
-%right uminus
+%right TK_uminus
 %left 'TK_incr' 'TK_decr'
-%left 'TK_dot' 'TK_lbrckt' 'TK_rbrckt'
+%left 'TK_dot' 'TK_lbrckt' 'TK_rbrckt' 'TK_lpar' 'TK_rpar'
 
 //análisis sintáctico
 %start INIT
@@ -157,23 +156,23 @@ INSTRUCTIONS :
     INSTRUCTION              {$$ = [$1]  } ;
 
 INSTRUCTION :
-    MAINMETHOD                    {$$ = $1} |
-    INITID TK_semicolon           {$$ = $1} |
-    IDASIGN TK_semicolon          {$$ = $1} |
-    NEWARRAY TK_semicolon         {$$ = $1} |
-    ARRAYASIGN TK_semicolon       {$$ = $1} |
-    IF                            {$$ = $1} |
-    SWITCH                        {$$ = $1} |
-    LOOP                          {$$ = $1} |
-    FUNCTION                      {$$ = $1} |
-    CALLFUNCTION TK_semicolon     {$$ = $1} |
-    NATIVES_FUNCTION TK_semicolon {$$ = $1} |
-    INCDEC TK_semicolon           {$$ = $1} |
-    RW_break TK_semicolon         {$$ = new Break(@1.first_line, @1.first_column)            } |
-    RW_continue TK_semicolon      {$$ = new Continue(@1.first_line, @1.first_column)         } |
-    RW_return TK_semicolon        {$$ = new Return(@1.first_line, @1.first_column, undefined)} |
-    RW_return EXP TK_semicolon    {$$ = new Return(@1.first_line, @1.first_column, $2)       } |
-    error                         {printErrors.push(new Error(this._$.first_line, this._$.first_column, TypeError.SYNTAX, `No se esperaba "${yytext}"`))} ;
+    MAINMETHOD                   {$$ = $1} |
+    INITID TK_semicolon          {$$ = $1} |
+    IDASIGN TK_semicolon         {$$ = $1} |
+    NEWARRAY TK_semicolon        {$$ = $1} |
+    ARRAYASIGN TK_semicolon      {$$ = $1} |
+    IF                           {$$ = $1} |
+    SWITCH                       {$$ = $1} |
+    LOOP                         {$$ = $1} |
+    FUNCTION                     {$$ = $1} |
+    CALLFUNCTION TK_semicolon    {$$ = $1} |
+    NATIVEFUNCTIONS TK_semicolon {$$ = $1} |
+    INCDEC TK_semicolon          {$$ = $1} |
+    RW_break TK_semicolon        {$$ = new Break(@1.first_line, @1.first_column)            } |
+    RW_continue TK_semicolon     {$$ = new Continue(@1.first_line, @1.first_column)         } |
+    RW_return TK_semicolon       {$$ = new Return(@1.first_line, @1.first_column, undefined)} |
+    RW_return EXP TK_semicolon   {$$ = new Return(@1.first_line, @1.first_column, $2)       } |
+    error                        {printErrors.push(new Error(this._$.first_line, this._$.first_column, TypeError.SYNTAX, `No se esperaba "${yytext}"`))} ;
 
 MAINMETHOD :
     RW_main CALLFUNCTION TK_semicolon {$$ = new MainMethod(@1.first_line, @1.first_column, $2)} ;
@@ -196,11 +195,11 @@ ARRAYVALUE :
 
 LISTVALUE :
     RW_new RW_list TK_less TYPE TK_great {$$ = undefined} |
-    R_toCharArray TK_lpar EXP TK_rpar    {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} ;
+    RW_toCharArray TK_lpar EXP TK_rpar   {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} ;
 
 ARRAYASIGN :
     TK_id TK_lbrckt EXP TK_rbrckt TK_equal EXP                     {$$ = new AsignArray(@1.first_line, @1.first_column, $1, $3, $6)} |
-    TK_id TK_dot R_add TK_lpar EXP TK_rpar                         {$$ = new Add(@1.first_line, @1.first_column, $1, $5)           } |
+    TK_id TK_dot RW_add TK_lpar EXP TK_rpar                        {$$ = new Add(@1.first_line, @1.first_column, $1, $5)           } |
     TK_id TK_lbrckt TK_lbrckt EXP TK_rbrckt TK_rbrckt TK_equal EXP {$$ = new AsignList(@1.first_line, @1.first_column, $1, $4, $8) } ;
 
 VALUELIST :
@@ -273,20 +272,20 @@ LISTARGS :
     LISTARGS TK_comma EXP {$$.push($3)} |
     EXP                   {$$ = [$1]  } ;
 
-NATIVES_FUNCTION :
-    R_print TK_lpar EXP TK_rpar {$$ = new Print(@1.first_line, @1.first_column, $3)} |
-    R_print TK_lpar TK_rpar     {$$ = new Print(@1.first_line, @1.first_column, undefined)} |
-    NATIVESFUNCTIONS            {$$ = $1} ;
+NATIVEFUNCTIONS :
+    RW_print TK_lpar EXP TK_rpar {$$ = new Print(@1.first_line, @1.first_column, $3)       } |
+    RW_print TK_lpar TK_rpar     {$$ = new Print(@1.first_line, @1.first_column, undefined)} |
+    NATIVESFUNCTIONSEXP          {$$ = $1} ;
 
-NATIVESFUNCTIONS :
-    R_toLower TK_lpar EXP TK_rpar     {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} |
-    R_toUpper TK_lpar EXP TK_rpar     {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} |
-    R_length TK_lpar EXP TK_rpar      {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} |
-    R_truncate TK_lpar EXP TK_rpar    {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} |
-    R_round TK_lpar EXP TK_rpar       {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} |
-    R_typeOf TK_lpar EXP TK_rpar      {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} |
-    R_toString TK_lpar EXP TK_rpar    {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} |
-    R_toCharArray TK_lpar EXP TK_rpar {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} ;
+NATIVESFUNCTIONSEXP :
+    RW_toLower TK_lpar EXP TK_rpar     {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} |
+    RW_toUpper TK_lpar EXP TK_rpar     {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} |
+    RW_length TK_lpar EXP TK_rpar      {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} |
+    RW_truncate TK_lpar EXP TK_rpar    {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} |
+    RW_round TK_lpar EXP TK_rpar       {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} |
+    RW_typeOf TK_lpar EXP TK_rpar      {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} |
+    RW_toString TK_lpar EXP TK_rpar    {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} |
+    RW_toCharArray TK_lpar EXP TK_rpar {$$ = new NativeFunc(@1.first_line, @1.first_column, $1, $3)} ;
 
 EXP :
     ARITHMETICS         {$$ = $1} |
@@ -295,7 +294,7 @@ EXP :
     TERNARY             {$$ = $1} |
     CAST                {$$ = $1} |
     ACCESSVECTOR        {$$ = $1} |
-    NATIVESFUNCTIONS    {$$ = $1} |
+    NATIVESFUNCTIONSEXP {$$ = $1} |
     CALLFUNCTION        {$$ = $1} |
     INCDEC              {$$ = $1} |
     TK_id               {$$ = new AccessID(@1.first_line, @1.first_column, $1)} |
@@ -308,13 +307,13 @@ EXP :
     TK_lpar EXP TK_rpar {$$ = $2} ;
 
 ARITHMETICS :
-    EXP TK_plus  EXP          {$$ = new Arithmetic(@2.first_line, @2.first_column, $1, $2, $3)} |
-    EXP TK_minus EXP          {$$ = new Arithmetic(@2.first_line, @2.first_column, $1, $2, $3)} |
-    EXP TK_mult  EXP          {$$ = new Arithmetic(@2.first_line, @2.first_column, $1, $2, $3)} |
-    EXP TK_div   EXP          {$$ = new Arithmetic(@2.first_line, @2.first_column, $1, $2, $3)} |
-    EXP TK_pow   EXP          {$$ = new Arithmetic(@2.first_line, @2.first_column, $1, $2, $3)} |
-    EXP TK_mod   EXP          {$$ = new Arithmetic(@2.first_line, @2.first_column, $1, $2, $3)} |
-    TK_minus EXP %prec uminus {$$ = new Arithmetic(@1.first_line, @1.first_column, undefined, $1, $2)} ;
+    EXP TK_plus  EXP             {$$ = new Arithmetic(@2.first_line, @2.first_column, $1, $2, $3)} |
+    EXP TK_minus EXP             {$$ = new Arithmetic(@2.first_line, @2.first_column, $1, $2, $3)} |
+    EXP TK_mult  EXP             {$$ = new Arithmetic(@2.first_line, @2.first_column, $1, $2, $3)} |
+    EXP TK_div   EXP             {$$ = new Arithmetic(@2.first_line, @2.first_column, $1, $2, $3)} |
+    EXP TK_pow   EXP             {$$ = new Arithmetic(@2.first_line, @2.first_column, $1, $2, $3)} |
+    EXP TK_mod   EXP             {$$ = new Arithmetic(@2.first_line, @2.first_column, $1, $2, $3)} |
+    TK_minus EXP %prec TK_uminus {$$ = new Arithmetic(@1.first_line, @1.first_column, undefined, $1, $2)} ;
 
 RELATIONALS :
     EXP TK_equalequal EXP {$$ = new Relational(@2.first_line, @2.first_column, $1, $2, $3)} |
