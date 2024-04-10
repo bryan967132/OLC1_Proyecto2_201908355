@@ -3,7 +3,6 @@ import { Instruction } from "../Abstracts/Instruction";
 import { Environment } from "../Env/Environment";
 import { TypeInst } from "../Utils/Instructions";
 import { ReturnType } from "../Utils/Type";
-import { Block } from './Block';
 export class Case extends Instruction {
     private caseEvaluate: ReturnType | any
     constructor(line: number,column: number,private case_: Expression,private block: Instruction) {

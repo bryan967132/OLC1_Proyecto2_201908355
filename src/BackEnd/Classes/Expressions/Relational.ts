@@ -22,8 +22,8 @@ export class Relational extends Expression {
                 return this.less(env)
             default:
                 return {value: -1,type: Type.NULL}
-            }
         }
+    }
     equal(env: Environment): ReturnType {
         let value1: ReturnType = this.exp1.execute(env)
         let value2: ReturnType = this.exp2.execute(env)
