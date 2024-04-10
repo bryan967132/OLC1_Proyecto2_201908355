@@ -212,7 +212,7 @@ IF :
     RW_if TK_lpar EXP TK_rpar BLOCK RW_else IF    {$$ = new If(@1.first_line, @1.first_column, $3, $5, $7)       } ;
 
 SWITCH :
-    RW_switch TK_lpar EXP TK_rpar TK_lbrc CASEBLOCK TK_rbrc {$$ = new Switch(@1.first_line, @1.first_column, $3, $6[0], $6[1])};
+    RW_switch TK_lpar EXP TK_rpar TK_lbrc CASEBLOCK TK_rbrc {$$ = new Switch(@1.first_line, @1.first_column, $3, $6[0], $6[1])} ;
 
 CASEBLOCK :
     CASELIST DEFAULT {$$ = [$1, $2]       } |
@@ -232,9 +232,9 @@ DEFAULT :
     RW_default TK_colon               {$$ = new Block(@1.first_line, @1.first_column, [])} ;
 
 LOOP :
-    RW_while TK_lpar EXP TK_rpar BLOCK                    {$$ = new While(@1.first_line, @1.first_column, $3, $5)} |
+    RW_while TK_lpar EXP TK_rpar BLOCK                    {$$ = new While(@1.first_line, @1.first_column, $3, $5)  } |
     RW_do BLOCK RW_while TK_lpar EXP TK_rpar TK_semicolon {$$ = new DoWhile(@1.first_line, @1.first_column, $5, $2)} |
-    RW_for TK_lpar FORARGS TK_rpar BLOCK                  {$$ = new For(@1.first_line, @1.first_column, $3, $5)} ;
+    RW_for TK_lpar FORARGS TK_rpar BLOCK                  {$$ = new For(@1.first_line, @1.first_column, $3, $5)    } ;
 
 FORARGS :
     IDASIGNFOR TK_semicolon EXP TK_semicolon UPDATE {$$ = [$1, $3, $5]} ;
@@ -245,7 +245,7 @@ IDASIGNFOR :
 
 UPDATE :
     INCDEC  {$$ = $1} |
-    IDASIGN {$$ = $1};
+    IDASIGN {$$ = $1} ;
 
 FUNCTION :
     TYPE TK_id TK_lpar PARAMETERS TK_rpar BLOCK    {$$ = new Function(@2.first_line, @2.first_column, $2, $4, $6, $1)       } |

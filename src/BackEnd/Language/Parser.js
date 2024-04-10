@@ -189,13 +189,13 @@ case 50: case 67:
 this.$ = new Block(_$[$0-1].first_line, _$[$0-1].first_column, [])
 break;
 case 51:
-this.$ = new While(_$[$0-4].first_line, _$[$0-4].first_column, $$[$0-2], $$[$0])
+this.$ = new While(_$[$0-4].first_line, _$[$0-4].first_column, $$[$0-2], $$[$0])  
 break;
 case 52:
 this.$ = new DoWhile(_$[$0-6].first_line, _$[$0-6].first_column, $$[$0-2], $$[$0-5])
 break;
 case 53:
-this.$ = new For(_$[$0-4].first_line, _$[$0-4].first_column, $$[$0-2], $$[$0])
+this.$ = new For(_$[$0-4].first_line, _$[$0-4].first_column, $$[$0-2], $$[$0])    
 break;
 case 54:
 this.$ = [$$[$0-4], $$[$0-2], $$[$0]]
