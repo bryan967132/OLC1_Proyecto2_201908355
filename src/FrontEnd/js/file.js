@@ -31,7 +31,7 @@ function getOpenedFiles(num) {
         for(let key in response) {
             tags += `<div class="${c == num ? 'tag-active' : 'tag'}"><div onclick="changeTag(${c + 1},'${key.split('_')[1]}')">${key.split('_')[1]}</div><div class="close-b" onclick="closeTag('${key.split('_')[1]}')">x</div></div>`
             if(c == num) {
-                editor.setOption('value',response[key])
+                editor.setOption('value', response[key])
             }
             c ++
         }
