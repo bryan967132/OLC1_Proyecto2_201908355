@@ -161,6 +161,7 @@ li ul li a:hover{
 }
 /* code mirror */
 .columns {
+    margin-top: 1vh;
     display: grid;
     grid-template-columns: repeat(2,1fr);
     column-gap: 0rem;
@@ -169,16 +170,15 @@ li ul li a:hover{
     margin: 0rem .5rem 0 1rem;
     line-height: 1.4;
     font-size: 11pt;
-    width: 89.5rem;
 }
 .panel2{
     margin: 0rem 1rem 0 .5rem;
     line-height: 1.4;
     font-size: 11pt;
-    width: 89.5rem;
 }
 #editor{
-    height: 100%;
+    max-width: 100%;
+    min-width: 90%;
 }
 /* modal */
 .modalmask {
