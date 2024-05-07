@@ -65,267 +65,221 @@
 | ```PARAMETERS```           | ```PARAMETER```            | ```LIST_ARGS```            | ```NATIVES_FUNCTION_EXP``` |
 
 ## Precedencia de Operadores
-```java
-%left '?' ':'
-%left '||'
-%left '&&'
-%right '!'
-%left '==' '!='
-%left '<' '<=' '>' '>='
-%left '+' '-'
-%left '*' '/' '%'
-%nonassoc '^'
-%right uminus
-%left '++' '--'
-%left '.' '[' ']'
-```
+| Nivel | Asociatividad | Operador |
+| :-: | :- | :- |
+| 11 | Izquierda | ```?``` ```:``` |
+| 10 | Izquierda | ```\|\|``` |
+| 9 | Izquierda | ```&&``` |
+| 8 | Derecha | ```!``` |
+| 7 | Izquierda | ```==``` ```!=``` |
+| 6 | Izquierda | ```<``` ```<=``` ```>``` ```>=``` |
+| 5 | Izquierda | ```+``` ```-``` |
+| 4 | Izquierda | ```*``` ```/``` ```%``` |
+| 3 | No Asociativa | ```^``` |
+| 2 | Derecha | ```TK_uminus``` |
+| 1 | Izquierda | ```++``` ```--``` |
+| 0 | Izquierda | ```.``` ```[``` ```]``` ```(``` ```)``` |
 
 ## Producciones
-```java
-//Inicio de Gramática
-INIT -> INSTRUCTIONS EOF | EOF ;
+```html
+<INIT> ::=
+    <INSTRUCTIONS> <EOF> |
+    <EOF>                
 
-//Instrucciones
-INSTRUCTIONS ->
-    INSTRUCTIONS INSTRUCTION |
-    INSTRUCTION              
+<INSTRUCTIONS> ::=
+    <INSTRUCTIONS> <INSTRUCTION> |
+    <INSTRUCTION>                
 
-INSTRUCTION ->
-    //Método Principal
-    MAIN_METHOD          |
-    //Finalización de Instrucción con ';'
-    INIT_ID ';'          |
-    ID_ASIGN ';'         |
-    NEW_ARRAY ';'        |
-    ARRAY_ASIGN ';'      |
-    //Estructuras de Control
-    IF_STRCT             |
-    SWITCH_STRCT         |
-    //Ciclos
-    LOOP                 |
-    FUNCTION             |
-    //Finalización de Instrucción con ';'
-    CALLED_FUNCTION ';'  |
-    NATIVES_FUNCTION ';' |
-    INCR_DECR ';'        |
-    //Instrucciones de Transferencia
-    'break' ';'          |
-    'continue' ';'       |
-    'return' ';'         |
-    'return' EXP ';'     |
-    error                
+<INSTRUCTION> ::=
+    <MAINMETHOD>          |
+    <INITID> ';'          |
+    <IDASIGN> ';'         |
+    <NEWARRAY> ';'        |
+    <ARRAYASIGN> ';'      |
+    <IF>                  |
+    <SWITCH>              |
+    <LOOP>                |
+    <FUNCTION>            |
+    <CALLFUNCTION> ';'    |
+    <NATIVEFUNCTIONS> ';' |
+    <INCDEC> ';'          |
+    'break' ';'           |
+    'continue' ';'        |
+    'return' ';'          |
+    'return' <EXP> ';'    
 
-//Llamada a Método Principal
-MAIN_METHOD ->
-    main CALLED_FUNCTION ';' 
+<MAINMETHOD> ::=
+    RW_main <CALLFUNCTION> ';' 
 
-//Inicialización de Variable
-INIT_ID ->
-    TYPE TOK_id '=' EXP |
-    TYPE TOK_id         
+<INITID> ::=
+    <TYPE> TK_id '=' <EXP> |
+    <TYPE> TK_id           
 
-//Asignación de Valor a Identificador
-ID_ASIGN ->
-    TOK_id '=' EXP
+<IDASIGN> ::=
+    TK_id '=' <EXP> 
 
-//Declaración de Arreglos y Listas
-NEW_ARRAY ->
-    //Arreglo
-    TYPE '[' ']' TOK_id '=' ARRAY_VALUE       |
-    //Lista
-    'list' '<' TYPE '>' TOK_id '=' LIST_VALUE 
+<NEWARRAY> ::=
+    <TYPE> '[' ']' TK_id '=' <ARRAYVALUE>       |
+    'list' '<' <TYPE> '>' TK_id '=' <LISTVALUE> 
 
-//Valor de Un Arreglo
-ARRAY_VALUE ->
-    //Con Longitud
-    'new' TYPE '[' EXP ']' |
-    //Con Valores
-    '{' VALUE_LIST '}'     |
-    //Vacío
-    '{' '}'
+<ARRAYVALUE> ::=
+    'new' <TYPE> '[' <EXP> ']' |
+    '{' <VALUELIST> '}'        |
+    '{' '}'                    
 
-LIST_VALUE ->
-    //Inicialización de una Lista Vacía
-    'new' 'list' '<' TYPE '>'   |
-    //Cadena a Lista de Caracteres
-    'toCharArray' '(' EXP ')' 
+<LISTVALUE> ::=
+    'new' 'list' '<' <TYPE> '>'  |
+    RW_toCharArray '(' <EXP> ')' 
 
-//Asignación de Valores a Arreglos y Listas
-ARRAY_ASIGN ->
-    //Arreglo
-    TOK_id '[' EXP ']' '=' EXP         |
-    //Lista con método Add
-    TOK_id '.' add '(' EXP ')'         |
-    //Lista
-    TOK_id '[' '[' EXP ']' ']' '=' EXP 
+<ARRAYASIGN> ::=
+    TK_id '[' <EXP> ']' '=' <EXP>         |
+    TK_id '.' 'add' '(' <EXP> ')'         |
+    TK_id '[' '[' <EXP> ']' ']' '=' <EXP> 
 
-//Lista de Valores para Arreglo
-VALUE_LIST ->
-    VALUE_LIST ',' EXP |
-    EXP                
+<VALUELIST> ::=
+    <VALUELIST> ',' <EXP> |
+    <EXP>                 
 
-//Estructura If
-IF_STRCT ->
-    //If
-    'if' '(' EXP ')' BLOCK                 |
-    //If Else
-    'if' '(' EXP ')' BLOCK 'else' BLOCK    |
-    //If Else If
-    'if' '(' EXP ')' BLOCK 'else' IF_STRCT 
+<IF> ::=
+    'if' '(' <EXP> ')' <BLOCK>                |
+    'if' '(' <EXP> ')' <BLOCK> 'else' <BLOCK> |
+    'if' '(' <EXP> ')' <BLOCK> 'else' <IF>    
 
-//Estructura Switch Case
-SWITCH_STRCT ->
-    'switch' '(' EXP ')' '{' CASE_BLOCK '}' 
+<SWITCH> ::=
+    'switch' '(' <EXP> ')' '{' <CASEBLOCK> '}' 
 
-CASE_BLOCK ->
-    //Casos y Default
-    CASE_LIST DEFAULT |
-    //Solo Casos
-    CASE_LIST         |
-    //Solo Default
-    DEFAULT           
+<CASEBLOCK> ::=
+    <CASELIST> <DEFAULT> |
+    <CASELIST>           |
+    <DEFAULT>            
 
-//Lista de Casos de Switch
-CASE_LIST ->
-    CASE_LIST CASE |
-    CASE           
+<CASELIST> ::=
+    <CASELIST> <CASE> |
+    <CASE>            
 
-//Case en Switch (Con y sin instrucciones)
-CASE ->
-    'case' EXP ':' INSTRUCTIONS |
-    'case' EXP ':'              
+<CASE> ::=
+    'case' <EXP> ':' <INSTRUCTIONS> |
+    'case' <EXP> ':'                
 
-//Default en Switch (Con y sin instrucciones)
-DEFAULT ->
-    'default' ':' INSTRUCTIONS |
-    'default' ':'              
+<DEFAULT> ::=
+    'default' ':' <INSTRUCTIONS> |
+    'default' ':'                
 
-LOOP ->
-    //Bucle While
-    'while' '(' EXP ')' BLOCK          |
-    //Bucle Do While
-    'do' BLOCK 'while' '(' EXP ')' ';' |
-    //Bucle For
-    'for' '(' FOR_ARGS ')' BLOCK     
+<LOOP> ::=
+    'while' '(' <EXP> ')' <BLOCK>          |
+    'do' <BLOCK> 'while' '(' <EXP> ')' ';' |
+    'for' '(' <FORARGS> ')' <BLOCK>        
 
-//Lista de Argumentos de For
-FOR_ARGS ->
-    ID_ASIGN_FOR ';' EXP ';' UPDATE 
+<FORARGS> ::=
+    <IDASIGNFOR> ';' <EXP> ';' <UPDATE> 
 
-//Asignacion de Variable para For
-ID_ASIGN_FOR ->
-    TYPE TOK_id '=' EXP |
-    ID_ASIGN            
+<IDASIGNFOR> ::=
+    <TYPE> TK_id '=' <EXP> |
+    <IDASIGN>                 
 
-//Actualización de Variable en For
-UPDATE ->
-    INCR_DECR |
-    ID_ASIGN  
+<UPDATE> ::=
+    <INCDEC>  |
+    <IDASIGN> 
 
-//Declaración de Funciones con y sin parámetros
-FUNCTION ->
-    TYPE   TOK_id '(' PARAMETERS ')' BLOCK |
-    'void' TOK_id '(' PARAMETERS ')' BLOCK |
-    TYPE   TOK_id '(' ')' BLOCK            |
-    'void' TOK_id '(' ')' BLOCK            
+<FUNCTION> ::=
+    <TYPE> TK_id '(' <PARAMETERS> ')' <BLOCK> |
+    'void' TK_id '(' <PARAMETERS> ')' <BLOCK> |
+    <TYPE> TK_id '(' ')' <BLOCK>              |
+    'void' TK_id '(' ')' <BLOCK>              
 
-//Lista de Parmáetros
-PARAMETERS ->
-    PARAMETERS ',' PARAMETER |
-    PARAMETER                      
+<PARAMETERS> ::=
+    <PARAMETERS> ',' <PARAMETER> |
+    <PARAMETER>                  
 
-//Parámetro
-PARAMETER ->
-    TYPE TOK_id 
+<PARAMETER> ::=
+    <TYPE> TK_id 
 
-//Bloque de Instrucciones para Entornos Locales
-BLOCK ->
-    '{' INSTRUCTIONS '}' |
-    '{' '}'              
+<BLOCK> ::=
+    '{' <INSTRUCTIONS> '}' |
+    '{' '}'                
 
-//Llamada a métodos y funciones con y sin parámetros
-CALLED_FUNCTION ->
-    TOK_id '(' LIST_ARGS ')' |
-    TOK_id '(' ')'           
+<CALLFUNCTION> ::=
+    TK_id '(' <LISTARGS> ')' |
+    TK_id '(' ')'          
 
-//Lista de Argumentos
-LIST_ARGS ->
-    LIST_ARGS ',' EXP |
-    EXP                     
+<LISTARGS> ::=
+    <LISTARGS> ',' <EXP> |
+    <EXP>                
 
-NATIVES_FUNCTION ->
-    //Función Nativa Print
-    'print' '(' EXP ')'    |
-    'print' '(' ')'        |
-    //Funciones Nativas que retornan un Valor
-    NATIVES_FUNCTION_EXP
+<NATIVEFUNCTIONS> ::=
+    'print' '(' <EXP> ')' |
+    'print' '(' ')'       |
+    <NATIVESFUNCTIONSEXP> 
 
-NATIVES_FUNCTION_EXP ->
-    //Funciones Nativas que retornan un Valor
-    'toLower'     '(' EXP ')' |
-    'toUpper'     '(' EXP ')' |
-    'length'      '(' EXP ')' |
-    'truncate'    '(' EXP ')' |
-    'round'       '(' EXP ')' |
-    'typeOf'      '(' EXP ')' |
-    'toString'    '(' EXP ')' |
-    'toCharArray' '(' EXP ')' 
+<NATIVESFUNCTIONSEXP> ::=
+    'toLower'     '(' <EXP> ')' |
+    'toUpper'     '(' <EXP> ')' |
+    'length'      '(' <EXP> ')' |
+    'truncate'    '(' <EXP> ')' |
+    'round'       '(' <EXP> ')' |
+    'typeOf'      '(' <EXP> ')' |
+    'toString'    '(' <EXP> ')' |
+    'toCharArray' '(' <EXP> ')' 
 
-EXP ->
-    //Aritméticas
-    EXP '+' EXP                |
-    EXP '-' EXP                |
-    EXP '*' EXP                |
-    EXP '/' EXP                |
-    EXP '^' EXP                |
-    EXP '%' EXP                |
-    '-' EXP %prec uminus       |
-    '(' EXP ')'                |
-    //Relacionales
-    EXP '==' EXP               |
-    EXP '!=' EXP               |
-    EXP '<'  EXP               |
-    EXP '>'  EXP               |
-    EXP '<=' EXP               |
-    EXP '>=' EXP               |
-    //Lógicas
-    EXP '||' EXP               |
-    EXP '&&' EXP               |
-    '!' EXP                    |
-    //Casteo
-    '(' TYPE ')' EXP           |
-    //Operador Ternario
-    EXP '?' EXP ':' EXP        |
-    //Acceso a Arreglos
-    TOK_id '[' EXP ']'         |
-    //Acceso a Listas
-    TOK_id '[' '[' EXP ']' ']' |
-    //Llamada a Funciones
-    CALLED_FUNCTION            |
-    //Llamada a Funciones Nativas
-    NATIVES_FUNCTION_EXP       |
-    //Incremento y Decremento
-    INCR_DECR                  |
-    //Acceso a Identificador
-    TOK_id                     |
-    //Acceso a Primitivos
-    TOK_integer                |
-    TOK_double                 |
-    TOK_string                 |
-    TOK_char                   |
-    'true'                     |
-    'false'                      
+<EXP> ::=
+    <ARITHMETICS>         |
+    <RELATIONALS>         |
+    <LOGICS>              |
+    <TERNARY>             |
+    <CAST>                |
+    <ACCESSVECTOR>        |
+    <NATIVESFUNCTIONSEXP> |
+    <CALLFUNCTION>        |
+    <INCDEC>              |
+    TK_id                 |
+    TK_integer            |
+    TK_double             |
+    TK_string             |
+    TK_char               |
+    'true'                |
+    'false'               |
+    '(' <EXP> ')'         
 
-//Incremento y Decremento
-INCR_DECR ->
-    TOK_id '++' |
-    TOK_id '--' 
+<ARITHMETICS> ::=
+    <EXP> '+' <EXP> |
+    <EXP> '-' <EXP> |
+    <EXP> '*' <EXP> |
+    <EXP> '/' <EXP> |
+    <EXP> '^' <EXP> |
+    <EXP> '%' <EXP> |
+    '-' <EXP> %prec TK_uminus 
 
-//Tipos
-TYPE ->
+<RELATIONALS> ::=
+    <EXP> '==' <EXP> |
+    <EXP> '!=' <EXP> |
+    <EXP> '<'  <EXP> |
+    <EXP> '>'  <EXP> |
+    <EXP> '<=' <EXP> |
+    <EXP> '>=' <EXP> 
+
+<LOGICS> ::=
+    <EXP> '||' <EXP> |
+    <EXP> '&&' <EXP> |
+    '!' <EXP>        
+
+<TERNARY> ::=
+    <EXP> '?' <EXP> ':' <EXP> 
+
+<CAST> ::=
+    '(' <TYPE> ')' <EXP> 
+
+<ACCESSVECTOR> ::=
+    TK_id '[' <EXP> ']'         |
+    TK_id '[' '[' <EXP> ']' ']' 
+
+<INCDEC> ::=
+    TK_id '++' |
+    TK_id '--' 
+
+<TYPE> ::=
     'int'     |
     'double'  |
     'boolean' |
     'char'    |
-    'String'   
+    'String'  
 ```
